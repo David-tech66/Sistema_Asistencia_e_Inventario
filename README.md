@@ -1,10 +1,10 @@
-# 📦 Sistema de Inventario
+# Sistema de Asistencias e Inventario para una Tienda de Informatica
 
 Aplicación web construida con **Laravel 13** (PHP 8.3+), **Tailwind CSS v4** y **Vite 8**. Este documento describe en detalle la estructura de carpetas, el rol de cada archivo y cómo los distintos componentes del framework interactúan entre sí.
 
 ---
 
-## 🗂️ Índice
+## Índice
 
 1. [Resumen del Stack Tecnológico](#resumen-del-stack-tecnológico)
 2. [Estructura General del Proyecto](#estructura-general-del-proyecto)
