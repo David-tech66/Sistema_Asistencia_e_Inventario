@@ -25,8 +25,8 @@
 
         <form action="#" method="POST">
             <div class="mb-4">
-                <label class="block text-gray-500 dark:text-gray-400 text-sm mb-2">Ingresa tu nombre de usuario</label>
-                <input type="text" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-transparent dark:text-white focus:outline-none focus:border-[#8e3a80]" placeholder="Nombre de usuario">
+                <label class="block text-gray-500 dark:text-gray-400 text-sm mb-2">Ingresar Correo Electronico</label>
+                <input type="text" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-transparent dark:text-white focus:outline-none focus:border-[#8e3a80]" placeholder="Correo Electronico">
             </div>
 
             <div class="mb-6">
