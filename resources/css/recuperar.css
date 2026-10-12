@@ -1,0 +1,374 @@
+/* ==========================================
+    ESTILOS - RECUPERAR CONTRASEÑA (GRUPO MDL)
+    Todos los estilos de resources/views/auth/recuperar.blade.php
+    (Tailwind ya se importa en resources/css/app.css)
+   ========================================== */
+
+/* Transición suave para el cambio de modo claro / oscuro */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Auto-rellenado adaptado para modo claro y oscuro */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ============ Contenedor principal ============ */
+.rcv-login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8fafc; /* slate-50 */
+    color: #0f172a;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .rcv-login { flex-direction: row; }
+}
+
+.dark .rcv-login { background-color: #070A10; }
+
+/* ============ Panel izquierdo (formulario) ============ */
+.rcv-panel-left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+}
+
+@media (min-width: 640px) {
+    .rcv-panel-left { padding: 3rem; }
+}
+
+@media (min-width: 1024px) {
+    .rcv-panel-left { width: 50%; }
+}
+
+/* Botón de cambio de tema (Luna / Sol) */
+.rcv-theme-toggle {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.625rem;
+    border-radius: 9999px;
+    background: none;
+    border: none;
+    color: #334155; /* slate-700 */
+    transition: background-color 0.15s ease, color 0.15s ease;
+    outline: none;
+    cursor: pointer;
+}
+
+.rcv-theme-toggle:hover { background-color: #e2e8f0; /* slate-200 */ }
+
+.rcv-theme-toggle svg { width: 1.25rem; height: 1.25rem; }
+
+.rcv-icon-moon { display: block; }
+.rcv-icon-sun { display: none; }
+
+.dark .rcv-theme-toggle { color: #e2e8f0; /* slate-200 */ }
+.dark .rcv-theme-toggle:hover { background-color: #1e293b; /* slate-800 */ }
+.dark .rcv-icon-moon { display: none; }
+.dark .rcv-icon-sun { display: block; }
+
+/* Tarjeta del formulario */
+.rcv-card {
+    max-width: 28rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: transparent;
+    padding: 1rem;
+}
+
+@media (min-width: 640px) {
+    .rcv-card { padding: 2rem; }
+}
+
+/* Logo */
+.rcv-logo-wrap {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .rcv-logo-wrap { text-align: left; }
+}
+
+.rcv-logo {
+    height: 3rem;
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .rcv-logo { margin-left: 0; margin-right: 0; }
+}
+
+/* Títulos */
+.rcv-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.dark .rcv-title { color: #ffffff; }
+
+.rcv-subtitle {
+    font-size: 0.875rem;
+    color: #64748b; /* slate-500 */
+    margin-top: 0.5rem;
+}
+
+.dark .rcv-subtitle { color: #94a3b8; }
+
+/* Mensaje de estado */
+.rcv-alert-status {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+    font-size: 0.875rem;
+}
+
+/* Formulario */
+.rcv-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rcv-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569; /* slate-600 */
+    margin-bottom: 0.25rem;
+}
+
+.dark .rcv-label { color: #94a3b8; }
+
+.rcv-input-wrap { position: relative; }
+
+.rcv-input-icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding-left: 0.875rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.rcv-input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1; /* slate-300 */
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 0.875rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rcv-input::placeholder { color: #94a3b8; }
+
+.rcv-input:focus {
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.dark .rcv-input {
+    border-color: #334155; /* slate-700 */
+    background-color: #0f172a; /* slate-900 */
+    color: #ffffff;
+}
+
+.dark .rcv-input:focus {
+    box-shadow: 0 0 0 2px #0f172a, 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Botón Siguiente */
+.rcv-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1rem;
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0B5394;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.rcv-btn:hover {
+    background-color: #094275;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(-2px);
+}
+
+.rcv-btn:active { transform: translateY(0); }
+
+.rcv-btn:focus {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.5);
+}
+
+/* Enlace Regresar al Login */
+.rcv-back-wrap {
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+.rcv-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155; /* slate-700 */
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.rcv-back:hover { color: #2563eb; /* blue-600 */ }
+
+.rcv-back svg { width: 1rem; height: 1rem; }
+
+.dark .rcv-back { color: #cbd5e1; /* slate-300 */ }
+.dark .rcv-back:hover { color: #60a5fa; /* blue-400 */ }
+
+/* Pie */
+.rcv-footer {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.rcv-footer span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* ============ Panel derecho (imagen y servicios) ============ */
+.rcv-panel-right {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    background-color: #0f172a; /* slate-900 */
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .rcv-panel-right {
+        display: flex;
+        width: 50%;
+    }
+}
+
+.rcv-panel-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.rcv-panel-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+}
+
+.rcv-panel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #020617, rgba(23, 37, 84, 0.6), rgba(15, 23, 42, 0.4));
+}
+
+.rcv-panel-top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rcv-panel-list {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 32rem;
+}
+
+.rcv-service {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid #1e293b; /* slate-800 */
+}
+
+.rcv-service svg {
+    width: 2rem;
+    height: 2rem;
+    color: #dc2626; /* red-600 */
+    flex-shrink: 0;
+}
+
+.rcv-service span {
+    color: #ffffff;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.rcv-panel-footer {
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    color: #94a3b8; /* slate-400 */
+}

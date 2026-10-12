@@ -1,0 +1,459 @@
+/* ==========================================
+    ESTILOS - LOGIN (GRUPO MDL)
+    Todos los estilos de resources/views/auth/login.blade.php
+    (Tailwind ya se importa en resources/css/app.css)
+   ========================================== */
+
+/* Transición suave para el cambio de modo claro / oscuro */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Auto-rellenado adaptado para modo claro y oscuro */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ============ Contenedor principal ============ */
+.mdl-login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8fafc; /* slate-50 */
+    color: #0f172a;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .mdl-login { flex-direction: row; }
+}
+
+.dark .mdl-login { background-color: #070A10; }
+
+/* ============ Panel izquierdo (imagen institucional) ============ */
+.mdl-panel-left {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    background-color: #0f172a; /* slate-900 */
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .mdl-panel-left {
+        display: flex;
+        width: 50%;
+    }
+}
+
+.mdl-panel-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.mdl-panel-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+}
+
+.mdl-panel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #020617, rgba(23, 37, 84, 0.6), rgba(15, 23, 42, 0.4));
+}
+
+.mdl-panel-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mdl-panel-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ffffff;
+}
+
+.mdl-panel-brand img {
+    height: 2.5rem;
+    width: auto;
+}
+
+.mdl-panel-content {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 3rem 0;
+}
+
+.mdl-panel-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+    line-height: 1.375;
+}
+
+@media (min-width: 1024px) {
+    .mdl-panel-title { font-size: 2.25rem; }
+}
+
+.mdl-panel-divider {
+    width: 6rem;
+    height: 0.25rem;
+    background-color: #dc2626; /* red-600 */
+    border-radius: 9999px;
+    margin-bottom: 2rem;
+}
+
+.mdl-panel-icons {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+    max-width: 28rem;
+}
+
+.mdl-panel-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid #1e293b; /* slate-800 */
+}
+
+.mdl-panel-icon svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #dc2626; /* red-600 */
+    margin-bottom: 0.25rem;
+}
+
+.mdl-panel-footer {
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    color: #94a3b8; /* slate-400 */
+}
+
+/* ============ Panel derecho (formulario) ============ */
+.mdl-panel-right {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+}
+
+@media (min-width: 640px) {
+    .mdl-panel-right { padding: 3rem; }
+}
+
+@media (min-width: 1024px) {
+    .mdl-panel-right { width: 50%; }
+}
+
+/* Botón de cambio de tema (Luna / Sol) */
+.mdl-theme-toggle {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.625rem;
+    border-radius: 9999px;
+    background: none;
+    border: none;
+    color: #334155; /* slate-700 */
+    transition: background-color 0.15s ease, color 0.15s ease;
+    outline: none;
+    cursor: pointer;
+}
+
+.mdl-theme-toggle:hover { background-color: #e2e8f0; /* slate-200 */ }
+
+.mdl-theme-toggle svg { width: 1.25rem; height: 1.25rem; }
+
+.mdl-icon-moon { display: block; }
+.mdl-icon-sun { display: none; }
+
+.dark .mdl-theme-toggle { color: #e2e8f0; /* slate-200 */ }
+.dark .mdl-theme-toggle:hover { background-color: #1e293b; /* slate-800 */ }
+.dark .mdl-icon-moon { display: none; }
+.dark .mdl-icon-sun { display: block; }
+
+/* Tarjeta del formulario */
+.mdl-form-card {
+    max-width: 28rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: transparent;
+    padding: 1rem;
+}
+
+@media (min-width: 640px) {
+    .mdl-form-card { padding: 2rem; }
+}
+
+/* Marca visible solo en móvil */
+.mdl-brand-mobile {
+    display: none;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 1023.98px) {
+    .mdl-brand-mobile { display: block; }
+}
+
+.mdl-brand-mobile span {
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    color: #0f172a;
+}
+
+.mdl-brand-mobile .mdl-red { color: #dc2626; }
+.mdl-brand-mobile .mdl-blue { font-size: 0.75rem; color: #2563eb; /* blue-600 */ }
+
+.dark .mdl-brand-mobile span { color: #ffffff; }
+
+/* Títulos */
+.mdl-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.dark .mdl-title { color: #ffffff; }
+
+.mdl-subtitle {
+    font-size: 0.875rem;
+    color: #64748b; /* slate-500 */
+    margin-top: 0.25rem;
+}
+
+.dark .mdl-subtitle { color: #94a3b8; }
+
+/* Alerta de errores */
+.mdl-alert-error {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 0.875rem;
+}
+
+/* Formulario */
+.mdl-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mdl-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569; /* slate-600 */
+    margin-bottom: 0.25rem;
+}
+
+.dark .mdl-label { color: #94a3b8; }
+
+.mdl-input-wrap { position: relative; }
+
+.mdl-input-icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding-left: 0.875rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.mdl-input-icon svg { width: 1rem; height: 1rem; }
+
+.mdl-input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1; /* slate-300 */
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 0.875rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mdl-input--password { padding-right: 2.75rem; }
+
+.mdl-input::placeholder { color: #94a3b8; }
+
+.mdl-input:focus {
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.dark .mdl-input {
+    border-color: #334155; /* slate-700 */
+    background-color: #0f172a; /* slate-900 */
+    color: #ffffff;
+}
+
+.dark .mdl-input:focus {
+    box-shadow: 0 0 0 2px #0f172a, 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Cabecera del campo contraseña */
+.mdl-field-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.mdl-forgot {
+    font-size: 0.75rem;
+    color: #2563eb; /* blue-600 */
+    text-decoration: none;
+}
+
+.mdl-forgot:hover { text-decoration: underline; }
+
+.dark .mdl-forgot { color: #60a5fa; /* blue-400 */ }
+
+/* Botón mostrar/ocultar contraseña */
+.mdl-eye-btn {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-right: 0.875rem;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.mdl-eye-btn:hover { color: #475569; }
+
+.dark .mdl-eye-btn:hover { color: #cbd5e1; }
+
+.mdl-eye-btn svg { width: 1.25rem; height: 1.25rem; }
+
+/* Recordar sesión */
+.mdl-remember {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.mdl-remember label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+}
+
+.mdl-checkbox {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    accent-color: #2563eb; /* blue-600 */
+    cursor: pointer;
+}
+
+.mdl-remember span {
+    color: #475569;
+    font-weight: 500;
+}
+
+.dark .mdl-remember span { color: #94a3b8; }
+
+/* Botón Iniciar Sesión */
+.mdl-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1rem;
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0B5394;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.mdl-btn:hover {
+    background-color: #094275;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(-2px);
+}
+
+.mdl-btn:active { transform: translateY(0); }
+
+.mdl-btn:focus {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.5);
+}
+
+/* Pie */
+.mdl-footer {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.mdl-footer span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}

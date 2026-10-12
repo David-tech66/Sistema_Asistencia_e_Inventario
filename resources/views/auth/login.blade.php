@@ -1,72 +1,160 @@
 @extends('layouts.app')
 
-@section('title', 'Iniciar Sesión - Sistema de Inventario')
+@section('title', 'Iniciar Sesión - Grupo MDL E.I.R.L.')
+
+@section('styles')
+    @vite(['resources/css/login.css'])
+@endsection
 
 @section('content')
-<div class="flex min-h-screen">
+<div class="mdl-login">
 
-    {{-- Lado izquierdo: Formulario --}}
-    <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 py-10 lg:px-24">
-
-        {{-- Logo y botón de tema --}}
-        <div class="flex justify-between items-center mb-10">
-            <div class="flex items-center font-bold text-lg">
-                <span class="w-8 h-8 mr-2 rounded-lg bg-[#8e3a80] text-white flex items-center justify-center">
-                    <i class="fa-solid fa-user"></i>
-                </span> Logo
-            </div>
-            <button type="button" data-theme-toggle class="text-xl" aria-label="Cambiar tema">
-                <i data-theme-icon class="fa-solid fa-moon"></i>
-            </button>
+    <!-- Panel Izquierdo: Imagen Institucional y Servicios -->
+    <div class="mdl-panel-left">
+        <!-- Imagen de fondo con overlay -->
+        <div class="mdl-panel-bg">
+            <img src="{{ asset('images/logo-empresa-MDL.jpeg') }}" alt="Setup Informático MDL">
+            <div class="mdl-panel-overlay"></div>
         </div>
 
-        <h1 class="text-3xl font-bold mb-2">Bienvenido de nuevo</h1>
-        <p class="text-gray-500 dark:text-gray-400 mb-8">Ingresa tus credenciales para dar inicio</p>
+        <!-- Logo superior -->
+        <div class="mdl-panel-header">
+            <span class="mdl-panel-brand">
+                <img src="{{ asset('images/logo-MDL.png') }}" alt="Logo MDL">
+            </span>
+        </div>
 
-        <form action="#" method="POST">
-            <div class="mb-4">
-                <label class="block text-gray-500 dark:text-gray-400 text-sm mb-2">Ingresar Correo Electronico</label>
-                <input type="text" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-transparent dark:text-white focus:outline-none focus:border-[#8e3a80]" placeholder="Correo Electronico">
-            </div>
+        <!-- Contenido central con los textos de los servicios -->
+        <div class="mdl-panel-content">
+            <h2 class="mdl-panel-title">
+                Mantenimiento de equipos informáticos<br>
+                Venta de productos tecnológicos<br>
+                Soporte y soluciones
+            </h2>
+            <div class="mdl-panel-divider"></div>
 
-            <div class="mb-6">
-                <label class="block text-gray-500 dark:text-gray-400 text-sm mb-2">Contraseña</label>
-                <div class="relative">
-                    <input type="password" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-transparent dark:text-white focus:outline-none focus:border-[#8e3a80]" placeholder="***************">
-                    <span data-toggle-password class="absolute right-4 top-3 cursor-pointer opacity-60"><i class="fa-solid fa-eye-slash"></i></span>
+            <!-- Iconos de servicios inferiores -->
+            <div class="mdl-panel-icons">
+                <div class="mdl-panel-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div class="mdl-panel-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <div class="mdl-panel-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div class="mdl-panel-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
                 </div>
             </div>
-
-            <p class="-mt-2 mb-6 text-right text-sm text-gray-500 dark:text-gray-400">
-                ¿Haz olvidado la <a href="/recuperar-contrasena" data-transition class="font-bold text-[#a04d97]">contraseña</a>?
-            </p>
-
-            <button type="button" class="w-full bg-[#8e3a80] text-white rounded-full py-3 font-semibold hover:bg-[#a04d97] transition">
-                Iniciar Sesión
-            </button>
-        </form>
-    </div>
-
-    {{-- Lado derecho: panel morado (oculto en móvil) --}}
-    <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-[#9c27b0] via-[#7b1fa2] to-[#4a148c] relative items-center justify-center rounded-tl-[3rem] overflow-hidden">
-        <div class="absolute -top-20 -right-20 w-80 h-80 bg-purple-400/30 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-3xl"></div>
-
-        <div class="text-center z-10 px-12">
-            <div class="bg-white/10 backdrop-blur-md rounded-lg p-10">
-                <h2 class="text-white text-4xl font-bold leading-tight">Haz que tu día sea<br>aún mejor</h2>
-            </div>
         </div>
 
-        <div class="absolute bottom-12 text-center">
-            <div class="text-white text-sm mb-4">Organiza, controla y mantén al día tu inventario</div>
-            <div class="flex justify-center space-x-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-            </div>
+        <div class="mdl-panel-footer">
+            GRUPO MDL E.I.R.L.
         </div>
     </div>
 
+    <!-- Panel Derecho: Formulario de Login -->
+    <div class="mdl-panel-right">
+        <!-- Botón de cambio de tema (Luna / Sol) -->
+        <button id="themeToggle" data-theme-toggle type="button" class="mdl-theme-toggle" aria-label="Cambiar tema">
+            <!-- Luna (Visible en modo claro) -->
+            <svg id="moonIcon" class="mdl-icon-moon" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+            </svg>
+            <!-- Sol (Visible en modo oscuro) -->
+            <svg id="sunIcon" class="mdl-icon-sun" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+
+        <div class="mdl-form-card">
+
+            <div class="mdl-brand-mobile">
+                <span>
+                    GRUPO <span class="mdl-red">MDL</span> <span class="mdl-blue">E.I.R.L.</span>
+                </span>
+            </div>
+
+            <div>
+                <h2 class="mdl-title">Iniciar Sesión</h2>
+                <p class="mdl-subtitle">Ingrese su correo y contraseña para acceder</p>
+            </div>
+
+            @if ($errors->any())
+                <div class="mdl-alert-error">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="#" class="mdl-form">
+                @csrf
+
+                <!-- Correo Electrónico -->
+                <div>
+                    <label class="mdl-label">Correo Electrónico</label>
+                    <div class="mdl-input-wrap">
+                        <span class="mdl-input-icon">@</span>
+                        <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                            class="mdl-input"
+                            placeholder="correo@ejemplo.com">
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div>
+                    <div class="mdl-field-header">
+                        <label class="mdl-label">Contraseña</label>
+                        <a href="/recuperar-contrasena" class="mdl-forgot">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <div class="mdl-input-wrap">
+                        <span class="mdl-input-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </span>
+                        <input type="password" id="password" name="password" required
+                            class="mdl-input mdl-input--password"
+                            placeholder="••••••••••">
+                        <button type="button" onclick="togglePassword()" class="mdl-eye-btn" aria-label="Mostrar contraseña">
+                            <svg id="eyeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7C19.27 16.057 15.632 19 12 19c-3.633 0-7.27-2.943-8.542-7z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recordar Sesión -->
+                <div class="mdl-remember">
+                    <label>
+                        <input type="checkbox" name="remember" class="mdl-checkbox">
+                        <span>Recordar Sesión</span>
+                    </label>
+                </div>
+
+                <!-- Botón Iniciar Sesión con efectos de hover claros -->
+                <button type="submit" class="mdl-btn">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="mdl-footer">
+                <span>GRUPO MDL E.I.R.L.</span>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7C19.27 16.057 15.632 19 12 19c-3.633 0-7.27-2.943-8.542-7z"/>';
+        }
+    }
+</script>
+@endpush

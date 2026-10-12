@@ -6,6 +6,7 @@
     <title>@yield('title', 'Sistema de Inventario')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('styles')
     <script>
         // Aplica el tema guardado antes de renderizar (evita parpadeo)
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -63,5 +64,6 @@
             });
         });
     </script>
+    @stack('scripts')
 </body>
 </html>
