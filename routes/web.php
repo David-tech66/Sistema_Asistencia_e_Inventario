@@ -14,6 +14,11 @@ Route::get('/dashboard', function () {
     return view('auth.dashboard');
 });
 
+Route::get('/proveedores', function () {
+    return view('views.proveedores');
+});
+
 Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
+

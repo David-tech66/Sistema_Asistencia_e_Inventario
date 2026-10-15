@@ -19,7 +19,7 @@
 
         <!-- Logo superior -->
         <div class="mdl-panel-header">
-            <span class="mdl-panel-brand">
+            <span class="mdl-panel-brand" >
                 <img src="{{ asset('images/logo-MDL.png') }}" alt="Logo MDL">
             </span>
         </div>

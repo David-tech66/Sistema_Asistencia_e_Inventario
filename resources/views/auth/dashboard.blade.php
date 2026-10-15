@@ -129,7 +129,7 @@
                     <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/proveedores.balde.php" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
                     </a>
                 </div>
