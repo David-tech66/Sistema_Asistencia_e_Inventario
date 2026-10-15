@@ -3,31 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Operativo - Grupo MDL E.I.R.L.</title>
+    <title>Panel Administrativo - Grupo MDL E.I.R.L.</title>
     
     <!-- Fuentes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js para los gráficos dinámicos -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
                     colors: {
                         brand: {
-                            dark: '#0f172a',    /* Slate 900 */
-                            primary: '#1e293b', /* Slate 800 */
-                            accent: '#2563eb',  /* Blue 600 */
-                            success: '#10b981', /* Emerald 500 */
+                            blue: '#2563eb',
+                            light: '#3b82f6',
+                            dark: '#1e40af',
+                            red: '#dc2626',
+                            gray: '#64748b'
                         }
                     }
                 }
@@ -35,52 +33,146 @@
         }
     </script>
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Scrollbar estilizado */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Efecto hover azul para items del sidebar */
+        .sidebar-item {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+        .sidebar-item:hover {
+            background-color: rgba(37, 99, 235, 0.08);
+            color: #2563eb;
+        }
+        .sidebar-item:hover i {
+            color: #2563eb;
+        }
+        .sidebar-item.active {
+            background-color: rgba(37, 99, 235, 0.12);
+            color: #2563eb;
+            font-weight: 500;
+        }
+        .sidebar-item.active i {
+            color: #2563eb;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden flex h-screen">
+<body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shadow-xl z-20 shrink-0">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
-            <span class="text-base font-black tracking-wider flex items-center gap-2">
-                <svg class="w-7 h-7 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                GRUPO <span class="text-red-600">MDL</span> <span class="text-[10px] text-blue-400 font-semibold px-1.5 py-0.5 bg-blue-900/40 rounded border border-blue-700/30">E.I.R.L.</span>
-            </span>
+    <aside class="w-[260px] bg-white flex flex-col border-r border-gray-200 z-20 shrink-0 overflow-y-auto">
+        
+        <!-- Logo -->
+        <div class="h-[72px] flex items-center px-6 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <!-- Logo ladrillos -->
+                <div class="flex flex-col gap-[2px]">
+                    <div class="flex gap-[2px]">
+                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
+                    </div>
+                    <div class="flex gap-[2px]">
+                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
+                    </div>
+                    <div class="flex gap-[2px]">
+                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
+                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-extrabold tracking-tight text-gray-900 leading-none">GRUPO MD</span>
+                    <span class="text-[8px] text-gray-500 font-medium tracking-wider mt-[1px]">E.I.R.L.</span>
+                </div>
+            </div>
         </div>
         
-        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-            <a href="#" class="flex items-center px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium text-sm shadow-sm">
-                <i class="fa-solid fa-chart-pie w-5 mr-2"></i> Dashboard
-            </a>
-            <div class="pt-3 pb-1 px-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Inventario</div>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-boxes-stacked w-5 mr-2 text-slate-400"></i> Productos
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-tags w-5 mr-2 text-slate-400"></i> Categorías
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-cart-shopping w-5 mr-2 text-slate-400"></i> Ventas
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-users w-5 mr-2 text-slate-400"></i> Clientes
+        <!-- Navegación -->
+        <nav class="flex-1 py-4 px-3 space-y-1">
+            
+            <!-- Dashboards -->
+            <a href="#" class="sidebar-item active flex items-center px-4 py-2.5 text-sm">
+                <i class="fa-solid fa-chart-pie w-5 mr-3 text-sm"></i> Dashboards
             </a>
 
-            <div class="pt-3 pb-1 px-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Personal & QR</div>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-id-badge w-5 mr-2 text-slate-400"></i> Empleados
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-sm transition-colors">
-                <i class="fa-solid fa-qrcode w-5 mr-2 text-emerald-400"></i> Asistencias QR
-            </a>
+            <!-- Inventario (desplegable) -->
+            <div class="pt-3">
+                <button onclick="toggleMenu('inventario')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-boxes-stacked w-5 mr-3 text-sm"></i> Inventario
+                    </div>
+                    <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
+                </button>
+                <div id="inventario-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
+                    </a>
+                </div>
+            </div>
+
+            <!-- General (desplegable) -->
+            <div class="pt-3">
+                <button onclick="toggleMenu('general')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-gear w-5 mr-3 text-sm"></i> General
+                    </div>
+                    <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
+                </button>
+                <div id="general-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <i class="fa-solid fa-user-check w-4 mr-2 text-[11px]"></i> Asistencias
+                    </a>
+                    <div class="pt-2">
+                        <div class="px-3 py-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Reportes</div>
+                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Productos
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes asistencias
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Ventas
+                        </a>
+                    </div>
+                </div>
+            </div>
         </nav>
         
-        <div class="p-4 border-t border-slate-800">
-            <a href="#" class="flex items-center px-3 py-2 text-slate-400 hover:text-white text-sm transition-colors">
-                <i class="fa-solid fa-arrow-right-from-bracket w-5 mr-2 text-rose-400"></i> Cerrar Sesión
+        <!-- Bottom: Configuración y Cerrar sesión -->
+        <div class="p-3 border-t border-gray-100 space-y-1">
+            <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
+                <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
+            </a>
+            <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
+                <i class="fa-solid fa-right-from-bracket w-5 mr-3 text-sm"></i> Cerrar Sesión
             </a>
         </div>
     </aside>
@@ -89,238 +181,118 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
         
         <!-- TOPBAR -->
-        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 shrink-0 border-b border-slate-100">
-            <div class="flex items-center">
-                <h1 class="text-lg font-bold text-slate-800">Panel Administrativo</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button class="relative text-slate-400 hover:text-slate-600 transition-colors">
-                    <i class="fa-regular fa-bell text-xl"></i>
-                    <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
+        <header class="h-[72px] bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button class="text-gray-500 hover:text-blue-600 transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
                 </button>
-                <div class="h-8 w-px bg-slate-200"></div>
-                <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=1e293b&color=fff" alt="Avatar" class="h-9 w-9 rounded-full object-cover border border-slate-200">
-                    <div class="ml-3 text-left">
-                        <p class="text-sm font-semibold text-slate-700 leading-tight">Administrador</p>
-                        <p class="text-xs text-slate-400">Control Central</p>
+                <h1 class="text-xl font-bold text-blue-600">Panel Administrativo</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-400 hover:text-blue-600 transition-colors">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
+                </button>
+                <div class="h-8 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=2563eb&color=fff" alt="Avatar" class="h-9 w-9 rounded-full object-cover border-2 border-blue-100">
+                    <div class="hidden sm:block text-left">
+                        <p class="text-sm font-semibold text-gray-800 leading-tight">Administrador</p>
+                        <p class="text-[11px] text-gray-400">Administrador</p>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- DASHBOARD CONTENT AREA -->
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/70 p-6 space-y-6">
+        <!-- DASHBOARD CONTENT -->
+        <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
             
-            <!-- Título de Sección y Fecha -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900">Resumen Operativo</h2>
-                    <p class="text-sm text-slate-500">Monitoreo en tiempo real de ventas, inventario y asistencia por código QR.</p>
-                </div>
-                <div class="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-xs text-sm font-medium text-slate-600 flex items-center gap-2">
-                    <i class="fa-regular fa-calendar text-blue-600"></i> Miércoles, 14 Oct 2026
-                </div>
+            <!-- Título de Sección -->
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Resumen Operativo</h2>
+                <p class="text-sm text-gray-500 mt-1">Monitoreo en tiempo real de ventas, inventario y asistencia por código QR.</p>
             </div>
 
-            <!-- 1. FILA SUPERIOR: TARJETAS KPI (4 Columnas) -->
+            <!-- KPI CARDS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 
-                <!-- KPI 1: Ventas -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Ventas del Día</span>
-                            <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                                <i class="fa-solid fa-cash-register text-lg"></i>
-                            </div>
+                <!-- KPI 1: Total de Productos -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total de Productos</span>
+                        <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-bag-shopping text-lg"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-slate-900">$1,450.00</h3>
                     </div>
-                    <div class="mt-4 flex items-center text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md w-fit">
-                        <i class="fa-solid fa-arrow-trend-up mr-1.5"></i> +12.4% vs ayer
+                    <h3 class="text-3xl font-bold text-gray-900">24</h3>
+                    <div class="mt-4 pt-3 border-t border-gray-50">
+                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                            Ver productos <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- KPI 2: Stock Mínimo -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Stock Crítico</span>
-                            <div class="h-10 w-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-                                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                            </div>
+                <!-- KPI 2: Stock Crítico -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Stock Crítico</span>
+                        <div class="h-10 w-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                            <i class="fa-solid fa-triangle-exclamation text-lg"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-rose-600">3 <span class="text-sm font-normal text-slate-400">artículos</span></h3>
                     </div>
-                    <div class="mt-4 flex items-center text-xs font-medium text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md w-fit">
-                        <i class="fa-solid fa-box-open mr-1.5"></i> Requiere reabastecimiento
+                    <h3 class="text-3xl font-bold text-gray-900">3 <span class="text-sm font-normal text-gray-400">artículos</span></h3>
+                    <div class="mt-4 pt-3 border-t border-gray-50">
+                        <span class="inline-flex items-center text-[11px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full">
+                            <i class="fa-solid fa-circle-exclamation mr-1 text-[9px]"></i> Requiere reabastecimiento
+                        </span>
+                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
+                            Ver stock <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- KPI 3: Asistencia QR -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Asistencia QR Hoy</span>
-                            <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                <i class="fa-solid fa-qrcode text-lg"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900">12 <span class="text-sm font-normal text-slate-400">/ 15 Presentes</span></h3>
+                <!-- KPI 3: Asistencias QR Hoy -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Asistencias QR Hoy</span>
                     </div>
-                    <div class="mt-4 flex items-center text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md w-fit">
-                        <i class="fa-solid fa-user-check mr-1.5"></i> 80% Puntualidad activa
+                    <!-- Gauge semicircular -->
+                    <div class="flex flex-col items-center -mt-2">
+                        <svg viewBox="0 0 120 70" class="w-28">
+                            <!-- Fondo del gauge -->
+                            <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
+                            <!-- Progreso del gauge (80%) -->
+                            <path d="M 10 60 A 50 50 0 0 1 107.6 28.4" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"/>
+                            <!-- Texto central -->
+                            <text x="60" y="48" text-anchor="middle" class="text-lg font-bold" fill="#1f2937" font-size="14">12</text>
+                            <text x="72" y="48" text-anchor="middle" class="text-gray-400" fill="#9ca3af" font-size="10">/15</text>
+                            <text x="60" y="62" text-anchor="middle" fill="#6b7280" font-size="8">presentes</text>
+                        </svg>
                     </div>
-                </div>
-
-                <!-- KPI 4: Órdenes o Servicios Activos -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Servicios en Taller</span>
-                            <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                                <i class="fa-solid fa-laptop-code text-lg"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900">7 <span class="text-sm font-normal text-slate-400">equipos</span></h3>
-                    </div>
-                    <div class="mt-4 flex items-center text-xs font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md w-fit">
-                        <i class="fa-solid fa-clock mr-1.5"></i> En proceso de soporte
+                    <div class="mt-2 pt-3 border-t border-gray-50 w-full">
+                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                            Ver reportes <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
                 </div>
 
-            </div>
-
-            <!-- 2. ZONA CENTRAL: GRÁFICOS OPERATIVOS (Línea de Ventas y Anillo de Asistencia QR) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Gráfico de Líneas: Ventas Tecnológicas (Ocupa 2 columnas) -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <div>
-                            <h3 class="text-base font-bold text-slate-900">Comportamiento de Ventas Tecnológicas</h3>
-                            <p class="text-xs text-slate-400">Ingresos acumulados por día de la semana actual ($)</p>
-                        </div>
-                        <span class="text-xs bg-blue-50 text-blue-600 font-semibold px-2.5 py-1 rounded-lg">Semanal</span>
-                    </div>
-                    <div class="flex-1 relative h-64">
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Gráfico de Anillo / Donut: Puntualidad QR (Ocupa 1 columna) -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <div>
-                            <h3 class="text-base font-bold text-slate-900">Puntualidad de Personal</h3>
-                            <p class="text-xs text-slate-400">Registros de asistencia vía QR</p>
+                <!-- KPI 4: Ventas del Día -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ventas del Día</span>
+                        <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i class="fa-solid fa-cash-register text-lg"></i>
                         </div>
                     </div>
-                    <div class="flex-1 relative flex items-center justify-center h-52">
-                        <canvas id="attendanceChart"></canvas>
+                    <h3 class="text-3xl font-bold text-gray-900">$1,450.00</h3>
+                    <div class="mt-4 pt-3 border-t border-gray-50">
+                        <span class="inline-flex items-center text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
+                            <i class="fa-solid fa-arrow-trend-up mr-1 text-[9px]"></i> +12.4% vs ayer
+                        </span>
+                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
+                            Ver reportes <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
-                    <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                        <div class="bg-emerald-50 p-2 rounded-lg">
-                            <span class="block text-xs text-slate-500">A tiempo</span>
-                            <span class="font-bold text-emerald-600 text-sm">10</span>
-                        </div>
-                        <div class="bg-amber-50 p-2 rounded-lg">
-                            <span class="block text-xs text-slate-500">Tardanzas</span>
-                            <span class="font-bold text-amber-600 text-sm">2</span>
-                        </div>
-                        <div class="bg-rose-50 p-2 rounded-lg">
-                            <span class="block text-xs text-slate-500">Faltas</span>
-                            <span class="font-bold text-rose-600 text-sm">3</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 3. FILA INFERIOR: GRÁFICO DE BARRAS HORIZONTALES Y TABLAS OPERATIVAS -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
-                <!-- Barras Horizontales: Categorías Más Vendidas -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <div>
-                            <h3 class="text-base font-bold text-slate-900">Categorías de Mayor Rotación</h3>
-                            <p class="text-xs text-slate-400">Volumen de salidas en inventario informático</p>
-                        </div>
-                    </div>
-                    <div class="flex-1 relative h-64">
-                        <canvas id="categoriesChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Panel de Alertas de Stock & Últimos Registros QR -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col space-y-6">
-                    
-                    <!-- Tabla Stock Crítico -->
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-rose-500"></span> Alertas de Stock Mínimo
-                            </h3>
-                            <span class="text-xs text-blue-600 font-semibold cursor-pointer hover:underline">Ver inventario</span>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead class="text-xs text-slate-400 bg-slate-50 border-b border-slate-100">
-                                    <tr>
-                                        <th class="py-2 px-3 font-medium">Producto / Componente</th>
-                                        <th class="py-2 px-3 font-medium text-center">Stock Actual</th>
-                                        <th class="py-2 px-3 font-medium text-right">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-50">
-                                    <tr>
-                                        <td class="py-2.5 px-3 font-medium text-slate-800">Memoria RAM DDR4 16GB</td>
-                                        <td class="py-2.5 px-3 text-center"><span class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded">2 unds</span></td>
-                                        <td class="py-2.5 px-3 text-right"><button class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded font-medium">Reabastecer</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2.5 px-3 font-medium text-slate-800">Cartucho Tinta Negra HP</td>
-                                        <td class="py-2.5 px-3 text-center"><span class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded">1 und</span></td>
-                                        <td class="py-2.5 px-3 text-right"><button class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded font-medium">Reabastecer</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Mini Lista: Últimos Registros QR Asistencia -->
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Últimos Escaneos QR
-                            </h3>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-3">
-                                    <img src="https://ui-avatars.com/api/?name=Carlos+Mendoza&background=0D8ABC&color=fff" class="w-7 h-7 rounded-full" alt="User">
-                                    <div>
-                                        <p class="font-semibold text-slate-800">Carlos Mendoza <span class="text-slate-400 font-normal">(Soporte T.)</span></p>
-                                        <p class="text-[10px] text-emerald-600 font-medium">Validación QR exitosa</p>
-                                    </div>
-                                </div>
-                                <span class="font-mono text-slate-500 font-semibold">08:02 AM</span>
-                            </div>
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-3">
-                                    <img src="https://ui-avatars.com/api/?name=Lucia+Gomez&background=F59E0B&color=fff" class="w-7 h-7 rounded-full" alt="User">
-                                    <div>
-                                        <p class="font-semibold text-slate-800">Lucía Gómez <span class="text-slate-400 font-normal">(Ventas)</span></p>
-                                        <p class="text-[10px] text-amber-600 font-medium">Tardanza registrada</p>
-                                    </div>
-                                </div>
-                                <span class="font-mono text-slate-500 font-semibold">08:15 AM</span>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
@@ -328,82 +300,22 @@
         </main>
     </div>
 
-    <!-- Script de Inicialización de Gráficos (Chart.js) -->
+    <!-- Script para menús desplegables -->
     <script>
-        // 1. Gráfico de Líneas: Ventas Tecnológicas
-        const ctxSales = document.getElementById('salesChart').getContext('2d');
-        new Chart(ctxSales, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'Ventas ($)',
-                    data: [820, 950, 1450, 1100, 1300, 1600, 750],
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.35,
-                    pointBackgroundColor: '#2563eb'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter' } } },
-                    x: { grid: { display: false }, ticks: { font: { family: 'Inter' } } }
-                }
+        function toggleMenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const arrow = document.getElementById(menuId + '-arrow');
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                submenu.classList.add('flex');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                submenu.classList.remove('flex');
+                arrow.style.transform = 'rotate(0deg)';
             }
-        });
-
-        // 2. Gráfico de Anillo: Puntualidad QR
-        const ctxAttendance = document.getElementById('attendanceChart').getContext('2d');
-        new Chart(ctxAttendance, {
-            type: 'doughnut',
-            data: {
-                labels: ['A tiempo', 'Tardanzas', 'Faltas'],
-                datasets: [{
-                    data: [10, 2, 3],
-                    backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
-                    borderWidth: 0,
-                    cutout: '75%'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-
-        // 3. Gráfico de Barras Horizontales: Categorías Más Vendidas
-        const ctxCategories = document.getElementById('categoriesChart').getContext('2d');
-        new Chart(ctxCategories, {
-            type: 'bar',
-            data: {
-                labels: ['Laptops y PCs', 'Componentes/Placas', 'Periféricos', 'Servicios Soporte'],
-                datasets: [{
-                    label: 'Unidades / Servicios',
-                    data: [42, 35, 28, 19],
-                    backgroundColor: ['#1e293b', '#2563eb', '#38bdf8', '#94a3b8'],
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter' } } },
-                    y: { grid: { display: false }, ticks: { font: { family: 'Inter' } } }
-                }
-            }
-        });
+        }
     </script>
 </body>
 </html>
