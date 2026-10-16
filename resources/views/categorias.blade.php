@@ -14,55 +14,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            blue: '#2563eb',
-                            light: '#3b82f6',
-                            dark: '#1e40af',
-                            red: '#dc2626',
-                            gray: '#64748b'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        /* Scrollbar estilizado */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Efecto hover azul para items del sidebar */
-        .sidebar-item {
-            transition: all 0.2s ease;
-            border-radius: 8px;
-        }
-        .sidebar-item:hover {
-            background-color: rgba(37, 99, 235, 0.08);
-            color: #2563eb;
-        }
-        .sidebar-item:hover i {
-            color: #2563eb;
-        }
-        .sidebar-item.active {
-            background-color: rgba(37, 99, 235, 0.12);
-            color: #2563eb;
-            font-weight: 500;
-        }
-        .sidebar-item.active i {
-            color: #2563eb;
-        }
-    </style>
+    @vite(['resources/css/sidebar_topbar.css', 'resources/js/sidebar_topbar.js'])
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
 
@@ -144,7 +96,7 @@
                     <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
                 </button>
                 <div id="general-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/users" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
                     </a>
                     <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
@@ -219,23 +171,5 @@
 
         </main>
     </div>
-
-    <!-- Script para menús desplegables -->
-    <script>
-        function toggleMenu(menuId) {
-            const submenu = document.getElementById(menuId + '-submenu');
-            const arrow = document.getElementById(menuId + '-arrow');
-            
-            if (submenu.classList.contains('hidden')) {
-                submenu.classList.remove('hidden');
-                submenu.classList.add('flex');
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                submenu.classList.add('hidden');
-                submenu.classList.remove('flex');
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-    </script>
 </body>
 </html>

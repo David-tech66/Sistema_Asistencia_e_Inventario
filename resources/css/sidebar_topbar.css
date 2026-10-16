@@ -1,0 +1,30 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+/* Scrollbar estilizado */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Efecto hover azul para items del sidebar */
+.sidebar-item {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+.sidebar-item:hover {
+    background-color: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+}
+.sidebar-item:hover i {
+    color: #2563eb;
+}
+.sidebar-item.active {
+    background-color: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+    font-weight: 500;
+}
+.sidebar-item.active i {
+    color: #2563eb;
+}

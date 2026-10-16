@@ -44,6 +44,7 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 // Rutas de tu equipo...
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
 Route::get('/proveedores', [App\Http\Controllers\ProveedorController::class, 'index']);
 Route::get('/productos', [App\Http\Controllers\ProductoController::class, 'index']);
 Route::get('/marcas', [App\Http\Controllers\MarcaController::class, 'index']);
