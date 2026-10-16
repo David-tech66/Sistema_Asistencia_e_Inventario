@@ -4,13 +4,22 @@
     (Tailwind ya se importa en resources/css/app.css)
    ========================================== */
 
-/* Transición suave para el cambio de modo claro / oscuro */
+/* Importar la tipografía Poppins desde Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Bloquear scroll de la página por completo */
 html {
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    height: 100vh;
+    overflow: hidden;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Auto-rellenado adaptado para modo claro y oscuro */
@@ -24,42 +33,56 @@ input:-webkit-autofill:focus {
 .dark input:-webkit-autofill,
 .dark input:-webkit-autofill:hover,
 .dark input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000a1a inset !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
 /* ============ Contenedor principal ============ */
 .rcv-login {
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-color: #f8fafc; /* slate-50 */
-    color: #0f172a;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #ffffff; /* slate-50 */
+    color: #000A1A;
+    font-family: "Poppins", sans-serif;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
 @media (min-width: 1024px) {
-    .rcv-login { flex-direction: row; }
+    .rcv-login {
+        flex-direction: row;
+    }
 }
 
-.dark .rcv-login { background-color: #070A10; }
+.dark .rcv-login {
+    background-color: #000A1A;
+}
 
 /* ============ Panel izquierdo (formulario) ============ */
 .rcv-panel-left {
+    display: none;
+    position: relative;
+    overflow: hidden;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
-    position: relative;
+    padding: 3rem;
 }
 
 @media (min-width: 640px) {
-    .rcv-panel-left { padding: 3rem; }
+    .rcv-panel-left {
+        padding: 3rem;
+    }
 }
 
 @media (min-width: 1024px) {
-    .rcv-panel-left { width: 50%; }
+    .rcv-panel-left {
+        width: 50%;
+    }
 }
 
 /* Botón de cambio de tema (Luna / Sol) */
@@ -72,22 +95,41 @@ input:-webkit-autofill:focus {
     background: none;
     border: none;
     color: #334155; /* slate-700 */
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
     outline: none;
     cursor: pointer;
 }
 
-.rcv-theme-toggle:hover { background-color: #e2e8f0; /* slate-200 */ }
+.rcv-theme-toggle:hover {
+    background-color: #e2e8f0; /* slate-200 */
+}
 
-.rcv-theme-toggle svg { width: 1.25rem; height: 1.25rem; }
+.rcv-theme-toggle svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
 
-.rcv-icon-moon { display: block; }
-.rcv-icon-sun { display: none; }
+.rcv-icon-moon {
+    display: block;
+}
+.rcv-icon-sun {
+    display: none;
+}
 
-.dark .rcv-theme-toggle { color: #e2e8f0; /* slate-200 */ }
-.dark .rcv-theme-toggle:hover { background-color: #1e293b; /* slate-800 */ }
-.dark .rcv-icon-moon { display: none; }
-.dark .rcv-icon-sun { display: block; }
+.dark .rcv-theme-toggle {
+    color: #e2e8f0; /* slate-200 */
+}
+.dark .rcv-theme-toggle:hover {
+    background-color: #1e293b; /* slate-800 */
+}
+.dark .rcv-icon-moon {
+    display: none;
+}
+.dark .rcv-icon-sun {
+    display: block;
+}
 
 /* Tarjeta del formulario */
 .rcv-card {
@@ -101,7 +143,9 @@ input:-webkit-autofill:focus {
 }
 
 @media (min-width: 640px) {
-    .rcv-card { padding: 2rem; }
+    .rcv-card {
+        padding: 2rem;
+    }
 }
 
 /* Logo */
@@ -111,7 +155,9 @@ input:-webkit-autofill:focus {
 }
 
 @media (min-width: 1024px) {
-    .rcv-logo-wrap { text-align: left; }
+    .rcv-logo-wrap {
+        text-align: left;
+    }
 }
 
 .rcv-logo {
@@ -124,7 +170,10 @@ input:-webkit-autofill:focus {
 }
 
 @media (min-width: 1024px) {
-    .rcv-logo { margin-left: 0; margin-right: 0; }
+    .rcv-logo {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 /* Títulos */
@@ -135,7 +184,9 @@ input:-webkit-autofill:focus {
     letter-spacing: -0.025em;
 }
 
-.dark .rcv-title { color: #ffffff; }
+.dark .rcv-title {
+    color: #ffffff;
+}
 
 .rcv-subtitle {
     font-size: 0.875rem;
@@ -143,7 +194,9 @@ input:-webkit-autofill:focus {
     margin-top: 0.5rem;
 }
 
-.dark .rcv-subtitle { color: #94a3b8; }
+.dark .rcv-subtitle {
+    color: #94a3b8;
+}
 
 /* Mensaje de estado */
 .rcv-alert-status {
@@ -172,9 +225,13 @@ input:-webkit-autofill:focus {
     margin-bottom: 0.25rem;
 }
 
-.dark .rcv-label { color: #94a3b8; }
+.dark .rcv-label {
+    color: #94a3b8;
+}
 
-.rcv-input-wrap { position: relative; }
+.rcv-input-wrap {
+    position: relative;
+}
 
 .rcv-input-icon {
     position: absolute;
@@ -200,14 +257,20 @@ input:-webkit-autofill:focus {
     font-size: 0.875rem;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
-.rcv-input::placeholder { color: #94a3b8; }
+.rcv-input::placeholder {
+    color: #94a3b8;
+}
 
 .rcv-input:focus {
     border-color: #2563eb; /* blue-600 */
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.2);
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 .dark .rcv-input {
@@ -217,7 +280,9 @@ input:-webkit-autofill:focus {
 }
 
 .dark .rcv-input:focus {
-    box-shadow: 0 0 0 2px #0f172a, 0 0 0 4px rgba(37, 99, 235, 0.2);
+    box-shadow:
+        0 0 0 2px #0f172a,
+        0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 /* Botón Siguiente */
@@ -229,26 +294,37 @@ input:-webkit-autofill:focus {
     padding: 0.875rem 1rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
     font-size: 0.875rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #0B5394;
+    background-color: #0b5394;
     cursor: pointer;
     outline: none;
-    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
 }
 
 .rcv-btn:hover {
     background-color: #094275;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     transform: translateY(-2px);
 }
 
-.rcv-btn:active { transform: translateY(0); }
+.rcv-btn:active {
+    transform: translateY(0);
+}
 
 .rcv-btn:focus {
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.5);
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px rgba(37, 99, 235, 0.5);
 }
 
 /* Enlace Regresar al Login */
@@ -268,12 +344,21 @@ input:-webkit-autofill:focus {
     transition: color 0.15s ease;
 }
 
-.rcv-back:hover { color: #2563eb; /* blue-600 */ }
+.rcv-back:hover {
+    color: #2563eb; /* blue-600 */
+}
 
-.rcv-back svg { width: 1rem; height: 1rem; }
+.rcv-back svg {
+    width: 1rem;
+    height: 1rem;
+}
 
-.dark .rcv-back { color: #cbd5e1; /* slate-300 */ }
-.dark .rcv-back:hover { color: #60a5fa; /* blue-400 */ }
+.dark .rcv-back {
+    color: #cbd5e1; /* slate-300 */
+}
+.dark .rcv-back:hover {
+    color: #60a5fa; /* blue-400 */
+}
 
 /* Pie */
 .rcv-footer {
@@ -320,7 +405,12 @@ input:-webkit-autofill:focus {
 .rcv-panel-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, #020617, rgba(23, 37, 84, 0.6), rgba(15, 23, 42, 0.4));
+    background: linear-gradient(
+        to top,
+        #020617,
+        rgba(23, 37, 84, 0.6),
+        rgba(15, 23, 42, 0.4)
+    );
 }
 
 .rcv-panel-top {

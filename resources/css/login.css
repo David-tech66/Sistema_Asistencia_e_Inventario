@@ -4,13 +4,22 @@
     (Tailwind ya se importa en resources/css/app.css)
    ========================================== */
 
-/* Transición suave para el cambio de modo claro / oscuro */
+/* Importar la tipografía Poppins desde Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Bloquear scroll de la página por completo */
 html {
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    height: 100vh;
+    overflow: hidden;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Auto-rellenado adaptado para modo claro y oscuro */
@@ -24,34 +33,42 @@ input:-webkit-autofill:focus {
 .dark input:-webkit-autofill,
 .dark input:-webkit-autofill:hover,
 .dark input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #000A1A inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000a1a inset !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
 /* ============ Contenedor principal ============ */
 .mdl-login {
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-color: #f8fafc; /* slate-50 */
-    color: #0f172a;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #ffffff; /* slate-50 */
+    color: #000A1A;
+    font-family: "Poppins", sans-serif;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
 @media (min-width: 1024px) {
-    .mdl-login { flex-direction: row; }
+    .mdl-login {
+        flex-direction: row;
+    }
 }
 
-.dark .mdl-login { background-color: #070A10; }
+.dark .mdl-login {
+    background-color: #000A1A;
+}
 
 /* ============ Panel izquierdo (imagen institucional) ============ */
 .mdl-panel-left {
     display: none;
     position: relative;
     overflow: hidden;
-    background-color: #0f172a; /* slate-900 */
+    background-color: #000A1A; /* slate-900 */
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     padding: 3rem;
 }
 
@@ -75,10 +92,16 @@ input:-webkit-autofill:focus {
     opacity: 0.4;
 }
 
+/* Overlay limpio y profesional (sin tonos de colores forzados) */
 .mdl-panel-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, #020617, rgba(23, 37, 84, 0.6), rgba(15, 23, 42, 0.4));
+    background: linear-gradient(
+        to top,
+        #020617,
+        rgba(23, 37, 84, 14%),
+        rgba(15, 23, 42, 14%)
+    );
 }
 
 .mdl-panel-header {
@@ -100,8 +123,23 @@ input:-webkit-autofill:focus {
 }
 
 .mdl-panel-brand img {
-    
+    height: 1.5em;
     width: auto;
+}
+
+/* Logo centrado en el panel izquierdo */
+.mdl-panel-brand-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.mdl-logo-img {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 .mdl-panel-content {
@@ -109,12 +147,16 @@ input:-webkit-autofill:focus {
     z-index: 1;
     margin-top: auto;
     margin-bottom: auto;
-    padding: 3rem 0;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .mdl-panel-title {
     font-size: 1.875rem;
-    font-weight: 800;
+    font-weight: 400;
     color: #ffffff;
     letter-spacing: -0.025em;
     margin-bottom: 1.5rem;
@@ -122,48 +164,49 @@ input:-webkit-autofill:focus {
 }
 
 @media (min-width: 1024px) {
-    .mdl-panel-title { font-size: 2.25rem; }
+    .mdl-panel-title {
+        font-size: 25px;
+    }
 }
 
-.mdl-panel-divider {
-    width: 6rem;
-    height: 0.25rem;
+/* Línea roja divisoria superior de los iconos */
+.mdl-divider-line {
+    width: 100%;
+    max-width: 18rem;
+    height: 2px;
     background-color: #dc2626; /* red-600 */
+    margin: 1.5rem auto 1.5rem auto;
     border-radius: 9999px;
-    margin-bottom: 2rem;
 }
 
+/* Contenedor de iconos idéntico a Figma (sin cajas oscuras) */
 .mdl-panel-icons {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 3rem;
-    max-width: 28rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    margin-top: 0.5rem;
 }
 
 .mdl-panel-icon {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 0.75rem;
-    border-radius: 0.75rem;
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid #1e293b; /* slate-800 */
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .mdl-panel-icon svg {
-    width: 1.75rem;
-    height: 1.75rem;
-    color: #dc2626; /* red-600 */
-    margin-bottom: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    color: #dc2626; /* Rojo institucional exacto */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease;
 }
 
-.mdl-panel-footer {
-    position: relative;
-    z-index: 1;
-    font-size: 0.75rem;
-    color: #94a3b8; /* slate-400 */
+.mdl-panel-icon svg:hover {
+    transform: scale(1.1);
 }
 
 /* ============ Panel derecho (formulario) ============ */
@@ -174,42 +217,65 @@ input:-webkit-autofill:focus {
     justify-content: center;
     padding: 1.5rem;
     position: relative;
+    font-family: "Poppins", sans-serif;
 }
 
 @media (min-width: 640px) {
-    .mdl-panel-right { padding: 3rem; }
+    .mdl-panel-right {
+        padding: 3rem;
+    }
 }
 
 @media (min-width: 1024px) {
-    .mdl-panel-right { width: 50%; }
+    .mdl-panel-right {
+        width: 50%;
+    }
 }
 
 /* Botón de cambio de tema (Luna / Sol) */
 .mdl-theme-toggle {
     position: absolute;
     top: 1.5rem;
-    right: 1.5rem;
-    padding: 0.625rem;
+    left: 1.5rem;
     border-radius: 9999px;
     background: none;
     border: none;
     color: #334155; /* slate-700 */
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
     outline: none;
     cursor: pointer;
 }
 
-.mdl-theme-toggle:hover { background-color: #e2e8f0; /* slate-200 */ }
+.mdl-theme-toggle:hover {
+    background-color: #e2e8f0; /* slate-200 */
+}
 
-.mdl-theme-toggle svg { width: 1.25rem; height: 1.25rem; }
+.mdl-theme-toggle svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
 
-.mdl-icon-moon { display: block; }
-.mdl-icon-sun { display: none; }
+.mdl-icon-moon {
+    display: block;
+}
+.mdl-icon-sun {
+    display: none;
+}
 
-.dark .mdl-theme-toggle { color: #e2e8f0; /* slate-200 */ }
-.dark .mdl-theme-toggle:hover { background-color: #1e293b; /* slate-800 */ }
-.dark .mdl-icon-moon { display: none; }
-.dark .mdl-icon-sun { display: block; }
+.dark .mdl-theme-toggle {
+    color: #e2e8f0; /* slate-200 */
+}
+.dark .mdl-theme-toggle:hover {
+    background-color: #1e293b; /* slate-800 */
+}
+.dark .mdl-icon-moon {
+    display: none;
+}
+.dark .mdl-icon-sun {
+    display: block;
+}
 
 /* Tarjeta del formulario */
 .mdl-form-card {
@@ -223,7 +289,9 @@ input:-webkit-autofill:focus {
 }
 
 @media (min-width: 640px) {
-    .mdl-form-card { padding: 2rem; }
+    .mdl-form-card {
+        padding: 2rem;
+    }
 }
 
 /* Marca visible solo en móvil */
@@ -234,7 +302,9 @@ input:-webkit-autofill:focus {
 }
 
 @media (max-width: 1023.98px) {
-    .mdl-brand-mobile { display: block; }
+    .mdl-brand-mobile {
+        display: block;
+    }
 }
 
 .mdl-brand-mobile span {
@@ -244,20 +314,29 @@ input:-webkit-autofill:focus {
     color: #0f172a;
 }
 
-.mdl-brand-mobile .mdl-red { color: #dc2626; }
-.mdl-brand-mobile .mdl-blue { font-size: 0.75rem; color: #2563eb; /* blue-600 */ }
+.mdl-brand-mobile .mdl-red {
+    color: #dc2626;
+}
+.mdl-brand-mobile .mdl-blue {
+    font-size: 0.75rem;
+    color: #2563eb; /* blue-600 */
+}
 
-.dark .mdl-brand-mobile span { color: #ffffff; }
+.dark .mdl-brand-mobile span {
+    color: #ffffff;
+}
 
 /* Títulos */
 .mdl-title {
     font-size: 1.875rem;
-    font-weight: 800;
-    color: #0f172a;
+    font-weight: 500;
+    color: #0b2f5b;
     letter-spacing: -0.025em;
 }
 
-.dark .mdl-title { color: #ffffff; }
+.dark .mdl-title {
+    color: #ffffff;
+}
 
 .mdl-subtitle {
     font-size: 0.875rem;
@@ -265,7 +344,9 @@ input:-webkit-autofill:focus {
     margin-top: 0.25rem;
 }
 
-.dark .mdl-subtitle { color: #94a3b8; }
+.dark .mdl-subtitle {
+    color: #94a3b8;
+}
 
 /* Alerta de errores */
 .mdl-alert-error {
@@ -287,16 +368,19 @@ input:-webkit-autofill:focus {
 .mdl-label {
     display: block;
     font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #475569; /* slate-600 */
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #334155; /* slate-600 */
     margin-bottom: 0.25rem;
 }
 
-.dark .mdl-label { color: #94a3b8; }
+.dark .mdl-label {
+    color: #94a3b8;
+}
 
-.mdl-input-wrap { position: relative; }
+.mdl-input-wrap {
+    position: relative;
+}
 
 .mdl-input-icon {
     position: absolute;
@@ -311,29 +395,41 @@ input:-webkit-autofill:focus {
     font-weight: 700;
 }
 
-.mdl-input-icon svg { width: 1rem; height: 1rem; }
+.mdl-input-icon svg {
+    width: 1rem;
+    height: 1rem;
+}
 
 .mdl-input {
     display: block;
     width: 100%;
     padding: 0.75rem 1rem 0.75rem 2.25rem;
     border-radius: 0.75rem;
-    border: 1px solid #cbd5e1; /* slate-300 */
+    border: 1px solid #cbcad7; /* slate-300 */
     background-color: #ffffff;
     color: #0f172a;
     font-size: 0.875rem;
+    font-family: "Poppins", sans-serif;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
-.mdl-input--password { padding-right: 2.75rem; }
+.mdl-input--password {
+    padding-right: 2.75rem;
+}
 
-.mdl-input::placeholder { color: #94a3b8; }
+.mdl-input::placeholder {
+    color: #cbcad7;
+}
 
 .mdl-input:focus {
     border-color: #2563eb; /* blue-600 */
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.2);
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 .dark .mdl-input {
@@ -343,7 +439,9 @@ input:-webkit-autofill:focus {
 }
 
 .dark .mdl-input:focus {
-    box-shadow: 0 0 0 2px #0f172a, 0 0 0 4px rgba(37, 99, 235, 0.2);
+    box-shadow:
+        0 0 0 2px #0f172a,
+        0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 /* Cabecera del campo contraseña */
@@ -360,9 +458,13 @@ input:-webkit-autofill:focus {
     text-decoration: none;
 }
 
-.mdl-forgot:hover { text-decoration: underline; }
+.mdl-forgot:hover {
+    text-decoration: underline;
+}
 
-.dark .mdl-forgot { color: #60a5fa; /* blue-400 */ }
+.dark .mdl-forgot {
+    color: #60a5fa; /* blue-400 */
+}
 
 /* Botón mostrar/ocultar contraseña */
 .mdl-eye-btn {
@@ -381,11 +483,18 @@ input:-webkit-autofill:focus {
     cursor: pointer;
 }
 
-.mdl-eye-btn:hover { color: #475569; }
+.mdl-eye-btn:hover {
+    color: #475569;
+}
 
-.dark .mdl-eye-btn:hover { color: #cbd5e1; }
+.dark .mdl-eye-btn:hover {
+    color: #cbd5e1;
+}
 
-.mdl-eye-btn svg { width: 1.25rem; height: 1.25rem; }
+.mdl-eye-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
 
 /* Recordar sesión */
 .mdl-remember {
@@ -410,11 +519,13 @@ input:-webkit-autofill:focus {
 }
 
 .mdl-remember span {
-    color: #475569;
-    font-weight: 500;
+    color: #64748b;
+    font-weight: 400;
 }
 
-.dark .mdl-remember span { color: #94a3b8; }
+.dark .mdl-remember span {
+    color: #94a3b8;
+}
 
 /* Botón Iniciar Sesión */
 .mdl-btn {
@@ -425,35 +536,36 @@ input:-webkit-autofill:focus {
     padding: 0.875rem 1rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
     font-size: 0.875rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #0B5394;
+    background-color: #0754A6;
+    font-family: "Poppins", sans-serif;
     cursor: pointer;
     outline: none;
-    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
 }
 
 .mdl-btn:hover {
     background-color: #094275;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     transform: translateY(-2px);
 }
 
-.mdl-btn:active { transform: translateY(0); }
+.mdl-btn:active {
+    transform: translateY(0);
+}
 
 .mdl-btn:focus {
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(37, 99, 235, 0.5);
-}
-
-/* Pie */
-.mdl-footer {
-    text-align: center;
-    padding-top: 1rem;
-}
-
-.mdl-footer span {
-    font-size: 0.75rem;
-    color: #94a3b8;
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px rgba(37, 99, 235, 0.5);
 }
