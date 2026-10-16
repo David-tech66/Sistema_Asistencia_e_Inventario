@@ -101,7 +101,7 @@
         <nav class="flex-1 py-4 px-3 space-y-1">
             
             <!-- Dashboards -->
-            <a href="#" class="sidebar-item active flex items-center px-4 py-2.5 text-sm">
+            <a href="/dashboard" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
                 <i class="fa-solid fa-chart-pie w-5 mr-3 text-sm"></i> Dashboards
             </a>
 
@@ -114,22 +114,22 @@
                     <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
                 </button>
                 <div id="inventario-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/categorias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/clientes" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/proveedores" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
                     </a>
                 </div>
@@ -205,9 +205,100 @@
         </header>
 
         <!-- MAIN CONTENT -->
-        <main class="flex-1 overflow-y-auto p-6">
-        
+        <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
+
+            <!-- Título de Sección -->
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Proveedores</h2>
+                <p class="text-sm text-gray-500 mt-1">Listado de empresas proveedoras registradas en el sistema.</p>
+            </div>
+
+            <!-- TABLA PROVEEDORES -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i class="fa-solid fa-truck-field text-blue-600"></i>
+                        <span>Total: <span class="font-semibold text-gray-800">{{ $proveedores->count() }}</span> proveedor(es)</span>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" placeholder="Buscar proveedor..." class="pl-8 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 w-64">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                                <th class="px-5 py-3">#</th>
+                                <th class="px-5 py-3">Razón Social</th>
+                                <th class="px-5 py-3">RUC</th>
+                                <th class="px-5 py-3">Teléfono</th>
+                                <th class="px-5 py-3">Fecha de Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @forelse ($proveedores as $proveedor)
+                                <tr class="hover:bg-gray-50/70 transition-colors">
+                                    <td class="px-5 py-3.5 text-gray-400 font-medium">{{ $proveedor->id }}</td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                                <i class="fa-solid fa-building text-sm"></i>
+                                            </div>
+                                            <span class="font-semibold text-gray-800">{{ $proveedor->razon_social }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        <span class="inline-flex items-center font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">{{ $proveedor->ruc }}</span>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        @if ($proveedor->telefono)
+                                            <span class="text-gray-600"><i class="fa-solid fa-phone text-[11px] text-gray-400 mr-1.5"></i>{{ $proveedor->telefono }}</span>
+                                        @else
+                                            <span class="text-gray-300 text-xs">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-5 py-3.5 text-gray-500">{{ $proveedor->created_at ? $proveedor->created_at->format('d/m/Y') : '—' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-5 py-12 text-center">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="h-12 w-12 rounded-2xl bg-gray-50 text-gray-300 flex items-center justify-center">
+                                                <i class="fa-solid fa-truck-field text-xl"></i>
+                                            </div>
+                                            <p class="text-sm font-medium text-gray-500">No hay proveedores registrados</p>
+                                            <p class="text-xs text-gray-400">Cuando se registren proveedores, aparecerán en esta lista.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
+
+    <!-- Script para menús desplegables -->
+    <script>
+        function toggleMenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const arrow = document.getElementById(menuId + '-arrow');
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                submenu.classList.add('flex');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                submenu.classList.remove('flex');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
 </body>
 </html>

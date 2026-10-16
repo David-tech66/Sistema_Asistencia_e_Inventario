@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProveedorController;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -14,9 +15,29 @@ Route::get('/dashboard', function () {
     return view('auth.dashboard');
 });
 
-Route::get('/proveedores', function () {
-    return view('views.proveedores');
-});
+Route::get('/proveedores', [
+    App\Http\Controllers\ProveedorController::class, 'index'
+]);
+
+Route::get('/productos', [
+    App\Http\Controllers\ProductoController::class, 'index'
+]);
+
+Route::get('/marcas', [
+    App\Http\Controllers\MarcaController::class, 'index'
+]);
+
+Route::get('/categorias', [
+    App\Http\Controllers\CategoriaController::class, 'index'
+]);
+
+Route::get('/ventas', [
+    App\Http\Controllers\VentaController::class, 'index'
+]);
+
+Route::get('/clientes', [
+    App\Http\Controllers\ClienteController::class, 'index'
+]);
 
 Route::post('/logout', function () {
     return redirect('/login');

@@ -114,22 +114,22 @@
                     <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
                 </button>
                 <div id="inventario-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/categorias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/clientes" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
                     </a>
-                    <a href="/proveedores.balde.php" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/proveedores" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
                     </a>
                 </div>
