@@ -84,13 +84,13 @@
 
         <div class="mdl-form-card">
 
-            <div class="mdl-brand-mobile">
-                <span>
-                    GRUPO <span class="mdl-red">MDL</span> <span class="mdl-blue">E.I.R.L.</span>
-                </span>
+            <!-- Logo Dual Centrado (Visible solo en Móvil) -->
+            <div class="mdl-mobile-logo-container">
+                <img src="{{ asset('images/logo-MDL-2.png') }}" alt="Logo MDL Claro" class="mdl-mobile-logo mdl-logo-light">
+                <img src="{{ asset('images/logo-MDL.png') }}" alt="Logo MDL Oscuro" class="mdl-mobile-logo mdl-logo-dark">
             </div>
 
-            <div>
+            <div class="mdl-mobile-text-center">
                 <h2 class="mdl-title">Iniciar Sesión</h2>
                 <p class="mdl-subtitle">Ingrese su correo y contraseña para acceder</p>
             </div>
@@ -101,7 +101,7 @@
             </div>
             @endif
 
-            <form method="POST" action="#" class="mdl-form">
+            <form method="POST" action="{{ route('login') }}" class="mdl-form">
                 @csrf
 
                 <!-- Correo Electrónico -->
@@ -110,7 +110,7 @@
                     <div class="mdl-input-wrap">
                         <span class="mdl-input-icon">@</span>
                         <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                            class="mdl-input">
+                            class="mdl-input" placeholder="correo@ejemplo.com">
                     </div>
                 </div>
 
