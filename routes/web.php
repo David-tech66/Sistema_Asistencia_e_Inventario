@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProveedorController;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -14,9 +15,9 @@ Route::get('/dashboard', function () {
     return view('auth.dashboard');
 });
 
-Route::get('/proveedores', function () {
-    return view('views.proveedores');
-});
+Route::get('/proveedores', [
+    App\Http\Controllers\ProveedorController::class, 'index'
+]);
 
 Route::post('/logout', function () {
     return redirect('/login');
