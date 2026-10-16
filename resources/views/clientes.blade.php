@@ -171,9 +171,12 @@
             <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
                 <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
             </a>
-            <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
-                <i class="fa-solid fa-right-from-bracket w-5 mr-3 text-sm"></i> Cerrar Sesión
-            </a>
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="sidebar-item flex items-center w-full px-4 py-2.5 text-sm text-gray-600 bg-transparent border-none cursor-pointer text-left">
+                    <i class="fa-solid fa-right-from-bracket w-5 mr-3 text-sm"></i> Cerrar Sesión
+                </button>
+            </form>
         </div>
     </aside>
 
