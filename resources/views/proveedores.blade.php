@@ -123,10 +123,10 @@
                     <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/clientes" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
                     </a>
                     <a href="/proveedores" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">

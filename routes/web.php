@@ -31,6 +31,14 @@ Route::get('/categorias', [
     App\Http\Controllers\CategoriaController::class, 'index'
 ]);
 
+Route::get('/ventas', [
+    App\Http\Controllers\VentaController::class, 'index'
+]);
+
+Route::get('/clientes', [
+    App\Http\Controllers\ClienteController::class, 'index'
+]);
+
 Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
