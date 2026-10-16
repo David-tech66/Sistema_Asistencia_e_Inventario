@@ -19,6 +19,10 @@ Route::get('/proveedores', [
     App\Http\Controllers\ProveedorController::class, 'index'
 ]);
 
+Route::get('/categorias', [
+    App\Http\Controllers\CategoriaController::class, 'index'
+]);
+
 Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
