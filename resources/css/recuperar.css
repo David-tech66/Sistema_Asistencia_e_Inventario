@@ -43,8 +43,8 @@ input:-webkit-autofill:focus {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-color: #ffffff; /* slate-50 */
-    color: #000A1A;
+    background-color: #ffffff;
+    color: #000a1a;
     font-family: "Poppins", sans-serif;
     transition:
         background-color 0.3s ease,
@@ -58,30 +58,24 @@ input:-webkit-autofill:focus {
 }
 
 .dark .rcv-login {
-    background-color: #000A1A;
+    background-color: #000a1a;
 }
 
 /* ============ Panel izquierdo (formulario) ============ */
 .rcv-panel-left {
-    display: none;
     position: relative;
     overflow: hidden;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
-}
-
-@media (min-width: 640px) {
-    .rcv-panel-left {
-        padding: 3rem;
-    }
+    padding: 2rem;
 }
 
 @media (min-width: 1024px) {
     .rcv-panel-left {
         width: 50%;
+        padding: 3rem;
     }
 }
 
@@ -94,7 +88,7 @@ input:-webkit-autofill:focus {
     border-radius: 9999px;
     background: none;
     border: none;
-    color: #334155; /* slate-700 */
+    color: #334155;
     transition:
         background-color 0.15s ease,
         color 0.15s ease;
@@ -103,7 +97,7 @@ input:-webkit-autofill:focus {
 }
 
 .rcv-theme-toggle:hover {
-    background-color: #e2e8f0; /* slate-200 */
+    background-color: #e2e8f0;
 }
 
 .rcv-theme-toggle svg {
@@ -119,10 +113,10 @@ input:-webkit-autofill:focus {
 }
 
 .dark .rcv-theme-toggle {
-    color: #e2e8f0; /* slate-200 */
+    color: #e2e8f0;
 }
 .dark .rcv-theme-toggle:hover {
-    background-color: #1e293b; /* slate-800 */
+    background-color: #1e293b;
 }
 .dark .rcv-icon-moon {
     display: none;
@@ -137,7 +131,7 @@ input:-webkit-autofill:focus {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.75rem;
     background: transparent;
     padding: 1rem;
 }
@@ -148,40 +142,61 @@ input:-webkit-autofill:focus {
     }
 }
 
-/* Logo */
-.rcv-logo-wrap {
+/* Cabecera centrada */
+.rcv-header-wrap {
     text-align: center;
-    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@media (min-width: 1024px) {
-    .rcv-logo-wrap {
-        text-align: left;
-    }
+/* Logo siempre centrado */
+.rcv-logo-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .rcv-logo {
-    height: 3rem;
-    width: auto;
+    max-width: 280px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1rem;
 }
 
-@media (min-width: 1024px) {
-    .rcv-logo {
-        margin-left: 0;
-        margin-right: 0;
-    }
+/* ==========================================
+    CAMBIO AUTOMÁTICO DE LOGO SEGÚN EL TEMA
+   ========================================== */
+
+/* Por defecto (Modo Claro): Se muestra el logo claro y se oculta el oscuro */
+.rcv-logo-dark {
+    display: none;
 }
 
-/* Títulos */
+.rcv-logo-light {
+    display: block;
+}
+
+/* Cuando la clase .dark está activa: Se oculta el claro y se muestra el oscuro */
+.dark .rcv-logo-light {
+    display: none;
+}
+
+.dark .rcv-logo-dark {
+    display: block;
+}
+
+/* Títulos y Subtítulos centrados */
 .rcv-title {
     font-size: 1.875rem;
-    font-weight: 800;
-    color: #0f172a;
+    font-weight: 600;
+    color: #0b2f5b;
     letter-spacing: -0.025em;
+    text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .dark .rcv-title {
@@ -190,8 +205,11 @@ input:-webkit-autofill:focus {
 
 .rcv-subtitle {
     font-size: 0.875rem;
-    color: #64748b; /* slate-500 */
-    margin-top: 0.5rem;
+    color: #64748b;
+    text-align: center;
+    margin-top: 0;
+    line-height: 1.5;
+    max-width: 24rem;
 }
 
 .dark .rcv-subtitle {
@@ -219,9 +237,8 @@ input:-webkit-autofill:focus {
     display: block;
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #475569; /* slate-600 */
+    letter-spacing: 0.04em;
+    color: #334155;
     margin-bottom: 0.25rem;
 }
 
@@ -250,11 +267,12 @@ input:-webkit-autofill:focus {
     display: block;
     width: 100%;
     padding: 0.75rem 1rem 0.75rem 2.25rem;
-    border-radius: 0.75rem;
-    border: 1px solid #cbd5e1; /* slate-300 */
+    border-radius: 0.5rem;
+    border: 1px solid #cbd5e1;
     background-color: #ffffff;
     color: #0f172a;
     font-size: 0.875rem;
+    font-family: "Poppins", sans-serif;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     outline: none;
     transition:
@@ -267,15 +285,15 @@ input:-webkit-autofill:focus {
 }
 
 .rcv-input:focus {
-    border-color: #2563eb; /* blue-600 */
+    border-color: #2563eb;
     box-shadow:
         0 0 0 2px #ffffff,
         0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 .dark .rcv-input {
-    border-color: #334155; /* slate-700 */
-    background-color: #0f172a; /* slate-900 */
+    border-color: #334155;
+    background-color: #0f172a;
     color: #ffffff;
 }
 
@@ -300,7 +318,8 @@ input:-webkit-autofill:focus {
     font-size: 0.875rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #0b5394;
+    background-color: #0754a6;
+    font-family: "Poppins", sans-serif;
     cursor: pointer;
     outline: none;
     transition:
@@ -339,13 +358,13 @@ input:-webkit-autofill:focus {
     gap: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #334155; /* slate-700 */
+    color: #334155;
     text-decoration: none;
     transition: color 0.15s ease;
 }
 
 .rcv-back:hover {
-    color: #2563eb; /* blue-600 */
+    color: #2563eb;
 }
 
 .rcv-back svg {
@@ -354,21 +373,10 @@ input:-webkit-autofill:focus {
 }
 
 .dark .rcv-back {
-    color: #cbd5e1; /* slate-300 */
+    color: #cbd5e1;
 }
 .dark .rcv-back:hover {
-    color: #60a5fa; /* blue-400 */
-}
-
-/* Pie */
-.rcv-footer {
-    text-align: center;
-    padding-top: 1rem;
-}
-
-.rcv-footer span {
-    font-size: 0.75rem;
-    color: #94a3b8;
+    color: #60a5fa;
 }
 
 /* ============ Panel derecho (imagen y servicios) ============ */
@@ -376,9 +384,9 @@ input:-webkit-autofill:focus {
     display: none;
     position: relative;
     overflow: hidden;
-    background-color: #0f172a; /* slate-900 */
+    background-color: #0f172a;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     padding: 3rem;
 }
 
@@ -408,8 +416,8 @@ input:-webkit-autofill:focus {
     background: linear-gradient(
         to top,
         #020617,
-        rgba(23, 37, 84, 0.6),
-        rgba(15, 23, 42, 0.4)
+        rgba(23, 37, 84, 14%),
+        rgba(15, 23, 42, 14%)
     );
 }
 
@@ -425,40 +433,35 @@ input:-webkit-autofill:focus {
     z-index: 1;
     margin-top: auto;
     margin-bottom: auto;
-    padding: 3rem 0;
+    padding: 2rem 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2.25rem;
     max-width: 32rem;
 }
 
+/* Servicios sin fondo de tarjeta oscura (estilo Figma) */
 .rcv-service {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid #1e293b; /* slate-800 */
+    gap: 1.25rem;
+    padding: 0;
+    background-color: transparent;
+    backdrop-filter: none;
+    border: none;
 }
 
 .rcv-service svg {
-    width: 2rem;
-    height: 2rem;
-    color: #dc2626; /* red-600 */
+    width: 2.25rem;
+    height: 2.25rem;
+    color: #dc2626; /* Rojo institucional exacto */
     flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .rcv-service span {
     color: #ffffff;
     font-size: 1.125rem;
-    font-weight: 600;
-}
-
-.rcv-panel-footer {
-    position: relative;
-    z-index: 1;
-    font-size: 0.75rem;
-    color: #94a3b8; /* slate-400 */
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }

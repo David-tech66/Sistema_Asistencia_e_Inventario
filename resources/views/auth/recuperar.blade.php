@@ -11,6 +11,7 @@
 
     <!-- Panel Izquierdo: Formulario de Recuperación -->
     <div class="rcv-panel-left">
+        
         <!-- Botón de cambio de tema (Luna / Sol) -->
         <button id="themeToggle" data-theme-toggle type="button" class="rcv-theme-toggle" aria-label="Cambiar tema">
             <!-- Luna (Visible en modo claro) -->
@@ -24,13 +25,20 @@
         </button>
 
         <div class="rcv-card">
-            <div class="rcv-logo-wrap">
-                <img src="{{ asset('images/logo-MDL.png') }}" alt="Logo MDL" class="rcv-logo">
-            </div>
+            <!-- Cabecera unificada y completamente centrada -->
+            <div class="rcv-header-wrap">
+                <div class="rcv-logo-wrap">
+                    <!-- Logo para Modo Claro (Lazo Azul) -->
+                    <img src="{{ asset('images/logo-MDL-2.png') }}" alt="Logo MDL Claro" class="rcv-logo rcv-logo-light">
+                    
+                    <!-- Logo para Modo Oscuro (Lazo Blanco) -->
+                    <img src="{{ asset('images/logo-MDL.png') }}" alt="Logo MDL Oscuro" class="rcv-logo rcv-logo-dark">
+                </div>
 
-            <div>
-                <h2 class="rcv-title">Recuperar Contraseña</h2>
-                <p class="rcv-subtitle">Ingresa tu Correo Electronico para enviarte un código de verificación para tu contraseña</p>
+                <div>
+                    <h2 class="rcv-title">Recuperar Contraseña</h2>
+                    <p class="rcv-subtitle">Ingresa tu Correo Electrónico para enviarte un código de verificación para tu contraseña</p>
+                </div>
             </div>
 
             @if (session('status'))
@@ -47,12 +55,11 @@
                     <div class="rcv-input-wrap">
                         <span class="rcv-input-icon">@</span>
                         <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                            class="rcv-input"
-                            placeholder="correo@ejemplo.com">
+                            class="rcv-input">
                     </div>
                 </div>
 
-                <!-- Botón Siguiente con efecto de hover claro -->
+                <!-- Botón Siguiente con efecto de hover -->
                 <button type="submit" class="rcv-btn">
                     Siguiente
                 </button>
@@ -65,47 +72,51 @@
                 </a>
             </div>
 
-            <div class="rcv-footer">
-                <span>GRUPO MDL E.I.R.L.</span>
-            </div>
         </div>
     </div>
 
-    <!-- Panel Derecho: Imagen y Listado de Servicios -->
+    <!-- Panel Derecho: Imagen y Listado de Servicios (Iconos limpios idénticos a Figma) -->
     <div class="rcv-panel-right">
         <div class="rcv-panel-bg">
-            <img src="{{ asset('images/logo-empresa-MDL.jpeg') }}" alt="Setup Informático MDL">
+            <img src="{{ asset('images/fondo-empresa-MDL.png') }}" alt="Setup Informático MDL">
             <div class="rcv-panel-overlay"></div>
         </div>
 
         <div class="rcv-panel-top"></div>
 
-        <!-- Contenido con los 4 servicios -->
+        <!-- Contenido con los 4 servicios limpios alineados al diseño -->
         <div class="rcv-panel-list">
             <div class="rcv-service">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
-                <span>Mantenimiento de Equipos Informaticos</span>
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.9 6.9a2.12 2.12 0 01-3-3l6.9-6.9a6 6 0 017.94-7.94l-3.76 3.76z" />
+                </svg>
+                <span>Mantenimiento de Equipos Informáticos</span>
             </div>
 
             <div class="rcv-service">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>
+                </svg>
                 <span>Inventario de Productos</span>
             </div>
 
             <div class="rcv-service">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v10M9 11l3-2 3 2"/>
+                </svg>
                 <span>Ventas en tiempo real</span>
             </div>
 
             <div class="rcv-service">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/>
+                </svg>
                 <span>Soporte de Servicios</span>
             </div>
         </div>
 
-        <div class="rcv-panel-footer">
-            GRUPO MDL E.I.R.L.
-        </div>
     </div>
 </div>
 @endsection
