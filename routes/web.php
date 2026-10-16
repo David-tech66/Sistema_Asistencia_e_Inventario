@@ -23,6 +23,10 @@ Route::get('/productos', [
     App\Http\Controllers\ProductoController::class, 'index'
 ]);
 
+Route::get('/marcas', [
+    App\Http\Controllers\MarcaController::class, 'index'
+]);
+
 Route::get('/categorias', [
     App\Http\Controllers\CategoriaController::class, 'index'
 ]);

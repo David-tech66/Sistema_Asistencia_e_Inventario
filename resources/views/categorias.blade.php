@@ -120,7 +120,7 @@
                     <a href="/categorias" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
                     </a>
                     <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
