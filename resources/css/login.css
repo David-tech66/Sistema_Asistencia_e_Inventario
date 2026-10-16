@@ -44,7 +44,7 @@ input:-webkit-autofill:focus {
     display: flex;
     flex-direction: column;
     background-color: #ffffff; /* slate-50 */
-    color: #000A1A;
+    color: #000a1a;
     font-family: "Poppins", sans-serif;
     transition:
         background-color 0.3s ease,
@@ -58,7 +58,7 @@ input:-webkit-autofill:focus {
 }
 
 .dark .mdl-login {
-    background-color: #000A1A;
+    background-color: #000a1a;
 }
 
 /* ============ Panel izquierdo (imagen institucional) ============ */
@@ -66,7 +66,7 @@ input:-webkit-autofill:focus {
     display: none;
     position: relative;
     overflow: hidden;
-    background-color: #000A1A; /* slate-900 */
+    background-color: #000a1a; /* slate-900 */
     flex-direction: column;
     justify-content: center;
     padding: 3rem;
@@ -404,7 +404,7 @@ input:-webkit-autofill:focus {
     display: block;
     width: 100%;
     padding: 0.75rem 1rem 0.75rem 2.25rem;
-    border-radius: 7px;
+    border-radius: 0.75rem;
     border: 1px solid #cbcad7; /* slate-300 */
     background-color: #ffffff;
     color: #0f172a;
@@ -542,7 +542,7 @@ input:-webkit-autofill:focus {
     font-size: 0.875rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #0754A6;
+    background-color: #0754a6;
     font-family: "Poppins", sans-serif;
     cursor: pointer;
     outline: none;
@@ -568,4 +568,55 @@ input:-webkit-autofill:focus {
     box-shadow:
         0 0 0 2px #ffffff,
         0 0 0 4px rgba(37, 99, 235, 0.5);
+}
+
+/* ==========================================
+   ESTILOS PARA LOGO DUAL CENTRADO EN MÓVIL
+   ========================================== */
+
+.mdl-mobile-logo-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+@media (max-width: 1023.98px) {
+    .mdl-mobile-logo-container {
+        display: flex; /* Visible solo en móvil */
+    }
+}
+
+.mdl-mobile-logo {
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Control de visualización del logo según el tema (Claro / Oscuro) */
+.mdl-logo-dark {
+    display: none !important;
+}
+
+.mdl-logo-light {
+    display: block !important;
+}
+
+.dark .mdl-logo-light,
+html.dark .mdl-logo-light {
+    display: none !important;
+}
+
+.dark .mdl-logo-dark,
+html.dark .mdl-logo-dark {
+    display: block !important;
+}
+
+/* Centrar el texto debajo del logo exclusivamente en vista mobile */
+@media (max-width: 1023.98px) {
+    .mdl-mobile-text-center {
+        text-align: center;
+    }
 }
