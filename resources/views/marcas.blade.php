@@ -122,6 +122,7 @@
         <div class="p-3 border-t border-gray-100 space-y-1">
             <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
                 <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
+            </a>
             <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                 @csrf
                 <button type="submit" class="sidebar-item flex items-center w-full px-4 py-2.5 text-sm text-gray-600 bg-transparent border-none cursor-pointer text-left">
@@ -163,8 +164,8 @@
 
             <!-- Título de Sección -->
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Marcas</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de marcas registradas en el sistema.</p>
+                <h2 class="text-2xl font-bold text-gray-900">Categorías</h2>
+                <p class="text-sm text-gray-500 mt-1">Listado de categorías registradas en el sistema.</p>
             </div>
 
 

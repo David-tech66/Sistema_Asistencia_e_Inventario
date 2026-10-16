@@ -72,7 +72,7 @@
                     <a href="/categorias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
                     </a>
-                    <a href="/marcas" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
                     </a>
                     <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
@@ -122,6 +122,7 @@
         <div class="p-3 border-t border-gray-100 space-y-1">
             <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
                 <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
+            </a>
             <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                 @csrf
                 <button type="submit" class="sidebar-item flex items-center w-full px-4 py-2.5 text-sm text-gray-600 bg-transparent border-none cursor-pointer text-left">
@@ -163,8 +164,8 @@
 
             <!-- Título de Sección -->
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Empleados</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de empleados registrados en el sistema.</p>
+                <h2 class="text-2xl font-bold text-gray-900">Categorías</h2>
+                <p class="text-sm text-gray-500 mt-1">Listado de categorías registradas en el sistema.</p>
             </div>
 
 
