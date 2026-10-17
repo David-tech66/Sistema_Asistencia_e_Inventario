@@ -52,3 +52,6 @@ Route::get('/marcas', [App\Http\Controllers\MarcaController::class, 'index']);
 Route::get('/categorias', [App\Http\Controllers\CategoriaController::class, 'index']);
 Route::get('/ventas', [App\Http\Controllers\VentaController::class, 'index']);
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'index']);
+Route::get('/reportes/productos', [App\Http\Controllers\ReporteController::class, 'productos']);
+Route::get('/reportes/asistencias', [App\Http\Controllers\ReporteController::class, 'asistencias']);
+Route::get('/reportes/ventas', [App\Http\Controllers\ReporteController::class, 'ventas']);

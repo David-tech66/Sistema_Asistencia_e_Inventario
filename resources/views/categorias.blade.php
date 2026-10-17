@@ -104,13 +104,13 @@
                     </a>
                     <div class="pt-2">
                         <div class="px-3 py-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Reportes</div>
-                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <a href="/reportes/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                             <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Productos
                         </a>
-                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <a href="/reportes/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                             <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes asistencias
                         </a>
-                        <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                        <a href="/reportes/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                             <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Ventas
                         </a>
                     </div>
