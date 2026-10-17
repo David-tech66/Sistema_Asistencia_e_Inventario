@@ -99,7 +99,7 @@
                     <a href="/users" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/asistencias   " class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-check w-4 mr-2 text-[11px]"></i> Asistencias
                     </a>
                     <div class="pt-2">

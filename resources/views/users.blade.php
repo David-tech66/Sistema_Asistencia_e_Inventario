@@ -99,7 +99,7 @@
                     <a href="/users" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
                     </a>
-                    <a href="#" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
+                    <a href="/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-user-check w-4 mr-2 text-[11px]"></i> Asistencias
                     </a>
                     <div class="pt-2">
@@ -164,8 +164,8 @@
 
             <!-- Título de Sección -->
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Categorías</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de categorías registradas en el sistema.</p>
+                <h2 class="text-2xl font-bold text-gray-900">Empleados</h2>
+                <p class="text-sm text-gray-500 mt-1">Listado de empleados registrados en el sistema.</p>
             </div>
 
 
