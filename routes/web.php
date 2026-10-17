@@ -47,9 +47,15 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login');
 })->name('logout');
 
-// Rutas de tu equipo...
+// Rutas de Recursos Humanos - Empleados
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
+Route::post('/users', [App\Http\Controllers\UserController::class, 'store']);
+Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update']);
+Route::patch('/users/{user}/estado', [App\Http\Controllers\UserController::class, 'cambiarEstado']);
+
+// Rutas de Recursos Humanos - Asistencias
 Route::get('/asistencias', [App\Http\Controllers\AsistenciaController::class, 'index']);
+
 // Rutas de productos
 Route::get('/productos', [App\Http\Controllers\ProductoController::class, 'index']);
 Route::post('/productos', [App\Http\Controllers\ProductoController::class, 'store']);
