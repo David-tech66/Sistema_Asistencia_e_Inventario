@@ -1,20 +1,4 @@
-tailwind.config = {
-    theme: {
-        extend: {
-            fontFamily: { sans: ['Poppins', 'sans-serif'] },
-                colors: {
-                    brand: {
-                        blue: '#2563eb',
-                        light: '#3b82f6',
-                        dark: '#1e40af',
-                        red: '#dc2626',
-                        gray: '#64748b'
-               }
-            }
-        }
-    }
-}
-        window.toggleMenu = function (menuId) {
+window.toggleMenu = function (menuId) {
             const submenu = document.getElementById(menuId + '-submenu');
             const arrow = document.getElementById(menuId + '-arrow');
             
@@ -28,4 +12,34 @@ tailwind.config = {
                 arrow.style.transform = 'rotate(0deg)';
             }
         };
+
+        // Mantener abierto el submenú del módulo activo (según la URL actual)
+        document.addEventListener('DOMContentLoaded', function () {
+            const ruta = window.location.pathname;
+            const grupos = {
+                inventario: ['/productos', '/categorias', '/marcas', '/ventas', '/clientes', '/proveedores'],
+                general: ['/users', '/asistencias', '/reportes'],
+            };
+
+            Object.keys(grupos).some(function (grupo) {
+                const coincide = grupos[grupo].some(function (rutaGrupo) {
+                    return ruta === rutaGrupo || ruta.indexOf(rutaGrupo + '/') === 0;
+                });
+
+                if (!coincide) return false;
+
+                const submenu = document.getElementById(grupo + '-submenu');
+                const arrow = document.getElementById(grupo + '-arrow');
+
+                if (submenu) {
+                    submenu.classList.remove('hidden');
+                    submenu.classList.add('flex');
+                }
+                if (arrow) {
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+
+                return true;
+            });
+        });
 

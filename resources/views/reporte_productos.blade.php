@@ -6,13 +6,7 @@
     <title>Panel Administrativo - Grupo MDL E.I.R.L.</title>
 
     <!-- Fuentes e Iconos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
     @vite(['resources/css/sidebar_topbar.css', 'resources/js/sidebar_topbar.js'])
 </head>
@@ -63,9 +57,9 @@
                     <div class="flex items-center">
                         <i class="fa-solid fa-boxes-stacked w-5 mr-3 text-sm"></i> Inventario
                     </div>
-                    <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
+                    <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'transform: rotate(180deg);' : '' }}"></i>
                 </button>
-                <div id="inventario-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
+                <div id="inventario-submenu" class="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
                     <a href="/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
                     </a>
@@ -93,9 +87,9 @@
                     <div class="flex items-center">
                         <i class="fa-solid fa-gear w-5 mr-3 text-sm"></i> General
                     </div>
-                    <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform"></i>
+                    <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'transform: rotate(180deg);' : '' }}"></i>
                 </button>
-                <div id="general-submenu" class="hidden flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
+                <div id="general-submenu" class="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
                     <a href="/users" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
                         <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
                     </a>

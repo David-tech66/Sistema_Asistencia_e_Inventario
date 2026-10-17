@@ -1,6 +1,7 @@
+@import 'tailwindcss';
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: ui-sans-serif, system-ui, sans-serif;
 }
 /* Scrollbar estilizado */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
