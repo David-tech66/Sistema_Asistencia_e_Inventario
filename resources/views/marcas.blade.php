@@ -52,7 +52,7 @@
                 <i class="fa-solid fa-chart-pie w-5 mr-3 text-sm"></i> Dashboards
             </a>
 
-            <!-- Inventario (desplegable) -->
+            <!-- Inventario (desplegable) jsjs -->
             <div class="pt-3">
                 <button onclick="toggleMenu('inventario')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
                     <div class="flex items-center">
