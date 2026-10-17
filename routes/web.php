@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 
 // Vistas públicas
+Route::get('/', function () {
+    return redirect('/login');
+});
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
