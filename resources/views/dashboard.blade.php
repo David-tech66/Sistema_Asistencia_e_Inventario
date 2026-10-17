@@ -181,7 +181,7 @@
                     </div>
                     <h3 class="text-3xl font-bold text-gray-900">24</h3>
                     <div class="mt-4 pt-3 border-t border-gray-50">
-                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                        <a href="/reportes/productos" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
                             Ver productos <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>
@@ -200,7 +200,7 @@
                         <span class="inline-flex items-center text-[11px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full">
                             <i class="fa-solid fa-circle-exclamation mr-1 text-[9px]"></i> Requiere reabastecimiento
                         </span>
-                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
+                        <a href="/productos" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
                             Ver stock <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>
@@ -225,7 +225,7 @@
                         </svg>
                     </div>
                     <div class="mt-2 pt-3 border-t border-gray-50 w-full">
-                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                        <a href="/reportes/asistencias" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
                             Ver reportes <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>
@@ -244,7 +244,7 @@
                         <span class="inline-flex items-center text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
                             <i class="fa-solid fa-arrow-trend-up mr-1 text-[9px]"></i> +12.4% vs ayer
                         </span>
-                        <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
+                        <a href="/reportes/ventas" class="text-xs font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2">
                             Ver reportes <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>

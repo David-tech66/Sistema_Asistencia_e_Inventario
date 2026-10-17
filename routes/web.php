@@ -46,10 +46,34 @@ Route::post('/logout', function (Request $request) {
 // Rutas de tu equipo...
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
 Route::get('/asistencias', [App\Http\Controllers\AsistenciaController::class, 'index']);
-Route::get('/proveedores', [App\Http\Controllers\ProveedorController::class, 'index']);
+// Rutas de productos
 Route::get('/productos', [App\Http\Controllers\ProductoController::class, 'index']);
+Route::post('/productos', [App\Http\Controllers\ProductoController::class, 'store']);
+Route::get('/productos/{producto}/edit', [App\Http\Controllers\ProductoController::class, 'edit']);
+Route::put('/productos/{producto}', [App\Http\Controllers\ProductoController::class, 'update']);
+Route::delete('/productos/{producto}', [App\Http\Controllers\ProductoController::class, 'destroy']);
+
+// Escaneo de stock: código existente = +1 stock, código desconocido = registrar
+Route::post('/productos/escanear', [App\Http\Controllers\ProductoController::class, 'escanear']);
+
 Route::get('/marcas', [App\Http\Controllers\MarcaController::class, 'index']);
+Route::post('/marcas', [App\Http\Controllers\MarcaController::class, 'store']);
+Route::get('/marcas/{marca}/edit', [App\Http\Controllers\MarcaController::class, 'edit']);
+Route::put('/marcas/{marca}', [App\Http\Controllers\MarcaController::class, 'update']);
+Route::delete('/marcas/{marca}', [App\Http\Controllers\MarcaController::class, 'destroy']);
+
 Route::get('/categorias', [App\Http\Controllers\CategoriaController::class, 'index']);
+Route::post('/categorias', [App\Http\Controllers\CategoriaController::class, 'store']);
+Route::get('/categorias/{categoria}/edit', [App\Http\Controllers\CategoriaController::class, 'edit']);
+Route::put('/categorias/{categoria}', [App\Http\Controllers\CategoriaController::class, 'update']);
+Route::delete('/categorias/{categoria}', [App\Http\Controllers\CategoriaController::class, 'destroy']);
+
+Route::get('/proveedores', [App\Http\Controllers\ProveedorController::class, 'index']);
+Route::post('/proveedores', [App\Http\Controllers\ProveedorController::class, 'store']);
+Route::get('/proveedores/{proveedor}/edit', [App\Http\Controllers\ProveedorController::class, 'edit']);
+Route::put('/proveedores/{proveedor}', [App\Http\Controllers\ProveedorController::class, 'update']);
+Route::delete('/proveedores/{proveedor}', [App\Http\Controllers\ProveedorController::class, 'destroy']);
+
 Route::get('/ventas', [App\Http\Controllers\VentaController::class, 'index']);
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'index']);
 Route::get('/reportes/productos', [App\Http\Controllers\ReporteController::class, 'productos']);

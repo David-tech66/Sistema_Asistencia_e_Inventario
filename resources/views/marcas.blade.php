@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrativo - Grupo MDL E.I.R.L.</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Fuentes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,14 +163,258 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
 
-            <!-- Título de Sección -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Categorías</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de categorías registradas en el sistema.</p>
+            <!-- Título + acción -->
+            <div class="mb-6 flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Marcas</h2>
+                    <p class="text-sm text-gray-500 mt-1">Administra las marcas de los productos.</p>
+                </div>
+                <button onclick="abrirModal('modal-marca-crear')"
+                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> Nueva marca
+                </button>
             </div>
 
+            <!-- Alertas -->
+            @if (session('exito'))
+                <div class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mb-5 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <p class="font-semibold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
+                    <ul class="list-disc list-inside mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- TABLA MARCAS -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i class="fa-solid fa-copyright text-blue-600"></i>
+                        <span>Total: <span class="font-semibold text-gray-800">{{ $marcas->count() }}</span> marca(s)</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                                <th class="px-5 py-3">Nombre</th>
+                                <th class="px-5 py-3">Descripción</th>
+                                <th class="px-5 py-3">Fecha de Registro</th>
+                                <th class="px-5 py-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @forelse ($marcas as $marca)
+                                <tr class="hover:bg-gray-50/70 transition-colors">
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                                <i class="fa-solid fa-copyright text-sm"></i>
+                                            </div>
+                                            <span class="font-semibold text-gray-800">{{ $marca->nombre }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        @if ($marca->descripcion)
+                                            <span class="text-gray-600">{{ $marca->descripcion }}</span>
+                                        @else
+                                            <span class="text-gray-300 text-xs">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-5 py-3.5 text-gray-500">{{ $marca->created_at ? $marca->created_at->format('d/m/Y') : '—' }}</td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarMarca({{ $marca->id }})"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-pen text-[10px]"></i> Editar
+                                            </button>
+                                            <button onclick="eliminarMarca({{ $marca->id }}, '{{ addslashes($marca->nombre) }}')"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-trash text-[10px]"></i> Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-5 py-12 text-center">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="h-12 w-12 rounded-2xl bg-gray-50 text-gray-300 flex items-center justify-center">
+                                                <i class="fa-solid fa-copyright text-xl"></i>
+                                            </div>
+                                            <p class="text-sm font-medium text-gray-500">No hay marcas registradas</p>
+                                            <p class="text-xs text-gray-400">Registra la primera marca con el botón "Nueva marca".</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
         </main>
     </div>
+
+    <!-- MODAL: Registrar marca -->
+    <div id="modal-marca-crear" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-marca-crear')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-copyright"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Registrar nueva marca</h3>
+                </div>
+                <button onclick="cerrarModal('modal-marca-crear')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form method="POST" action="/marcas">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                        <input type="text" name="nombre" required maxlength="100"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               placeholder="Ej: Lenovo, Samsung, Kingston">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                        <textarea name="descripcion" maxlength="255" rows="2"
+                                  class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                                  placeholder="Descripción breve (opcional)"></textarea>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-marca-crear')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Editar marca -->
+    <div id="modal-marca-editar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-marca-editar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Editar marca</h3>
+                </div>
+                <button onclick="cerrarModal('modal-marca-editar')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="form-marca-editar" method="POST" action="/marcas/0">
+                @csrf
+                @method('PUT')
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                        <input type="text" name="nombre" required maxlength="100"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                        <textarea name="descripcion" maxlength="255" rows="2"
+                                  class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"></textarea>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-marca-editar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Confirmar eliminación -->
+    <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
+            <div class="h-14 w-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-trash text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Eliminar marca</h3>
+            <p class="text-sm text-gray-500 mt-2">¿Seguro que deseas eliminar <span id="eliminar-nombre" class="font-semibold text-gray-800"></span>? Esta acción no se puede deshacer.</p>
+            <form id="form-eliminar" method="POST" action="/marcas/0">
+                @csrf
+                @method('DELETE')
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-eliminar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm">
+                        Sí, eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function editarMarca(id) {
+            fetch('/marcas/' + id + '/edit')
+                .then(function (res) { return res.json(); })
+                .then(function (m) {
+                    const form = document.getElementById('form-marca-editar');
+                    form.action = '/marcas/' + m.id;
+                    form.querySelector('[name="nombre"]').value = m.nombre || '';
+                    form.querySelector('[name="descripcion"]').value = m.descripcion || '';
+                    abrirModal('modal-marca-editar');
+                })
+                .catch(function () { alert('No se pudo cargar la marca.'); });
+        }
+
+        function eliminarMarca(id, nombre) {
+            document.getElementById('form-eliminar').action = '/marcas/' + id;
+            document.getElementById('eliminar-nombre').textContent = nombre;
+            abrirModal('modal-eliminar');
+        }
+
+        // Si se volvió con errores de validación, reabrir el formulario de registro
+        @if ($errors->any())
+            abrirModal('modal-marca-crear');
+        @endif
+    </script>
 </body>
 </html>

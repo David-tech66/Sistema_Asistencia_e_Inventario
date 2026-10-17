@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrativo - Grupo MDL E.I.R.L.</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Fuentes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,11 +163,39 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
 
-            <!-- Título de Sección -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Proveedores</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de empresas proveedoras registradas en el sistema.</p>
+            <!-- Título + acción -->
+            <div class="mb-6 flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Proveedores</h2>
+                    <p class="text-sm text-gray-500 mt-1">Administra las empresas proveedoras registradas en el sistema.</p>
+                </div>
+                <button onclick="abrirModal('modal-proveedor-crear')"
+                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> Nuevo proveedor
+                </button>
             </div>
+
+            <!-- Alertas -->
+            @if (session('exito'))
+                <div class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mb-5 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <p class="font-semibold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
+                    <ul class="list-disc list-inside mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <!-- TABLA PROVEEDORES -->
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -186,17 +215,16 @@
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
-                                <th class="px-5 py-3">#</th>
                                 <th class="px-5 py-3">Razón Social</th>
                                 <th class="px-5 py-3">RUC</th>
                                 <th class="px-5 py-3">Teléfono</th>
                                 <th class="px-5 py-3">Fecha de Registro</th>
+                                <th class="px-5 py-3">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @forelse ($proveedores as $proveedor)
                                 <tr class="hover:bg-gray-50/70 transition-colors">
-                                    <td class="px-5 py-3.5 text-gray-400 font-medium">{{ $proveedor->id }}</td>
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center gap-3">
                                             <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
@@ -216,6 +244,18 @@
                                         @endif
                                     </td>
                                     <td class="px-5 py-3.5 text-gray-500">{{ $proveedor->created_at ? $proveedor->created_at->format('d/m/Y') : '—' }}</td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarProveedor({{ $proveedor->id }})"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-pen text-[10px]"></i> Editar
+                                            </button>
+                                            <button onclick="eliminarProveedor({{ $proveedor->id }}, '{{ addslashes($proveedor->razon_social) }}')"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-trash text-[10px]"></i> Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -237,5 +277,165 @@
 
         </main>
     </div>
+
+    <!-- MODAL: Registrar proveedor -->
+    <div id="modal-proveedor-crear" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-proveedor-crear')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-truck-field"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Registrar nuevo proveedor</h3>
+                </div>
+                <button onclick="cerrarModal('modal-proveedor-crear')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form method="POST" action="/proveedores">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Razón social *</label>
+                        <input type="text" name="razon_social" required maxlength="150"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               placeholder="Ej: Distribuidora SAC">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">RUC *</label>
+                        <input type="text" name="ruc" required maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono"
+                               placeholder="Ej: 20555555555">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="text" name="telefono" maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               placeholder="Ej: 999888777 (opcional)">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-proveedor-crear')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Editar proveedor -->
+    <div id="modal-proveedor-editar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-proveedor-editar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Editar proveedor</h3>
+                </div>
+                <button onclick="cerrarModal('modal-proveedor-editar')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="form-proveedor-editar" method="POST" action="/proveedores/0">
+                @csrf
+                @method('PUT')
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Razón social *</label>
+                        <input type="text" name="razon_social" required maxlength="150"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">RUC *</label>
+                        <input type="text" name="ruc" required maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="text" name="telefono" maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-proveedor-editar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Confirmar eliminación -->
+    <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
+            <div class="h-14 w-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-trash text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Eliminar proveedor</h3>
+            <p class="text-sm text-gray-500 mt-2">¿Seguro que deseas eliminar <span id="eliminar-nombre" class="font-semibold text-gray-800"></span>? Esta acción no se puede deshacer.</p>
+            <form id="form-eliminar" method="POST" action="/proveedores/0">
+                @csrf
+                @method('DELETE')
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-eliminar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm">
+                        Sí, eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function editarProveedor(id) {
+            fetch('/proveedores/' + id + '/edit')
+                .then(function (res) { return res.json(); })
+                .then(function (p) {
+                    const form = document.getElementById('form-proveedor-editar');
+                    form.action = '/proveedores/' + p.id;
+                    form.querySelector('[name="razon_social"]').value = p.razon_social || '';
+                    form.querySelector('[name="ruc"]').value = p.ruc || '';
+                    form.querySelector('[name="telefono"]').value = p.telefono || '';
+                    abrirModal('modal-proveedor-editar');
+                })
+                .catch(function () { alert('No se pudo cargar el proveedor.'); });
+        }
+
+        function eliminarProveedor(id, nombre) {
+            document.getElementById('form-eliminar').action = '/proveedores/' + id;
+            document.getElementById('eliminar-nombre').textContent = nombre;
+            abrirModal('modal-eliminar');
+        }
+
+        // Si se volvió con errores de validación, reabrir el formulario de registro
+        @if ($errors->any())
+            abrirModal('modal-proveedor-crear');
+        @endif
+    </script>
 </body>
 </html>

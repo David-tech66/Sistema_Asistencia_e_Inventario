@@ -162,14 +162,225 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
 
-            <!-- Título de Sección -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Reporte de Productos</h2>
-                <p class="text-sm text-gray-500 mt-1">Resumen del inventario de productos registrado en el sistema.</p>
+            <!-- Título + acción -->
+            <div class="mb-6 flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Reporte de Productos</h2>
+                    <p class="text-sm text-gray-500 mt-1">Gestión de productos: registra, edita o elimina con su imagen.</p>
+                </div>
+                <button onclick="abrirModal('modal-producto-crear')"
+                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> Nuevo producto
+                </button>
             </div>
 
+            <!-- Alerta de éxito -->
+            @if (session('exito'))
+                <div class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
+                </div>
+            @endif
+
+            <!-- Alerta de errores -->
+            @if ($errors->any())
+                <div class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <p class="font-semibold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
+                    <ul class="list-disc list-inside mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if ($productos->isEmpty())
+                <!-- Estado vacío -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="h-14 w-14 rounded-2xl bg-gray-50 text-gray-300 flex items-center justify-center">
+                            <i class="fa-solid fa-box-open text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-500">No hay productos registrados</p>
+                        <p class="text-xs text-gray-400">Registra el primer producto con el botón "Nuevo producto".</p>
+                    </div>
+                </div>
+            @else
+                <!-- Cuadrícula de productos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    @foreach ($productos as $producto)
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+                            <!-- Imagen -->
+                            <div class="h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
+                                @if ($producto->imagen)
+                                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-full w-full object-cover">
+                                @else
+                                    <div class="flex flex-col items-center gap-2 text-gray-300">
+                                        <i class="fa-solid fa-image text-3xl"></i>
+                                        <span class="text-[11px]">Sin imagen</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="p-4 flex-1 flex flex-col">
+                                <div class="flex items-start justify-between gap-2">
+                                    <h3 class="text-sm font-semibold text-gray-900 leading-snug">{{ $producto->nombre }}</h3>
+                                    @if ($producto->stock_actual <= $producto->stock_minimo)
+                                        <span class="text-[10px] font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full shrink-0">Stock bajo</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">{{ $producto->categoria?->nombre_categoria }} · {{ $producto->marca?->nombre }}</p>
+                                <p class="text-[11px] text-gray-400 font-mono mt-1 truncate">{{ $producto->codigo_qr }}</p>
+
+                                <div class="mt-3 pt-3 border-t border-gray-50">
+                                    <p class="text-lg font-bold text-gray-900">S/ {{ number_format($producto->precio_venta, 2) }}</p>
+                                    <p class="text-[11px] text-gray-400">Stock: {{ $producto->stock_actual }} unidades</p>
+                                </div>
+
+                                <div class="flex gap-2 mt-3">
+                                    <button onclick="editarProducto({{ $producto->id }})"
+                                            class="flex-1 px-3 py-2 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-pen text-[10px]"></i> Editar
+                                    </button>
+                                    <button onclick="eliminarProducto({{ $producto->id }}, '{{ addslashes($producto->nombre) }}')"
+                                            class="flex-1 px-3 py-2 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-xl transition-colors flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-trash text-[10px]"></i> Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
         </main>
     </div>
+
+    <!-- MODAL: Registrar producto -->
+    <div id="modal-producto-crear" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-producto-crear')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Registrar nuevo producto</h3>
+                </div>
+                <button onclick="cerrarModal('modal-producto-crear')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            @include('partials.form_producto', ['modo' => 'crear'])
+        </div>
+    </div>
+
+    <!-- MODAL: Editar producto -->
+    <div id="modal-producto-editar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-producto-editar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Editar producto</h3>
+                </div>
+                <button onclick="cerrarModal('modal-producto-editar')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            @include('partials.form_producto', ['modo' => 'editar'])
+        </div>
+    </div>
+
+    <!-- MODAL: Confirmar eliminación -->
+    <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
+            <div class="h-14 w-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-trash text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Eliminar producto</h3>
+            <p class="text-sm text-gray-500 mt-2">¿Seguro que deseas eliminar <span id="eliminar-nombre" class="font-semibold text-gray-800"></span>? Esta acción no se puede deshacer.</p>
+            <form id="form-eliminar" method="POST" action="/productos/0">
+                @csrf
+                @method('DELETE')
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-eliminar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm">
+                        Sí, eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function editarProducto(id) {
+            fetch('/productos/' + id + '/edit')
+                .then(function (res) { return res.json(); })
+                .then(function (p) {
+                    const form = document.getElementById('form-producto-editar');
+                    form.action = '/productos/' + p.id;
+
+                    const set = function (nombre, valor) {
+                        const el = form.querySelector('[name="' + nombre + '"]');
+                        if (el) el.value = (valor === null || valor === undefined) ? '' : valor;
+                    };
+                    set('codigo_qr', p.codigo_qr);
+                    set('nombre', p.nombre);
+                    set('categoria_id', p.categoria_id);
+                    set('marca_id', p.marca_id);
+                    set('proveedor_id', p.proveedor_id);
+                    set('meses_garantia', p.meses_garantia);
+                    set('stock_actual', p.stock_actual);
+                    set('stock_minimo', p.stock_minimo);
+                    set('precio_compra', p.precio_compra);
+                    set('precio_venta', p.precio_venta);
+                    set('especificaciones', p.especificaciones);
+
+                    const fileInput = form.querySelector('[name="imagen"]');
+                    if (fileInput) fileInput.value = '';
+
+                    const img = document.getElementById('preview-img-editar');
+                    const icon = document.getElementById('preview-icon-editar');
+                    if (img) {
+                        if (p.imagen) {
+                            img.src = '/storage/' + p.imagen;
+                            img.classList.remove('hidden');
+                            if (icon) icon.classList.add('hidden');
+                        } else {
+                            img.classList.add('hidden');
+                            if (icon) icon.classList.remove('hidden');
+                        }
+                    }
+
+                    abrirModal('modal-producto-editar');
+                })
+                .catch(function () { alert('No se pudo cargar el producto.'); });
+        }
+
+        function eliminarProducto(id, nombre) {
+            document.getElementById('form-eliminar').action = '/productos/' + id;
+            document.getElementById('eliminar-nombre').textContent = nombre;
+            abrirModal('modal-eliminar');
+        }
+
+        // Si se volvió con errores de validación, reabrir el formulario de registro
+        @if ($errors->any())
+            abrirModal('modal-producto-crear');
+        @endif
+    </script>
 </body>
 </html>
