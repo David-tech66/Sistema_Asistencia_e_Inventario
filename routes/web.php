@@ -85,7 +85,13 @@ Route::put('/proveedores/{proveedor}', [App\Http\Controllers\ProveedorController
 Route::delete('/proveedores/{proveedor}', [App\Http\Controllers\ProveedorController::class, 'destroy']);
 
 Route::get('/ventas', [App\Http\Controllers\VentaController::class, 'index']);
+Route::post('/ventas/escanear', [App\Http\Controllers\VentaController::class, 'escanear']);
+Route::post('/ventas', [App\Http\Controllers\VentaController::class, 'store']);
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'index']);
+Route::post('/clientes', [App\Http\Controllers\ClienteController::class, 'store']);
+Route::get('/clientes/{cliente}/edit', [App\Http\Controllers\ClienteController::class, 'edit']);
+Route::put('/clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'update']);
+Route::delete('/clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'destroy']);
 Route::get('/reportes/productos', [App\Http\Controllers\ReporteController::class, 'productos']);
 Route::get('/reportes/asistencias', [App\Http\Controllers\ReporteController::class, 'asistencias']);
 Route::get('/reportes/ventas', [App\Http\Controllers\ReporteController::class, 'ventas']);
