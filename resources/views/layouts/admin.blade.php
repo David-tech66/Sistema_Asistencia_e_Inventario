@@ -11,6 +11,7 @@
 
     @vite(['resources/css/sidebar_topbar.css', 'resources/js/sidebar_topbar.js'])
     @yield('styles')
+    @stack('css')
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
 
