@@ -133,24 +133,29 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="topbar-left">
-                <!-- Botón de menú hamburguesa responsive -->
+                <!-- Botón hamburguesa (solo visible en pantallas pequeñas/móviles) -->
                 <button class="topbar-menu-btn" onclick="toggleSidebar()">
                     <i data-lucide="menu"></i>
                 </button>
                 <h1 class="topbar-title">Panel Administrativo</h1>
             </div>
+
             <div class="topbar-right">
-                <button class="topbar-notification-btn">
-                    <i class="fa-regular fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                <!-- Notificación (Campana limpia sin badge) -->
+                <button class="topbar-notification-btn" aria-label="Notificaciones">
+                    <i data-lucide="bell" class="topbar-icon"></i>
                 </button>
+
+                <!-- Divisor vertical -->
                 <div class="topbar-divider"></div>
+
+                <!-- Perfil de usuario (Texto primero, luego Avatar al final) -->
                 <div class="user-profile">
-                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=2563eb&color=fff" alt="Avatar" class="user-avatar">
                     <div class="user-info">
                         <p class="user-name">Administrador</p>
                         <p class="user-role">Administrador</p>
                     </div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop" alt="Foto de perfil" class="user-avatar">
                 </div>
             </div>
         </header>

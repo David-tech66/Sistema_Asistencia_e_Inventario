@@ -110,7 +110,7 @@
                     <div class="mdl-input-wrap">
                         <span class="mdl-input-icon">@</span>
                         <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                            class="mdl-input" placeholder="correo@ejemplo.com">
+                            class="mdl-input">
                     </div>
                 </div>
 
