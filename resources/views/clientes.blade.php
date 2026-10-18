@@ -156,15 +156,292 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
 
-            <!-- Título de Sección -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Clientes</h2>
-                <p class="text-sm text-gray-500 mt-1">Listado de clientes registrados en el sistema.</p>
+            <!-- Título + acción -->
+            <div class="mb-6 flex items-start justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Clientes</h2>
+                    <p class="text-sm text-gray-500 mt-1">Listado de clientes registrados en el sistema.</p>
+                </div>
+                <button onclick="abrirModal('modal-cliente-crear')"
+                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> Nuevo cliente
+                </button>
             </div>
 
+            <!-- Alertas -->
+            @if (session('exito'))
+                <div class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mb-5 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                    <p class="font-semibold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
+                    <ul class="list-disc list-inside mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- TABLA CLIENTES -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i class="fa-solid fa-user-group text-blue-600"></i>
+                        <span>Total: <span class="font-semibold text-gray-800">{{ $clientes->count() }}</span> cliente(s)</span>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="buscar-cliente" oninput="filtrarClientes()" placeholder="Buscar cliente..." class="pl-8 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 w-64">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                                <th class="px-5 py-3">Documento</th>
+                                <th class="px-5 py-3">Nombre</th>
+                                <th class="px-5 py-3">Teléfono</th>
+                                <th class="px-5 py-3">Fecha de Registro</th>
+                                <th class="px-5 py-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-clientes" class="divide-y divide-gray-50">
+                            @forelse ($clientes as $cliente)
+                                <tr class="hover:bg-gray-50/70 transition-colors cliente-fila" data-buscar="{{ strtolower($cliente->nombre . ' ' . $cliente->documento . ' ' . ($cliente->telefono ?? '')) }}">
+                                    <td class="px-5 py-3.5">
+                                        <span class="inline-flex items-center font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">{{ $cliente->documento }}</span>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 text-sm font-bold">
+                                                {{ mb_substr($cliente->nombre, 0, 1) }}
+                                            </div>
+                                            <span class="font-semibold text-gray-800">{{ $cliente->nombre }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        @if ($cliente->telefono)
+                                            <span class="text-gray-600"><i class="fa-solid fa-phone text-[11px] text-gray-400 mr-1.5"></i>{{ $cliente->telefono }}</span>
+                                        @else
+                                            <span class="text-gray-300 text-xs">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-5 py-3.5 text-gray-500">{{ $cliente->created_at ? $cliente->created_at->format('d/m/Y') : '—' }}</td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarCliente({{ $cliente->id }})"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-pen text-[10px]"></i> Editar
+                                            </button>
+                                            <button onclick="eliminarCliente({{ $cliente->id }}, '{{ addslashes($cliente->nombre) }}')"
+                                                    class="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-trash text-[10px]"></i> Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-5 py-12 text-center">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="h-12 w-12 rounded-2xl bg-gray-50 text-gray-300 flex items-center justify-center">
+                                                <i class="fa-solid fa-user-group text-xl"></i>
+                                            </div>
+                                            <p class="text-sm font-medium text-gray-500">No hay clientes registrados</p>
+                                            <p class="text-xs text-gray-400">Cuando se registren clientes, aparecerán en esta lista.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <p id="sin-resultados" class="hidden px-5 py-8 text-center text-sm text-gray-400">No se encontraron clientes con esa búsqueda.</p>
+                </div>
+            </div>
 
         </main>
     </div>
 
+    <!-- MODAL: Registrar cliente -->
+    <div id="modal-cliente-crear" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-cliente-crear')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Registrar nuevo cliente</h3>
+                </div>
+                <button onclick="cerrarModal('modal-cliente-crear')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form method="POST" action="/clientes">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Documento (DNI o RUC) *</label>
+                        <input type="text" name="documento" required maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono"
+                               placeholder="Ej: 12345678">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
+                        <input type="text" name="nombre" required maxlength="200"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="text" name="telefono" maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               placeholder="Ej: 999888777 (opcional)">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-cliente-crear')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Editar cliente -->
+    <div id="modal-cliente-editar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-cliente-editar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Editar cliente</h3>
+                </div>
+                <button onclick="cerrarModal('modal-cliente-editar')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="form-cliente-editar" method="POST" action="/clientes/0">
+                @csrf
+                @method('PUT')
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Documento (DNI o RUC) *</label>
+                        <input type="text" name="documento" required maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
+                        <input type="text" name="nombre" required maxlength="200"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="text" name="telefono" maxlength="20"
+                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-cliente-editar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Confirmar eliminación -->
+    <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
+            <div class="h-14 w-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-trash text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Eliminar cliente</h3>
+            <p class="text-sm text-gray-500 mt-2">¿Seguro que deseas eliminar <span id="eliminar-nombre" class="font-semibold text-gray-800"></span>? Esta acción no se puede deshacer.</p>
+            <form id="form-eliminar" method="POST" action="/clientes/0">
+                @csrf
+                @method('DELETE')
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="cerrarModal('modal-eliminar')"
+                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm">
+                        Sí, eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function editarCliente(id) {
+            fetch('/clientes/' + id + '/edit')
+                .then(function (res) { return res.json(); })
+                .then(function (c) {
+                    const form = document.getElementById('form-cliente-editar');
+                    form.action = '/clientes/' + c.id;
+                    form.querySelector('[name="documento"]').value = c.documento || '';
+                    form.querySelector('[name="nombre"]').value = c.nombre || '';
+                    form.querySelector('[name="telefono"]').value = c.telefono || '';
+                    abrirModal('modal-cliente-editar');
+                })
+                .catch(function () { alert('No se pudo cargar el cliente.'); });
+        }
+
+        function eliminarCliente(id, nombre) {
+            document.getElementById('form-eliminar').action = '/clientes/' + id;
+            document.getElementById('eliminar-nombre').textContent = nombre;
+            abrirModal('modal-eliminar');
+        }
+
+        function filtrarClientes() {
+            const texto = document.getElementById('buscar-cliente').value.toLowerCase().trim();
+            const filas = document.querySelectorAll('.cliente-fila');
+            let visibles = 0;
+            filas.forEach(function (fila) {
+                const coincide = fila.dataset.buscar.includes(texto);
+                fila.classList.toggle('hidden', !coincide);
+                if (coincide) visibles++;
+            });
+            document.getElementById('sin-resultados').classList.toggle('hidden', !(texto && visibles === 0));
+        }
+
+        // Si se volvió con errores de validación, reabrir el formulario de registro
+        @if ($errors->any())
+            abrirModal('modal-cliente-crear');
+        @endif
+    </script>
 </body>
 </html>
