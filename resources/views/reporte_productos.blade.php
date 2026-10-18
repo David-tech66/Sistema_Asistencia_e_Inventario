@@ -162,10 +162,17 @@
                     <h2 class="text-2xl font-bold text-gray-900">Reporte de Productos</h2>
                     <p class="text-sm text-gray-500 mt-1">Gestión de productos: registra, edita o elimina con su imagen.</p>
                 </div>
-                <button onclick="abrirModal('modal-producto-crear')"
-                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-plus"></i> Nuevo producto
-                </button>
+                <div class="flex items-center gap-3 shrink-0">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="buscar-producto" oninput="filtrarProductos()" placeholder="Buscar por nombre, código o categoría..."
+                               class="pl-8 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 w-64">
+                    </div>
+                    <button onclick="abrirModal('modal-producto-crear')"
+                            class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Nuevo producto
+                    </button>
+                </div>
             </div>
 
             <!-- Alerta de éxito -->
@@ -202,7 +209,8 @@
                 <!-- Cuadrícula de productos -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     @foreach ($productos as $producto)
-                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+                        <div class="producto-card bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                             data-buscar="{{ e(strtolower($producto->nombre . ' ' . $producto->codigo_qr . ' ' . ($producto->categoria?->nombre_categoria ?? '') . ' ' . ($producto->marca?->nombre ?? ''))) }}">
                             <!-- Imagen -->
                             <div class="h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
                                 @if ($producto->imagen)
@@ -244,6 +252,7 @@
                         </div>
                     @endforeach
                 </div>
+                <p id="sin-resultados" class="hidden text-center text-sm text-gray-400 py-10">No se encontraron productos con esa búsqueda.</p>
             @endif
 
         </main>
@@ -369,6 +378,18 @@
             document.getElementById('form-eliminar').action = '/productos/' + id;
             document.getElementById('eliminar-nombre').textContent = nombre;
             abrirModal('modal-eliminar');
+        }
+
+        function filtrarProductos() {
+            const texto = document.getElementById('buscar-producto').value.toLowerCase().trim();
+            const tarjetas = document.querySelectorAll('.producto-card');
+            let visibles = 0;
+            tarjetas.forEach(function (tarjeta) {
+                const coincide = tarjeta.dataset.buscar.includes(texto);
+                tarjeta.classList.toggle('hidden', !coincide);
+                if (coincide) visibles++;
+            });
+            document.getElementById('sin-resultados').classList.toggle('hidden', !(texto && visibles === 0));
         }
 
         // Si se volvió con errores de validación, reabrir el formulario de registro

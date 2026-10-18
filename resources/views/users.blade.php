@@ -305,45 +305,46 @@
     </div>
 
     <!-- MODAL NUEVO EMPLEADO -->
-    <div id="modalNuevo" class="hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div id="modalNuevo" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modalNuevo')"></div>
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
 
-            <div class="p-5 border-b flex items-center justify-between">
+            <div class="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4">
                 <div>
-                    <h3 class="text-lg font-bold">Registrar empleado</h3>
-                    <p class="text-sm text-gray-500">Completa los datos de acceso.</p>
+                    <h3 class="text-lg font-bold text-gray-900">Registrar empleado</h3>
+                    <p class="text-sm text-gray-500 mt-0.5">Completa los datos de acceso.</p>
                 </div>
-                <button type="button" onclick="cerrarModal('modalNuevo')" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+                <button type="button" onclick="cerrarModal('modalNuevo')" class="text-gray-400 hover:text-gray-600 transition-colors text-xl leading-none">&times;</button>
             </div>
 
             <form action="/users" method="POST">
                 @csrf
 
-                <div class="p-5 space-y-4">
+                <div class="px-6 py-5 space-y-4">
 
                     <div>
-                        <label class="block text-sm font-medium mb-1">Nombre de usuario</label>
+                        <label class="block text-sm font-semibold text-gray-800 mb-1.5">Nombre de usuario</label>
                         <input type="text" name="nombre_usuario" required maxlength="150"
                             value="{{ old('nombre_usuario') }}"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-1">Correo electrónico</label>
+                        <label class="block text-sm font-semibold text-gray-800 mb-1.5">Correo electrónico</label>
                         <input type="email" name="email" required maxlength="150"
                             value="{{ old('email') }}"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-1">Contraseña inicial</label>
+                        <label class="block text-sm font-semibold text-gray-800 mb-1.5">Contraseña inicial</label>
                         <input type="password" name="password" required minlength="6"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-1">Rol de acceso</label>
-                        <select name="rol" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <label class="block text-sm font-semibold text-gray-800 mb-1.5">Rol de acceso</label>
+                        <select name="rol" required class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="empleado">Empleado</option>
                             <option value="admin">Administrador</option>
                         </select>
@@ -351,10 +352,10 @@
 
                 </div>
 
-                <div class="p-5 bg-gray-50 border-t flex justify-end gap-3">
-                    <button type="button" onclick="cerrarModal('modalNuevo')" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-semibold">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar empleado
+                <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-3">
+                    <button type="button" onclick="cerrarModal('modalNuevo')" class="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar empleado
                     </button>
                 </div>
             </form>
@@ -363,53 +364,57 @@
 
     <!-- MODALES EDITAR -->
     @foreach($users as $user)
-        <div id="modalEditar{{ $user->id }}" class="hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div id="modalEditar{{ $user->id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modalEditar{{ $user->id }}')"></div>
+            <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
 
-                <div class="p-5 border-b flex items-center justify-between">
-                    <h3 class="text-lg font-bold">Editar empleado #{{ $user->id }}</h3>
-                    <button type="button" onclick="cerrarModal('modalEditar{{ $user->id }}')" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+                <div class="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Editar empleado</h3>
+                        <p class="text-sm text-gray-500 mt-0.5">Actualiza los datos de acceso.</p>
+                    </div>
+                    <button type="button" onclick="cerrarModal('modalEditar{{ $user->id }}')" class="text-gray-400 hover:text-gray-600 transition-colors text-xl leading-none">&times;</button>
                 </div>
 
                 <form action="/users/{{ $user->id }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    <div class="p-5 space-y-4">
+                    <div class="px-6 py-5 space-y-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Nombre de usuario</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-1.5">Nombre de usuario</label>
                             <input type="text" name="nombre_usuario" required maxlength="150"
                                 value="{{ $user->nombre_usuario }}"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">Correo electrónico</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-1.5">Correo electrónico</label>
                             <input type="email" name="email" required maxlength="150"
                                 value="{{ $user->email }}"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">Nueva contraseña (opcional)</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-1.5">Nueva contraseña (opcional)</label>
                             <input type="password" name="password" minlength="6"
                                 placeholder="Déjalo vacío para conservar la actual"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1">Rol de acceso</label>
-                            <select name="rol" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <label class="block text-sm font-semibold text-gray-800 mb-1.5">Rol de acceso</label>
+                            <select name="rol" required class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="empleado" {{ $user->rol === 'empleado' ? 'selected' : '' }}>Empleado</option>
                                 <option value="admin" {{ $user->rol === 'admin' ? 'selected' : '' }}>Administrador</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="p-5 bg-gray-50 border-t flex justify-end gap-3">
-                        <button type="button" onclick="cerrarModal('modalEditar{{ $user->id }}')" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Cancelar</button>
-                        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-semibold">
-                            Guardar cambios
+                    <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-3">
+                        <button type="button" onclick="cerrarModal('modalEditar{{ $user->id }}')" class="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancelar</button>
+                        <button type="submit" class="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
                         </button>
                     </div>
                 </form>

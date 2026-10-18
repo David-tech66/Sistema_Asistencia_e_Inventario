@@ -198,6 +198,11 @@
                         <i class="fa-solid fa-copyright text-blue-600"></i>
                         <span>Total: <span class="font-semibold text-gray-800">{{ $marcas->count() }}</span> marca(s)</span>
                     </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="buscar-marca" oninput="filtrarMarcas()" placeholder="Buscar marca..."
+                               class="pl-8 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 w-64">
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -212,7 +217,8 @@
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @forelse ($marcas as $marca)
-                                <tr class="hover:bg-gray-50/70 transition-colors">
+                                <tr class="hover:bg-gray-50/70 transition-colors marca-fila"
+                                    data-buscar="{{ e(strtolower($marca->nombre . ' ' . ($marca->descripcion ?? ''))) }}">
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center gap-3">
                                             <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
@@ -257,6 +263,7 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <p id="sin-resultados" class="hidden px-5 py-8 text-center text-sm text-gray-400">No se encontraron marcas con esa búsqueda.</p>
                 </div>
             </div>
 
@@ -403,6 +410,18 @@
             document.getElementById('form-eliminar').action = '/marcas/' + id;
             document.getElementById('eliminar-nombre').textContent = nombre;
             abrirModal('modal-eliminar');
+        }
+
+        function filtrarMarcas() {
+            const texto = document.getElementById('buscar-marca').value.toLowerCase().trim();
+            const filas = document.querySelectorAll('.marca-fila');
+            let visibles = 0;
+            filas.forEach(function (fila) {
+                const coincide = fila.dataset.buscar.includes(texto);
+                fila.classList.toggle('hidden', !coincide);
+                if (coincide) visibles++;
+            });
+            document.getElementById('sin-resultados').classList.toggle('hidden', !(texto && visibles === 0));
         }
 
         // Si se volvió con errores de validación, reabrir el formulario de registro
