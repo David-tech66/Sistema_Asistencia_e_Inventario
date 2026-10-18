@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,155 +14,157 @@
     @yield('styles')
     @stack('css')
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
+
+<body class="app-layout">
 
     <!-- SIDEBAR -->
-    <aside class="w-[260px] bg-white flex flex-col border-r border-gray-200 z-20 shrink-0 overflow-y-auto">
+    <aside class="sidebar" id="app-sidebar">
 
-        <!-- Logo -->
-        <div class="h-[72px] flex items-center px-6 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <!-- Logo ladrillos -->
-                <div class="flex flex-col gap-[2px]">
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                    </div>
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                    </div>
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                    </div>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-[15px] font-extrabold tracking-tight text-gray-900 leading-none">GRUPO MD</span>
-                    <span class="text-[8px] text-gray-500 font-medium tracking-wider mt-[1px]">E.I.R.L.</span>
-                </div>
+        <!-- Parte Superior Fija (Logo + Dashboards) -->
+        <div class="sidebar-fixed-top">
+            <div class="sidebar-header">
+                <a href="/dashboard" class="sidebar-brand-link">
+                    <img src="{{ asset('images/logo-MDL-2.png') }}" alt="Grupo MDI E.I.R.L." class="sidebar-logo-img">
+                </a>
             </div>
+
+            <div class="sidebar-top-group">
+                <a href="/dashboard" class="sidebar-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+                    <span>Dashboards</span>
+                </a>
+            </div>
+            <hr class="sidebar-divider">
         </div>
 
-        <!-- Navegación -->
-        <nav class="flex-1 py-4 px-3 space-y-1">
-
-            <!-- Dashboards -->
-            <a href="/dashboard" class="sidebar-item active flex items-center px-4 py-2.5 text-sm">
-                <i class="fa-solid fa-chart-pie w-5 mr-3 text-sm"></i> Dashboards
-            </a>
+        <!-- Navegación Con Scroll (Inventario, Empleados, Asistencias, General) -->
+        <nav class="sidebar-nav">
 
             <!-- Inventario (desplegable) -->
-            <div class="pt-3">
-                <button onclick="toggleMenu('inventario')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-boxes-stacked w-5 mr-3 text-sm"></i> Inventario
+            <div class="sidebar-group">
+                <button onclick="toggleMenu('inventario')" class="sidebar-item sidebar-group-btn">
+                    <div class="sidebar-item-content">
+                        <span>Inventario</span>
                     </div>
-                    <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'transform: rotate(180deg);' : '' }}"></i>
+                    <i id="inventario-arrow" data-lucide="chevron-down" class="sidebar-arrow {{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'rotated' : '' }}"></i>
                 </button>
-                <div id="inventario-submenu" class="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
+
+                <div id="inventario-submenu" class="sidebar-submenu {{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'open' : '' }}">
+                    <a href="/productos" class="submenu-item {{ request()->is('productos') ? 'active' : '' }}">
+                        <i data-lucide="shopping-bag" class="submenu-icon"></i> Productos
                     </a>
-                    <a href="/categorias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
+                    <a href="/categorias" class="submenu-item {{ request()->is('categorias') ? 'active' : '' }}">
+                        <i data-lucide="tags" class="submenu-icon"></i> Categorías
                     </a>
-                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
+                    <a href="/marcas" class="submenu-item {{ request()->is('marcas') ? 'active' : '' }}">
+                        <i data-lucide="badge-check" class="submenu-icon"></i> Marcas
                     </a>
-                    <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
+                    <a href="/ventas" class="submenu-item {{ request()->is('ventas') ? 'active' : '' }}">
+                        <i data-lucide="shopping-cart" class="submenu-icon"></i> Ventas
                     </a>
-                    <a href="/clientes" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
+                    <a href="/clientes" class="submenu-item {{ request()->is('clientes') ? 'active' : '' }}">
+                        <i data-lucide="user-group" class="submenu-icon"></i> Clientes
                     </a>
-                    <a href="/proveedores" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
+                    <a href="/proveedores" class="submenu-item {{ request()->is('proveedores') ? 'active' : '' }}">
+                        <i data-lucide="truck" class="submenu-icon"></i> Proveedores
                     </a>
                 </div>
             </div>
 
+            <hr class="sidebar-divider">
+
+            <!-- Empleados -->
+            <a href="/users" class="sidebar-item {{ request()->is('users') ? 'active' : '' }}">
+                <i data-lucide="id-card-lanyard" class="sidebar-icon"></i>
+                <span>Empleados</span>
+            </a>
+
+            <!-- Asistencias -->
+            <a href="/asistencias" class="sidebar-item {{ request()->is('asistencias') ? 'active' : '' }}">
+                <i data-lucide="user-check" class="sidebar-icon"></i>
+                <span>Asistencias</span>
+            </a>
+
             <!-- General (desplegable) -->
-            <div class="pt-3">
-                <button onclick="toggleMenu('general')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-gear w-5 mr-3 text-sm"></i> General
+            <div class="sidebar-group">
+                <button onclick="toggleMenu('general')" class="sidebar-item sidebar-group-btn">
+                    <div class="sidebar-item-content">
+                        <span>General</span>
                     </div>
-                    <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'transform: rotate(180deg);' : '' }}"></i>
+                    <i id="general-arrow" data-lucide="chevron-down" class="sidebar-arrow {{ request()->is('reportes/*') ? 'rotated' : '' }}"></i>
                 </button>
-                <div id="general-submenu" class="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="/users" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
+
+                <div id="general-submenu" class="sidebar-submenu {{ request()->is('reportes/*') ? 'open' : '' }}">
+                    <a href="/reportes/productos" class="submenu-item {{ request()->is('reportes/productos') ? 'active' : '' }}">
+                        <i data-lucide="file-chart-column" class="submenu-icon"></i> Reportes Productos
                     </a>
-                    <a href="/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-user-check w-4 mr-2 text-[11px]"></i> Asistencias
+                    <a href="/reportes/asistencias" class="submenu-item {{ request()->is('reportes/asistencias') ? 'active' : '' }}">
+                        <i data-lucide="file-user" class="submenu-icon"></i> Reportes Asistencias
                     </a>
-                    <div class="pt-2">
-                        <div class="px-3 py-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Reportes</div>
-                        <a href="/reportes/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Productos
-                        </a>
-                        <a href="/reportes/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes asistencias
-                        </a>
-                        <a href="/reportes/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Ventas
-                        </a>
-                    </div>
+                    <a href="/reportes/ventas" class="submenu-item {{ request()->is('reportes/ventas') ? 'active' : '' }}">
+                        <i data-lucide="file-spreadsheet" class="submenu-icon"></i> Reportes Ventas
+                    </a>
                 </div>
             </div>
         </nav>
 
-        <!-- Bottom: Configuración y Cerrar sesión -->
-        <div class="p-3 border-t border-gray-100 space-y-1">
-            <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
-                <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
+        <!-- Parte Inferior Fija (Configuración + Cerrar Sesión) -->
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-item">
+                <i data-lucide="settings" class="sidebar-icon"></i>
+                <span>Configuración</span>
             </a>
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+            <form method="POST" action="{{ route('logout') }}" class="logout-form">
                 @csrf
-                <button type="submit" class="sidebar-item flex items-center w-full px-4 py-2.5 text-sm text-gray-600 bg-transparent border-none cursor-pointer text-left">
-                    <i class="fa-solid fa-right-from-bracket w-5 mr-3 text-sm"></i> Cerrar Sesión
+                <button type="submit" class="sidebar-item logout-btn">
+                    <i data-lucide="log-out" class="sidebar-icon"></i>
+                    <span>Cerrar Sesión</span>
                 </button>
             </form>
         </div>
     </aside>
 
+    <!-- Fondo oscuro para móviles cuando el sidebar está abierto -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
     <!-- MAIN CONTAINER -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div class="main-container">
 
         <!-- TOPBAR -->
-        <header class="h-[72px] bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 shrink-0">
-            <div class="flex items-center gap-4">
-                <button class="text-gray-500 hover:text-blue-600 transition-colors">
-                    <i class="fa-solid fa-bars text-xl"></i>
+        <header class="topbar">
+            <div class="topbar-left">
+                <!-- Botón de menú hamburguesa responsive -->
+                <button class="topbar-menu-btn" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
                 </button>
-                <h1 class="text-xl font-bold text-blue-600">Panel Administrativo</h1>
+                <h1 class="topbar-title">Panel Administrativo</h1>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="relative text-gray-400 hover:text-blue-600 transition-colors">
-                    <i class="fa-regular fa-bell text-xl"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
+            <div class="topbar-right">
+                <button class="topbar-notification-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge">3</span>
                 </button>
-                <div class="h-8 w-px bg-gray-200"></div>
-                <div class="flex items-center gap-3">
-                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=2563eb&color=fff" alt="Avatar" class="h-9 w-9 rounded-full object-cover border-2 border-blue-100">
-                    <div class="hidden sm:block text-left">
-                        <p class="text-sm font-semibold text-gray-800 leading-tight">Administrador</p>
-                        <p class="text-[11px] text-gray-400">Administrador</p>
+                <div class="topbar-divider"></div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=2563eb&color=fff" alt="Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <p class="user-name">Administrador</p>
+                        <p class="user-role">Administrador</p>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- CONTENT -->
-        <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
+        <main class="main-content">
             @yield('content')
         </main>
     </div>
 
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     @stack('scripts')
 </body>
+
 </html>
