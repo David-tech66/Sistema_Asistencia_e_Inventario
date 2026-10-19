@@ -134,6 +134,7 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="topbar-left">
+
                 <!-- Botón hamburguesa (solo visible en pantallas pequeñas/móviles) -->
                 <button class="topbar-menu-btn" onclick="toggleSidebar()">
                     <i data-lucide="menu"></i>
@@ -150,13 +151,34 @@
                 <!-- Divisor vertical -->
                 <div class="topbar-divider"></div>
 
-                <!-- Perfil de usuario (Texto primero, luego Avatar al final) -->
+                <!-- Perfil de usuario dinámico -->
                 <div class="user-profile">
+                    @auth
+                    @php
+                    $u = Auth::user();
+                    // Obtener el nombre del array de atributos sin importar el case de la columna
+                    $nombre = $u->NOMBRE_USUARIO ?? $u->nombre_usuario ?? $u->name ?? 'Usuario';
+                    $rolRaw = strtolower($u->ROL ?? $u->rol ?? $u->role ?? 'admin');
+                    $rol = ($rolRaw === 'admin') ? 'Administrador' : ucfirst($rolRaw);
+                    @endphp
+
                     <div class="user-info">
-                        <p class="user-name">Administrador</p>
-                        <p class="user-role">Administrador</p>
+                        <p class="user-name">{{ $nombre }}</p>
+                        <p class="user-role">{{ $rol }}</p>
                     </div>
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop" alt="Foto de perfil" class="user-avatar">
+
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($nombre) }}&background=2563eb&color=ffffff&bold=true"
+                        alt="Avatar de {{ $nombre }}"
+                        class="user-avatar">
+                    @else
+                    <div class="user-info">
+                        <p class="user-name">Invitado</p>
+                        <p class="user-role">Sin Sesión</p>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Invitado&background=94a3b8&color=ffffff&bold=true"
+                        alt="Avatar Invitado"
+                        class="user-avatar">
+                    @endauth
                 </div>
             </div>
         </header>
