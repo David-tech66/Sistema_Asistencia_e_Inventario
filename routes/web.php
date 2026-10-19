@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AsistenciaController;
 
 // Vistas públicas
 Route::get('/', function () {
@@ -55,6 +56,7 @@ Route::patch('/users/{user}/estado', [App\Http\Controllers\UserController::class
 
 // Rutas de Recursos Humanos - Asistencias
 Route::get('/asistencias', [App\Http\Controllers\AsistenciaController::class, 'index']);
+Route::post('/asistencias/entrada', [App\Http\Controllers\AsistenciaController::class, 'registrarEntrada']);
 
 // Rutas de productos
 Route::get('/productos', [App\Http\Controllers\ProductoController::class, 'index']);
