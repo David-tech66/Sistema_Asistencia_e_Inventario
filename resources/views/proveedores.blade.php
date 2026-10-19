@@ -1,435 +1,235 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrativo - Grupo MDL E.I.R.L.</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <!-- Fuentes e Iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.admin')
 
-    @vite(['resources/css/sidebar_topbar.css', 'resources/js/sidebar_topbar.js'])
-</head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
+@section('title', 'Proveedores')
 
-    <!-- SIDEBAR -->
-    <aside class="w-[260px] bg-white flex flex-col border-r border-gray-200 z-20 shrink-0 overflow-y-auto">
-        
-        <!-- Logo -->
-        <div class="h-[72px] flex items-center px-6 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <!-- Logo ladrillos -->
-                <div class="flex flex-col gap-[2px]">
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                    </div>
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                    </div>
-                    <div class="flex gap-[2px]">
-                        <div class="w-[14px] h-[10px] bg-red-600 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-gray-800 rounded-[2px]"></div>
-                        <div class="w-[14px] h-[10px] bg-blue-600 rounded-[2px]"></div>
-                    </div>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-[15px] font-extrabold tracking-tight text-gray-900 leading-none">GRUPO MD</span>
-                    <span class="text-[8px] text-gray-500 font-medium tracking-wider mt-[1px]">E.I.R.L.</span>
-                </div>
+@section('styles')
+    @vite(['resources/css/crud-components.css'])
+@endsection
+
+@section('content')
+    <!-- Título de Sección -->
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Proveedores</h2>
+            <p class="section-subtitle">Administra las empresas proveedoras registradas en el sistema.</p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="abrirModal('modal-proveedor-crear')">
+            <i class="fa-solid fa-plus"></i> Nuevo proveedor
+        </button>
+    </div>
+
+    <!-- Alertas -->
+    @if (session('exito'))
+        <div class="alert alert-success">
+            <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger alert-list">
+            <p><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+
+    <!-- TABLA PROVEEDORES -->
+    <div class="table-card">
+        <div class="table-card-header">
+            <div class="table-total">
+                <i class="fa-solid fa-truck-field table-total-icon"></i>
+                <span>Total: <strong>{{ $proveedores->count() }}</strong> proveedor(es)</span>
+            </div>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="buscar-proveedor" placeholder="Buscar proveedor..." class="search-input" autocomplete="off">
             </div>
         </div>
-        
-        <!-- Navegación -->
-        <nav class="flex-1 py-4 px-3 space-y-1">
-            
-            <!-- Dashboards -->
-            <a href="/dashboard" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
-                <i class="fa-solid fa-chart-pie w-5 mr-3 text-sm"></i> Dashboards
-            </a>
 
-            <!-- Inventario (desplegable) -->
-            <div class="pt-3">
-                <button onclick="toggleMenu('inventario')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-boxes-stacked w-5 mr-3 text-sm"></i> Inventario
-                    </div>
-                    <i id="inventario-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'transform: rotate(180deg);' : '' }}"></i>
-                </button>
-                <div id="inventario-submenu" class="{{ request()->is('productos', 'categorias', 'marcas', 'ventas', 'clientes', 'proveedores') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-tag w-4 mr-2 text-[11px]"></i> Productos
-                    </a>
-                    <a href="/categorias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-layer-group w-4 mr-2 text-[11px]"></i> Categorías
-                    </a>
-                    <a href="/marcas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-copyright w-4 mr-2 text-[11px]"></i> Marcas
-                    </a>
-                    <a href="/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-shopping-cart w-4 mr-2 text-[11px]"></i> Ventas
-                    </a>
-                    <a href="/clientes" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-user-group w-4 mr-2 text-[11px]"></i> Clientes
-                    </a>
-                    <a href="/proveedores" class="sidebar-item active flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-truck-field w-4 mr-2 text-[11px]"></i> Proveedores
-                    </a>
-                </div>
-            </div>
-
-            <!-- General (desplegable) -->
-            <div class="pt-3">
-                <button onclick="toggleMenu('general')" class="sidebar-item w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-600">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-gear w-5 mr-3 text-sm"></i> General
-                    </div>
-                    <i id="general-arrow" class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform" style="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'transform: rotate(180deg);' : '' }}"></i>
-                </button>
-                <div id="general-submenu" class="{{ request()->is('users', 'asistencias', 'reportes', 'reportes/*') ? 'flex' : 'hidden' }} flex-col ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
-                    <a href="/users" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-id-badge w-4 mr-2 text-[11px]"></i> Empleados
-                    </a>
-                    <a href="/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                        <i class="fa-solid fa-user-check w-4 mr-2 text-[11px]"></i> Asistencias
-                    </a>
-                    <div class="pt-2">
-                        <div class="px-3 py-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Reportes</div>
-                        <a href="/reportes/productos" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Productos
-                        </a>
-                        <a href="/reportes/asistencias" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes asistencias
-                        </a>
-                        <a href="/reportes/ventas" class="sidebar-item flex items-center px-3 py-2 text-[13px] text-gray-500">
-                            <i class="fa-solid fa-file-lines w-4 mr-2 text-[11px]"></i> Reportes Ventas
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        
-        <!-- Bottom: Configuración y Cerrar sesión -->
-        <div class="p-3 border-t border-gray-100 space-y-1">
-            <a href="#" class="sidebar-item flex items-center px-4 py-2.5 text-sm text-gray-600">
-                <i class="fa-solid fa-sliders w-5 mr-3 text-sm"></i> Configuración
-            </a>
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                @csrf
-                <button type="submit" class="sidebar-item flex items-center w-full px-4 py-2.5 text-sm text-gray-600 bg-transparent border-none cursor-pointer text-left">
-                    <i class="fa-solid fa-right-from-bracket w-5 mr-3 text-sm"></i> Cerrar Sesión
-                </button>
-            </form>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Razón Social</th>
+                        <th>RUC</th>
+                        <th>Teléfono</th>
+                        <th>Fecha de Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($proveedores as $proveedor)
+                        <tr class="proveedor-fila"
+                            data-buscar="{{ e(strtolower($proveedor->razon_social . ' ' . $proveedor->ruc . ' ' . ($proveedor->telefono ?? ''))) }}">
+                            <td>
+                                <div class="cell-entity">
+                                    <div class="entity-icon">
+                                        <i class="fa-solid fa-building"></i>
+                                    </div>
+                                    <span class="entity-name">{{ $proveedor->razon_social }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="cell-code">{{ $proveedor->ruc }}</span>
+                            </td>
+                            <td>
+                                @if ($proveedor->telefono)
+                                    <span class="cell-detail"><i class="fa-solid fa-phone"></i>{{ $proveedor->telefono }}</span>
+                                @else
+                                    <span class="cell-muted">—</span>
+                                @endif
+                            </td>
+                            <td class="cell-date">{{ $proveedor->created_at ? $proveedor->created_at->format('d/m/Y') : '—' }}</td>
+                            <td class="cell-actions">
+                                <div class="actions-group">
+                                    <button type="button" class="btn-edit" onclick="editarProveedor({{ $proveedor->id }})">
+                                        <i class="fa-solid fa-pen"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn-delete" onclick="eliminarProveedor({{ $proveedor->id }}, '{{ addslashes($proveedor->razon_social) }}')">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="fa-solid fa-truck-field"></i>
+                                    </div>
+                                    <p class="empty-title">No hay proveedores registrados</p>
+                                    <p class="empty-text">Cuando se registren proveedores, aparecerán en esta lista.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <p id="sin-resultados" class="empty-filter hidden">No se encontraron proveedores con esa búsqueda.</p>
         </div>
-    </aside>
-
-    <!-- MAIN CONTAINER -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
-        
-        <!-- TOPBAR -->
-        <header class="h-[72px] bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 shrink-0">
-            <div class="flex items-center gap-4">
-                <button class="text-gray-500 hover:text-blue-600 transition-colors">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-                <h1 class="text-xl font-bold text-blue-600">Panel Administrativo</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <button class="relative text-gray-400 hover:text-blue-600 transition-colors">
-                    <i class="fa-regular fa-bell text-xl"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
-                </button>
-                <div class="h-8 w-px bg-gray-200"></div>
-                <div class="flex items-center gap-3">
-                    <img src="https://ui-avatars.com/api/?name=Admin+MDL&background=2563eb&color=fff" alt="Avatar" class="h-9 w-9 rounded-full object-cover border-2 border-blue-100">
-                    <div class="hidden sm:block text-left">
-                        <p class="text-sm font-semibold text-gray-800 leading-tight">Administrador</p>
-                        <p class="text-[11px] text-gray-400">Administrador</p>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
-
-            <!-- Título + acción -->
-            <div class="mb-6 flex items-start justify-between gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Proveedores</h2>
-                    <p class="text-sm text-gray-500 mt-1">Administra las empresas proveedoras registradas en el sistema.</p>
-                </div>
-                <button onclick="abrirModal('modal-proveedor-crear')"
-                        class="px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-plus"></i> Nuevo proveedor
-                </button>
-            </div>
-
-            <!-- Alertas -->
-            @if (session('exito'))
-                <div class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
-                    <i class="fa-solid fa-circle-check"></i> {{ session('exito') }}
-                </div>
-            @endif
-            @if (session('error'))
-                <div class="mb-5 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-                    <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-                    <p class="font-semibold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Revisa los siguientes errores:</p>
-                    <ul class="list-disc list-inside mt-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <!-- TABLA PROVEEDORES -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-
-                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                    <div class="flex items-center gap-2 text-sm text-gray-500">
-                        <i class="fa-solid fa-truck-field text-blue-600"></i>
-                        <span>Total: <span class="font-semibold text-gray-800">{{ $proveedores->count() }}</span> proveedor(es)</span>
-                    </div>
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" placeholder="Buscar proveedor..." class="pl-8 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 w-64">
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-gray-50 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
-                                <th class="px-5 py-3">Razón Social</th>
-                                <th class="px-5 py-3">RUC</th>
-                                <th class="px-5 py-3">Teléfono</th>
-                                <th class="px-5 py-3">Fecha de Registro</th>
-                                <th class="px-5 py-3">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            @forelse ($proveedores as $proveedor)
-                                <tr class="hover:bg-gray-50/70 transition-colors">
-                                    <td class="px-5 py-3.5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                                                <i class="fa-solid fa-building text-sm"></i>
-                                            </div>
-                                            <span class="font-semibold text-gray-800">{{ $proveedor->razon_social }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        <span class="inline-flex items-center font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">{{ $proveedor->ruc }}</span>
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        @if ($proveedor->telefono)
-                                            <span class="text-gray-600"><i class="fa-solid fa-phone text-[11px] text-gray-400 mr-1.5"></i>{{ $proveedor->telefono }}</span>
-                                        @else
-                                            <span class="text-gray-300 text-xs">—</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-5 py-3.5 text-gray-500">{{ $proveedor->created_at ? $proveedor->created_at->format('d/m/Y') : '—' }}</td>
-                                    <td class="px-5 py-3.5">
-                                        <div class="flex gap-2">
-                                            <button onclick="editarProveedor({{ $proveedor->id }})"
-                                                    class="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1.5">
-                                                <i class="fa-solid fa-pen text-[10px]"></i> Editar
-                                            </button>
-                                            <button onclick="eliminarProveedor({{ $proveedor->id }}, '{{ addslashes($proveedor->razon_social) }}')"
-                                                    class="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1.5">
-                                                <i class="fa-solid fa-trash text-[10px]"></i> Eliminar
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-5 py-12 text-center">
-                                        <div class="flex flex-col items-center gap-2">
-                                            <div class="h-12 w-12 rounded-2xl bg-gray-50 text-gray-300 flex items-center justify-center">
-                                                <i class="fa-solid fa-truck-field text-xl"></i>
-                                            </div>
-                                            <p class="text-sm font-medium text-gray-500">No hay proveedores registrados</p>
-                                            <p class="text-xs text-gray-400">Cuando se registren proveedores, aparecerán en esta lista.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </main>
     </div>
 
     <!-- MODAL: Registrar proveedor -->
-    <div id="modal-proveedor-crear" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-proveedor-crear')"></div>
-        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-5">
-                <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+    <div id="modal-proveedor-crear" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-proveedor-crear')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <div class="modal-icon modal-icon--blue">
                         <i class="fa-solid fa-truck-field"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900">Registrar nuevo proveedor</h3>
+                    <div>
+                        <h3 class="modal-title">Registrar nuevo proveedor</h3>
+                        <p class="modal-subtitle">Completa los datos de la empresa.</p>
+                    </div>
                 </div>
-                <button onclick="cerrarModal('modal-proveedor-crear')" class="text-gray-400 hover:text-red-500 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+                <button type="button" class="modal-close" onclick="cerrarModal('modal-proveedor-crear')">&times;</button>
             </div>
             <form method="POST" action="/proveedores">
                 @csrf
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Razón social *</label>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Razón social *</label>
                         <input type="text" name="razon_social" required maxlength="150"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               value="{{ old('razon_social') }}" class="form-input"
                                placeholder="Ej: Distribuidora SAC">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">RUC *</label>
+                    <div class="form-group">
+                        <label class="form-label">RUC *</label>
                         <input type="text" name="ruc" required maxlength="20"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono"
+                               value="{{ old('ruc') }}" class="form-input form-input--mono"
                                placeholder="Ej: 20555555555">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <div class="form-group">
+                        <label class="form-label">Teléfono</label>
                         <input type="text" name="telefono" maxlength="20"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
+                               value="{{ old('telefono') }}" class="form-input"
                                placeholder="Ej: 999888777 (opcional)">
                     </div>
                 </div>
-                <div class="flex gap-3 mt-6">
-                    <button type="button" onclick="cerrarModal('modal-proveedor-crear')"
-                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit"
-                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
-                        Registrar
-                    </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-proveedor-crear')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL: Editar proveedor -->
-    <div id="modal-proveedor-editar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-proveedor-editar')"></div>
-        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-5">
-                <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+    <div id="modal-proveedor-editar" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-proveedor-editar')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <div class="modal-icon modal-icon--amber">
                         <i class="fa-solid fa-pen"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900">Editar proveedor</h3>
+                    <div>
+                        <h3 class="modal-title">Editar proveedor</h3>
+                        <p class="modal-subtitle">Actualiza los datos de la empresa.</p>
+                    </div>
                 </div>
-                <button onclick="cerrarModal('modal-proveedor-editar')" class="text-gray-400 hover:text-red-500 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+                <button type="button" class="modal-close" onclick="cerrarModal('modal-proveedor-editar')">&times;</button>
             </div>
             <form id="form-proveedor-editar" method="POST" action="/proveedores/0">
                 @csrf
                 @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Razón social *</label>
-                        <input type="text" name="razon_social" required maxlength="150"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Razón social *</label>
+                        <input type="text" name="razon_social" required maxlength="150" class="form-input">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">RUC *</label>
-                        <input type="text" name="ruc" required maxlength="20"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 font-mono">
+                    <div class="form-group">
+                        <label class="form-label">RUC *</label>
+                        <input type="text" name="ruc" required maxlength="20" class="form-input form-input--mono">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                        <input type="text" name="telefono" maxlength="20"
-                               class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    <div class="form-group">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="telefono" maxlength="20" class="form-input">
                     </div>
                 </div>
-                <div class="flex gap-3 mt-6">
-                    <button type="button" onclick="cerrarModal('modal-proveedor-editar')"
-                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit"
-                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
-                        Guardar cambios
-                    </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-proveedor-editar')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL: Confirmar eliminación -->
-    <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/50" onclick="cerrarModal('modal-eliminar')"></div>
-        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
-            <div class="h-14 w-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
-                <i class="fa-solid fa-trash text-xl"></i>
+    <div id="modal-eliminar" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="modal-dialog modal-dialog--confirm">
+            <div class="modal-header">
+                <div>
+                    <div class="confirm-icon">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                    <h3 class="confirm-title">Eliminar proveedor</h3>
+                    <p class="confirm-text">¿Seguro que deseas eliminar <strong id="eliminar-nombre"></strong>? Esta acción no se puede deshacer.</p>
+                </div>
             </div>
-            <h3 class="text-lg font-bold text-gray-900">Eliminar proveedor</h3>
-            <p class="text-sm text-gray-500 mt-2">¿Seguro que deseas eliminar <span id="eliminar-nombre" class="font-semibold text-gray-800"></span>? Esta acción no se puede deshacer.</p>
             <form id="form-eliminar" method="POST" action="/proveedores/0">
                 @csrf
                 @method('DELETE')
-                <div class="flex gap-3 mt-6">
-                    <button type="button" onclick="cerrarModal('modal-eliminar')"
-                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit"
-                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm">
-                        Sí, eliminar
-                    </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
                 </div>
             </form>
         </div>
     </div>
+@endsection
 
-    <script>
-        function abrirModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function cerrarModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        function editarProveedor(id) {
-            fetch('/proveedores/' + id + '/edit')
-                .then(function (res) { return res.json(); })
-                .then(function (p) {
-                    const form = document.getElementById('form-proveedor-editar');
-                    form.action = '/proveedores/' + p.id;
-                    form.querySelector('[name="razon_social"]').value = p.razon_social || '';
-                    form.querySelector('[name="ruc"]').value = p.ruc || '';
-                    form.querySelector('[name="telefono"]').value = p.telefono || '';
-                    abrirModal('modal-proveedor-editar');
-                })
-                .catch(function () { alert('No se pudo cargar el proveedor.'); });
-        }
-
-        function eliminarProveedor(id, nombre) {
-            document.getElementById('form-eliminar').action = '/proveedores/' + id;
-            document.getElementById('eliminar-nombre').textContent = nombre;
-            abrirModal('modal-eliminar');
-        }
-
-        // Si se volvió con errores de validación, reabrir el formulario de registro
-        @if ($errors->any())
-            abrirModal('modal-proveedor-crear');
-        @endif
-    </script>
-</body>
-</html>
+@push('scripts')
+    @vite(['resources/js/proveedores.js'])
+@endpush

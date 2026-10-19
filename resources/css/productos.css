@@ -1,0 +1,182 @@
+/* ==========================================
+    PRODUCTOS (stock + escáner) - PANEL ADMINISTRATIVO (GRUPO MDL)
+    Recursos para resources/views/productos.blade.php
+   ========================================== */
+
+@import './crud-components.css';
+
+/* ============ TARJETA ESCÁNER ============ */
+.scanner-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.scanner-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.scanner-head .entity-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+}
+
+.scanner-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.scanner-sub {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.scanner-row {
+    display: flex;
+    gap: 12px;
+}
+
+.scanner-input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.scanner-input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.scanner-input {
+    width: 100%;
+    padding: 16px;
+    padding-left: 48px;
+    font-size: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #1f2937;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scanner-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    background-color: #ffffff;
+}
+
+.scanner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.15s ease;
+}
+
+.scanner-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.scanner-hint {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 12px;
+}
+
+.scanner-hint i {
+    color: #60a5fa;
+}
+
+/* ============ TABLA DE STOCK ============ */
+tr.row-flash,
+.data-table tbody tr.row-flash {
+    background-color: #ecfdf5 !important;
+}
+
+/* ============ MODAL CÁMARA ============ */
+.camera-viewport {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #000000;
+    min-height: 280px;
+}
+
+.camera-status {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.camera-status--active {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.camera-status--error {
+    color: #ef4444;
+    word-break: break-word;
+}
+
+/* ============ TOAST DE ESCANEO ============ */
+.toast-escaneo {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    max-width: 384px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    background-color: #059669;
+    z-index: 60;
+}
+
+.toast-escaneo--blue {
+    background-color: #2563eb;
+}
+
+.toast-escaneo--red {
+    background-color: #dc2626;
+}
+
+.toast-escaneo p {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+    .scanner-row {
+        flex-direction: column;
+    }
+
+    .scanner-btn {
+        justify-content: center;
+    }
+}
