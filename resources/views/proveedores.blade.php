@@ -61,6 +61,8 @@
                         <th>Razón Social</th>
                         <th>RUC</th>
                         <th>Teléfono</th>
+                        <th>Correo Electronico</th>
+                        <th>Dirección</th>
                         <th>Fecha de Registro</th>
                         <th>Acciones</th>
                     </tr>
@@ -83,6 +85,20 @@
                             <td>
                                 @if ($proveedor->telefono)
                                     <span class="cell-detail"><i class="fa-solid fa-phone"></i>{{ $proveedor->telefono }}</span>
+                                @else
+                                    <span class="cell-muted">—</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($proveedor->correo)
+                                    <span class="cell-detail"><i class="fa-solid fa-envelope"></i>{{ $proveedor->correo }}</span>
+                                @else
+                                    <span class="cell-muted">—</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($proveedor->direccion)
+                                    <span class="cell-detail"><i class="fa-solid fa-location-dot"></i>{{ $proveedor->direccion }}</span>
                                 @else
                                     <span class="cell-muted">—</span>
                                 @endif
@@ -140,20 +156,32 @@
                     <div class="form-group">
                         <label class="form-label">Razón social *</label>
                         <input type="text" name="razon_social" required maxlength="150"
-                               value="{{ old('razon_social') }}" class="form-input"
-                               placeholder="Ej: Distribuidora SAC">
+                                value="{{ old('razon_social') }}" class="form-input"
+                                placeholder="Ej: Distribuidora SAC">
                     </div>
                     <div class="form-group">
                         <label class="form-label">RUC *</label>
                         <input type="text" name="ruc" required maxlength="20"
-                               value="{{ old('ruc') }}" class="form-input form-input--mono"
-                               placeholder="Ej: 20555555555">
+                                value="{{ old('ruc') }}" class="form-input form-input--mono"
+                                placeholder="Ej: 20555555555">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Teléfono</label>
                         <input type="text" name="telefono" maxlength="20"
-                               value="{{ old('telefono') }}" class="form-input"
-                               placeholder="Ej: 999888777 (opcional)">
+                                value="{{ old('telefono') }}" class="form-input"
+                                placeholder="Ej: 999888777 (opcional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" name="correo" maxlength="100"
+                                value="{{ old('correo') }}" class="form-input"
+                                placeholder="Ej: contacto@empresa.com (opcional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="direccion" maxlength="200"
+                                value="{{ old('direccion') }}" class="form-input"
+                                placeholder="Ej: Av. Principal 123 (opcional)">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -195,6 +223,14 @@
                     <div class="form-group">
                         <label class="form-label">Teléfono</label>
                         <input type="text" name="telefono" maxlength="20" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" name="correo" maxlength="100" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="direccion" maxlength="200" class="form-input">
                     </div>
                 </div>
                 <div class="modal-footer">

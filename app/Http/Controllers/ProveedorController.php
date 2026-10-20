@@ -59,6 +59,8 @@ class ProveedorController extends Controller
             'razon_social' => ['required', 'string', 'max:150'],
             'ruc' => ['required', 'string', 'max:20', Rule::unique('proveedores', 'ruc')->ignore($id)],
             'telefono' => ['nullable', 'string', 'max:20'],
+            'correo' => ['nullable', 'email', 'max:100'],
+            'direccion' => ['nullable', 'string', 'max:200'],
         ]);
     }
 }
