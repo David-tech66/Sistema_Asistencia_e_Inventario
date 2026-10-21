@@ -1,0 +1,92 @@
+/* ==========================================
+   ASISTENCIAS - PANEL ADMINISTRATIVO (GRUPO MDL)
+   Recursos para resources/views/asistencias.blade.php
+   ========================================== */
+
+@import './crud-components.css';
+
+/* ============ TARJETA DE REGISTRO ============ */
+.register-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.register-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.register-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.register-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.register-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+}
+@media (min-width: 768px) {
+    .register-form {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+    .register-field { flex: 1; }
+    .register-form .btn { width: auto; white-space: nowrap; }
+}
+
+.register-field { width: 100%; }
+
+.register-note {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 16px;
+}
+.register-note i { color: #2563eb; }
+
+/* ============ BADGES DE ASISTENCIA ============ */
+.asistencia-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.asistencia-badge--presente { background-color: #dcfce7; color: #15803d; }
+.asistencia-badge--sin { background-color: #f3f4f6; color: #4b5563; }
+
+/* ============ ALERTA AVISO ============ */
+.alert-warning {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}

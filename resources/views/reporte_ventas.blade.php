@@ -3,7 +3,7 @@
 @section('title', 'Reporte de Ventas')
 
 @section('styles')
-    @vite(['resources/css/reportes_ventas.css'])
+    @vite(['resources/css/reporte_ventas.css'])
 @endsection
 
 @section('content')
@@ -182,5 +182,5 @@
 @endsection
 
 @push('scripts')
-    @vite(['resources/js/reportes_ventas.js'])
+    @vite(['resources/js/reporte_ventas.js'])
 @endpush
