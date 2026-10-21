@@ -91,6 +91,11 @@
                 <span>Asistencias</span>
             </a>
 
+            <!-- Usuarios -->
+            <a href="/users" class="submenu-item {{ request()->is('users') ? 'active' : '' }}">
+                <svg class="submenu-icon" {!! $svgAttrs !!}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg> Usuarios
+            </a>
+
             <!-- General (desplegable) -->
             <div class="sidebar-group">
                 <button onclick="toggleMenu('general')" class="sidebar-item sidebar-group-btn">
@@ -101,9 +106,6 @@
                 </button>
 
                 <div id="general-submenu" class="sidebar-submenu {{ request()->is('users', 'reportes', 'reportes/*') ? 'open' : '' }}">
-                    <a href="/users" class="submenu-item {{ request()->is('users') ? 'active' : '' }}">
-                        <svg class="submenu-icon" {!! $svgAttrs !!}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg> Usuarios
-                    </a>
                     <a href="/reportes/productos" class="submenu-item {{ request()->is('reportes/productos') ? 'active' : '' }}">
                         <svg class="submenu-icon" {!! $svgAttrs !!}><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M8 18v-1"/><path d="M12 18v-6"/><path d="M16 18v-3"/></svg> Reportes Productos
                     </a>

@@ -250,21 +250,23 @@ body {
 .submenu-item {
     display: flex;
     align-items: center;
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: 500;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: 600;
     color: #0b2f5b;
+    border-radius: 8px;
     text-decoration: none;
-    border-radius: 6px;
     transition: all 0.2s ease;
 }
 
 .submenu-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 12px; /* Separación en submenús */
-    color: #4b5563;
+    width: 20px;
+    height: 20px;
+    margin-right: 16px; /* Separación en submenús */
+    color: #0b2f5b;
     flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .submenu-item:hover {

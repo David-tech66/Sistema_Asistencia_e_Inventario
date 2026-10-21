@@ -1,9 +1,9 @@
 /* ==========================================
-   USUARIOS - PANEL ADMINISTRATIVO (GRUPO MDL)
-   Recursos para resources/views/users.blade.php
+    USUARIOS - PANEL ADMINISTRATIVO (GRUPO MDL)
+    Recursos para resources/views/users.blade.php
    ========================================== */
 
-@import './crud-components.css';
+@import "./crud-components.css";
 
 /* ============ TARJETAS RESUMEN ============ */
 .stats-grid {
@@ -13,7 +13,9 @@
     margin-bottom: 24px;
 }
 @media (min-width: 640px) {
-    .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 .stat-card {
@@ -41,9 +43,15 @@
     font-size: 30px;
     flex-shrink: 0;
 }
-.stat-icon--blue { color: #3b82f6; }
-.stat-icon--green { color: #22c55e; }
-.stat-icon--red { color: #ef4444; }
+.stat-icon--blue {
+    color: #3b82f6;
+}
+.stat-icon--green {
+    color: #22c55e;
+}
+.stat-icon--red {
+    color: #ef4444;
+}
 
 /* ============ CELDA: AVATAR + NOMBRE ============ */
 .avatar-circle {
@@ -69,8 +77,14 @@
     font-size: 12px;
     font-weight: 600;
 }
-.badge-rol--admin { background-color: #f3e8ff; color: #7e22ce; }
-.badge-rol--empleado { background-color: #dbeafe; color: #1d4ed8; }
+.badge-rol--admin {
+    background-color: #f3e8ff;
+    color: #7e22ce;
+}
+.badge-rol--empleado {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
 
 .badge-estado {
     display: inline-flex;
@@ -80,8 +94,14 @@
     font-size: 12px;
     font-weight: 600;
 }
-.badge-estado--activo { background-color: #dcfce7; color: #15803d; }
-.badge-estado--inactivo { background-color: #fee2e2; color: #b91c1c; }
+.badge-estado--activo {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+.badge-estado--inactivo {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
 
 /* ============ BOTONES DE ESTADO ============ */
 .btn-state {
@@ -101,12 +121,16 @@
     background-color: #fef2f2;
     color: #b91c1c;
 }
-.btn-state--off:hover { background-color: #fee2e2; }
+.btn-state--off:hover {
+    background-color: #fee2e2;
+}
 .btn-state--on {
     background-color: #f0fdf4;
     color: #15803d;
 }
-.btn-state--on:hover { background-color: #dcfce7; }
+.btn-state--on:hover {
+    background-color: #dcfce7;
+}
 
 /* ============ PIE DE TABLA ============ */
 .table-footer {
