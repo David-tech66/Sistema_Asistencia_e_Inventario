@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/css/clientes.css',
                 'resources/css/reporte_ventas.css',
                 'resources/css/users.css',
+                'resources/css/empleados.css',
                 'resources/css/asistencias.css',
                 'resources/js/app.js',
                 'resources/js/sidebar_topbar.js',
@@ -32,6 +33,8 @@ export default defineConfig({
                 'resources/js/clientes.js',
                 'resources/js/reporte_ventas.js',
                 'resources/js/users.js',
+                'resources/js/empleados.js',
+                'resources/js/asistencias.js',
             ],
             refresh: true,
             fonts: [

@@ -80,7 +80,7 @@
             <hr class="sidebar-divider">
 
             <!-- Empleados -->
-            <a href="/users" class="sidebar-item {{ request()->is('users') ? 'active' : '' }}">
+            <a href="/empleados" class="sidebar-item {{ request()->is('empleados') ? 'active' : '' }}">
                 <svg class="sidebar-icon" {!! $svgAttrs !!}><path d="M13.5 8h-3"/><path d="m15 2-1 2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3"/><path d="M16 22a4 4 0 0 0-8 0"/><path d="m9 2 3 6"/><circle cx="12" cy="15" r="3"/></svg>
                 <span>Empleados</span>
             </a>
@@ -97,10 +97,13 @@
                     <div class="sidebar-item-content">
                         <span>General</span>
                     </div>
-                    <i id="general-arrow" class="sidebar-arrow {{ request()->is('reportes', 'reportes/*') ? 'rotated' : '' }}"><svg {!! $svgAttrs !!}><path d="m6 9 6 6 6-6"/></svg></i>
+                    <i id="general-arrow" class="sidebar-arrow {{ request()->is('users', 'reportes', 'reportes/*') ? 'rotated' : '' }}"><svg {!! $svgAttrs !!}><path d="m6 9 6 6 6-6"/></svg></i>
                 </button>
 
-                <div id="general-submenu" class="sidebar-submenu {{ request()->is('reportes', 'reportes/*') ? 'open' : '' }}">
+                <div id="general-submenu" class="sidebar-submenu {{ request()->is('users', 'reportes', 'reportes/*') ? 'open' : '' }}">
+                    <a href="/users" class="submenu-item {{ request()->is('users') ? 'active' : '' }}">
+                        <svg class="submenu-icon" {!! $svgAttrs !!}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg> Usuarios
+                    </a>
                     <a href="/reportes/productos" class="submenu-item {{ request()->is('reportes/productos') ? 'active' : '' }}">
                         <svg class="submenu-icon" {!! $svgAttrs !!}><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M8 18v-1"/><path d="M12 18v-6"/><path d="M16 18v-3"/></svg> Reportes Productos
                     </a>

@@ -44,39 +44,52 @@
                 <i class="fa-solid fa-user-clock"></i>
             </div>
             <div>
-                <h3 class="register-title">Registrar entrada</h3>
-                <p class="register-subtitle">Selecciona al trabajador para registrar su asistencia.</p>
+                <h3 class="register-title">Registrar asistencia</h3>
+                <p class="register-subtitle">Elige el modo, escribe o escanea el DNI del empleado.</p>
             </div>
         </div>
 
         @if ($empleados->isEmpty())
             <div class="alert alert-warning">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                No hay usuarios registrados. Primero registra un empleado en el módulo Empleados.
+                No hay empleados activos. Primero registra un empleado en el módulo Empleados.
             </div>
         @else
-            <form action="/asistencias/entrada" method="POST" class="register-form">
+            <form action="/asistencias/registrar" method="POST" class="register-form">
                 @csrf
                 <div class="register-field">
-                    <label class="form-label" for="user_id">Seleccionar empleado</label>
-                    <select name="user_id" id="user_id" required class="form-input">
-                        <option value="">Selecciona un empleado</option>
-                        @foreach ($empleados as $empleado)
-                            <option value="{{ $empleado->id }}" {{ old('user_id') == $empleado->id ? 'selected' : '' }}>
-                                {{ $empleado->nombre_usuario }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <span class="form-label">Modo de registro</span>
+                    <div class="modo-switch" role="radiogroup" aria-label="Modo de registro">
+                        <label class="modo-option">
+                            <input type="radio" name="modo" value="entrada"
+                                   {{ old('modo', 'entrada') === 'entrada' ? 'checked' : '' }}>
+                            <i class="fa-solid fa-right-to-bracket"></i> Entrada
+                        </label>
+                        <label class="modo-option">
+                            <input type="radio" name="modo" value="salida"
+                                   {{ old('modo') === 'salida' ? 'checked' : '' }}>
+                            <i class="fa-solid fa-right-from-bracket"></i> Salida
+                        </label>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-clock"></i> Registrar entrada
+                <div class="register-field">
+                    <label class="form-label" for="dni">DNI del empleado</label>
+                    <input type="text" name="dni" id="dni" class="form-input"
+                           value="{{ old('dni') }}" required maxlength="15"
+                           pattern="[0-9]*" inputmode="numeric" autocomplete="off"
+                           autofocus placeholder="Escribe o escanea el DNI (8 dígitos)">
+                    <div id="dni-preview" class="dni-preview" aria-live="polite"></div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-registrar">
+                    <i class="fa-solid fa-clock"></i> <span id="btn-registrar-texto">Registrar entrada</span>
                 </button>
             </form>
         @endif
 
         <p class="register-note">
             <i class="fa-solid fa-circle-info"></i>
-            La fecha y la hora de entrada se registran automáticamente.
+            Escanea el código de barras del DNI o escríbelo y presiona Enter. La fecha y la hora se capturan automáticamente.
+            Primero registra la entrada; la salida solo está disponible cuando ya existe entrada hoy.
         </p>
     </section>
 
@@ -106,7 +119,7 @@
                         <tr>
                             <td>{{ $asistencia->id }}</td>
                             <td>
-                                <span class="entity-name">{{ $asistencia->user?->nombre_usuario ?? 'Usuario no disponible' }}</span>
+                                <span class="entity-name">{{ $asistencia->empleado?->nombre_completo ?? 'Empleado no disponible' }}</span>
                             </td>
                             <td class="cell-date">{{ $asistencia->fecha }}</td>
                             <td>{{ $asistencia->hora_entrada ?? '--:--:--' }}</td>
@@ -149,3 +162,7 @@
         Grupo MDL E.I.R.L. — Módulo de Recursos Humanos
     </p>
 @endsection
+
+@push('scripts')
+    @vite(['resources/js/asistencias.js'])
+@endpush

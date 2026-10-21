@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * Mostrar listado de empleados.
+     * Mostrar listado de usuarios.
      */
     public function index(): View
     {
@@ -21,7 +21,7 @@ class UserController extends Controller
     }
 
     /**
-     * Registrar un nuevo empleado.
+     * Registrar un nuevo usuario.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -40,11 +40,11 @@ class UserController extends Controller
             'estado' => true,
         ]);
 
-        return redirect('/users')->with('success', 'Empleado registrado correctamente.');
+        return redirect('/users')->with('success', 'Usuario registrado correctamente.');
     }
 
     /**
-     * Actualizar un empleado.
+     * Actualizar un usuario.
      */
     public function update(Request $request, User $user): RedirectResponse
     {
@@ -75,11 +75,11 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect('/users')->with('success', 'Empleado actualizado correctamente.');
+        return redirect('/users')->with('success', 'Usuario actualizado correctamente.');
     }
 
     /**
-     * Activar o desactivar un empleado.
+     * Activar o desactivar un usuario.
      */
     public function cambiarEstado(User $user): RedirectResponse
     {
@@ -89,8 +89,8 @@ class UserController extends Controller
         return redirect('/users')->with(
             'success',
             $user->estado
-                ? 'Empleado activado correctamente.'
-                : 'Empleado desactivado correctamente.'
+                ? 'Usuario activado correctamente.'
+                : 'Usuario desactivado correctamente.'
         );
     }
 }

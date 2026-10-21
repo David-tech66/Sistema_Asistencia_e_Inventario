@@ -1,5 +1,5 @@
 /* ==========================================
-   EMPLEADOS - PANEL ADMINISTRATIVO (GRUPO MDL)
+   USUARIOS - PANEL ADMINISTRATIVO (GRUPO MDL)
    Recursos para resources/views/users.blade.php
    ========================================== */
 
@@ -11,10 +11,10 @@ window.cerrarModal = function (id) {
     document.getElementById(id).classList.add('hidden');
 };
 
-window.buscarEmpleado = function () {
-    const texto = document.getElementById('buscar-empleado').value.toLowerCase().trim();
+window.buscarUsuario = function () {
+    const texto = document.getElementById('buscar-usuario').value.toLowerCase().trim();
 
-    document.querySelectorAll('#tabla-empleados tr').forEach(function (fila) {
+    document.querySelectorAll('#tabla-usuarios tr').forEach(function (fila) {
         fila.style.display = fila.textContent.toLowerCase().includes(texto) ? '' : 'none';
     });
 };
