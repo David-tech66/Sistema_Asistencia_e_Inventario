@@ -10,11 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'empleado_id',
     'fecha',
     'hora_entrada',
-    'hora_salida'
+    'hora_salida',
+    'estado',
+    'salida_anticipada'
 ])]
 class Asistencia extends Model
 {
     protected $table = 'asistencias';
+
+    protected $casts = [
+        'salida_anticipada' => 'boolean',
+    ];
 
     public function empleado(): BelongsTo
     {

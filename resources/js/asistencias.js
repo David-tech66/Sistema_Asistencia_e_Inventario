@@ -3,6 +3,20 @@
    Recursos para resources/views/asistencias.blade.php
    ========================================== */
 
+window.abrirModal = function (id) {
+    document.getElementById(id).classList.remove("hidden");
+};
+
+window.cerrarModal = function (id) {
+    document.getElementById(id).classList.add("hidden");
+};
+
+window.eliminarAsistencia = function (id, nombre, fecha) {
+    document.getElementById("form-eliminar").action = "/asistencias/" + id;
+    document.getElementById("eliminar-nombre").textContent = nombre + " (" + fecha + ")";
+    window.abrirModal("modal-eliminar");
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('dni');
     const preview = document.getElementById('dni-preview');
@@ -21,9 +35,51 @@ document.addEventListener('DOMContentLoaded', function () {
         preview.className = 'dni-preview';
     };
 
+    const escapar = function (valor) {
+        return String(valor).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    };
+
+    const iniciales = function (nombre) {
+        const partes = String(nombre || '').trim().split(/\s+/).filter(Boolean);
+        if (!partes.length) return '?';
+        const primera = partes[0].charAt(0);
+        const segunda = partes[1] ? partes[1].charAt(0) : partes[0].charAt(1);
+        return (primera + segunda).toUpperCase();
+    };
+
+    const ICONOS = {
+        ok: 'fa-circle-check',
+        warn: 'fa-clock',
+        err: 'fa-circle-xmark',
+    };
+
+    const icono = function (tipo) {
+        return 'fa-solid ' + (ICONOS[tipo] || 'fa-circle-info');
+    };
+
+    // Mensaje simple (DNI inexistente o inválido): icono + texto.
     const pintar = function (texto, tipo) {
-        preview.textContent = texto;
+        preview.innerHTML = '<i class="' + icono(tipo) + ' dni-preview__icon"></i>' + escapar(texto);
         preview.className = 'dni-preview dni-preview--' + tipo;
+    };
+
+    // Tarjeta de empleado: avatar con iniciales, nombre/cargo y chip de estado.
+    const pintarCard = function (emp, mensaje, tipo) {
+        preview.innerHTML =
+            '<div class="dni-card">' +
+                '<div class="dni-card__avatar">' + escapar(iniciales(emp.nombre)) + '</div>' +
+                '<div class="dni-card__info">' +
+                    '<p class="dni-card__nombre">' + escapar(emp.nombre) + '</p>' +
+                    '<p class="dni-card__cargo">' + escapar(emp.cargo) + '</p>' +
+                '</div>' +
+                '<span class="dni-card__chip dni-card__chip--' + tipo + '">' +
+                    '<i class="' + icono(tipo) + '"></i>' +
+                    '<span class="dni-card__chip-texto">' + escapar(mensaje) + '</span>' +
+                '</span>' +
+            '</div>';
+        preview.className = 'dni-preview dni-preview--card dni-preview--' + tipo;
     };
 
     const actualizarBoton = function () {
@@ -44,32 +100,31 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const emp = data.empleado;
-        const base = emp.nombre + ' — ' + emp.cargo;
         const modo = modoActual();
 
         if (!emp.activo) {
-            pintar(base + ' (inactivo)', 'err');
+            pintarCard(emp, 'Empleado inactivo', 'err');
             return;
         }
 
         if (modo === 'entrada') {
             if (emp.entrada_hoy) {
-                pintar(base + ' · Entrada de hoy ya registrada (' + emp.entrada_hoy + ')', 'warn');
+                pintarCard(emp, 'Entrada de hoy ya registrada · ' + emp.entrada_hoy, 'warn');
             } else if (emp.salida_hoy) {
-                pintar(base + ' · Salida de hoy registrada (' + emp.salida_hoy + ')', 'warn');
+                pintarCard(emp, 'Salida de hoy registrada · ' + emp.salida_hoy, 'warn');
             } else {
-                pintar(base + ' · Listo para registrar entrada', 'ok');
+                pintarCard(emp, 'Listo para registrar entrada', 'ok');
             }
             return;
         }
 
         // Modo salida
         if (!emp.entrada_hoy) {
-            pintar(base + ' · Sin entrada hoy: primero registra la entrada', 'err');
+            pintarCard(emp, 'Sin entrada hoy: primero registra la entrada', 'err');
         } else if (emp.salida_hoy) {
-            pintar(base + ' · Salida de hoy ya registrada (' + emp.salida_hoy + ')', 'warn');
+            pintarCard(emp, 'Salida de hoy registrada · ' + emp.salida_hoy, 'warn');
         } else {
-            pintar(base + ' · Entrada ' + emp.entrada_hoy + ' · Listo para registrar salida', 'ok');
+            pintarCard(emp, 'Entrada ' + emp.entrada_hoy + ' · Listo para registrar salida', 'ok');
         }
     };
 

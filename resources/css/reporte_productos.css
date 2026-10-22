@@ -118,19 +118,6 @@
     margin-top: 2px;
 }
 
-.card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.card-actions .btn-edit,
-.card-actions .btn-delete {
-    flex: 1;
-    justify-content: center;
-    padding: 8px 12px;
-}
-
 /* ============ RESPONSIVE ============ */
 @media (max-width: 640px) {
     .product-grid {

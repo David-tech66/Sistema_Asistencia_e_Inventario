@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
+use App\Models\Configuracion;
 use App\Models\Empleado;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -10,6 +11,12 @@ use Illuminate\Http\Request;
 
 class AsistenciaController extends Controller
 {
+    /**
+     * Horario por defecto si no hay configuración guardada.
+     */
+    public const HORA_LIMITE_TARDANZA = '08:10:00';
+    public const HORA_LIMITE_SALIDA = '18:00:00';
+
     public function index(): View
     {
         $asistencias = Asistencia::with('empleado')
@@ -21,7 +28,12 @@ class AsistenciaController extends Controller
             ->orderBy('nombre_completo')
             ->get();
 
-        return view('asistencias', compact('asistencias', 'empleados'));
+        return view('asistencias', [
+            'asistencias' => $asistencias,
+            'empleados' => $empleados,
+            'horarioEntrada' => Configuracion::obtener('hora_entrada', '08:10'),
+            'horarioSalida' => Configuracion::obtener('hora_salida', '18:00'),
+        ]);
     }
 
     public function registrar(Request $request): RedirectResponse
@@ -60,11 +72,17 @@ class AsistenciaController extends Controller
                     ->with('error', 'Este empleado ya tiene la entrada registrada para hoy (' . $asistencia->hora_entrada . ').');
             }
 
+            $horaEntrada = now()->format('H:i:s');
+            $limiteEntrada = $this->normalizarHora(
+                Configuracion::obtener('hora_entrada', self::HORA_LIMITE_TARDANZA)
+            );
+
             Asistencia::create([
                 'empleado_id' => $empleado->id,
                 'fecha' => $hoy,
-                'hora_entrada' => now()->format('H:i:s'),
+                'hora_entrada' => $horaEntrada,
                 'hora_salida' => null,
+                'estado' => $horaEntrada > $limiteEntrada ? 'tardanza' : 'presente',
             ]);
 
             return redirect('/asistencias')
@@ -82,10 +100,40 @@ class AsistenciaController extends Controller
                 ->with('error', 'Este empleado ya tiene la salida registrada para hoy (' . $asistencia->hora_salida . ').');
         }
 
-        $asistencia->hora_salida = now()->format('H:i:s');
+        $horaSalida = now()->format('H:i:s');
+        $limiteSalida = $this->normalizarHora(
+            Configuracion::obtener('hora_salida', self::HORA_LIMITE_SALIDA)
+        );
+
+        $asistencia->hora_salida = $horaSalida;
+        $asistencia->salida_anticipada = $horaSalida < $limiteSalida;
         $asistencia->save();
 
+        $mensajeSalida = 'Salida registrada para ' . $empleado->nombre_completo
+            . ($asistencia->salida_anticipada ? ' (salida anticipada).' : '.');
+
+        return redirect('/asistencias')->with('success', $mensajeSalida);
+    }
+
+    /**
+     * Convierte HH:MM a HH:MM:SS para comparar con las horas guardadas.
+     */
+    private function normalizarHora(string $hora): string
+    {
+        return strlen($hora) === 5 ? $hora . ':00' : $hora;
+    }
+
+    /**
+     * Elimina un registro de asistencia.
+     */
+    public function destroy(Asistencia $asistencia): RedirectResponse
+    {
+        $nombre = $asistencia->empleado?->nombre_completo ?? 'Empleado no disponible';
+        $fecha = $asistencia->fecha;
+
+        $asistencia->delete();
+
         return redirect('/asistencias')
-            ->with('success', 'Salida registrada para ' . $empleado->nombre_completo . '.');
+            ->with('success', 'Asistencia del ' . $fecha . ' de ' . $nombre . ' eliminada.');
     }
 }

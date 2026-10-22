@@ -69,6 +69,11 @@ Route::middleware(['auth'])->group(function () {
     // Rutas de Recursos Humanos - Asistencias
     Route::get('/asistencias', [App\Http\Controllers\AsistenciaController::class, 'index']);
     Route::post('/asistencias/registrar', [App\Http\Controllers\AsistenciaController::class, 'registrar']);
+    Route::delete('/asistencias/{asistencia}', [App\Http\Controllers\AsistenciaController::class, 'destroy']);
+
+    // Configuración del horario (solo admin)
+    Route::get('/configuracion', [App\Http\Controllers\ConfiguracionController::class, 'index']);
+    Route::post('/configuracion', [App\Http\Controllers\ConfiguracionController::class, 'update']);
 
     // Rutas de productos
     Route::get('/productos', [App\Http\Controllers\ProductoController::class, 'index']);

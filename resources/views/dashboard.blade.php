@@ -24,7 +24,7 @@
                     <i class="fa-solid fa-bag-shopping"></i>
                 </div>
             </div>
-            <h3 class="kpi-value">24</h3>
+            <h3 class="kpi-value">{{ $totalProductos }}</h3>
             <div class="kpi-footer">
                 <a href="/reportes/productos" class="kpi-link">
                     Ver reportes <i class="fa-solid fa-arrow-right"></i>
@@ -40,11 +40,13 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
             </div>
-            <h3 class="kpi-value">3 <span class="kpi-unit">artículos</span></h3>
+            <h3 class="kpi-value">{{ $stockCritico }} <span class="kpi-unit">artículo{{ $stockCritico === 1 ? '' : 's' }}</span></h3>
             <div class="kpi-footer">
-                <span class="kpi-badge kpi-badge--red">
-                    <i class="fa-solid fa-circle-exclamation"></i> Requiere reabastecimiento
-                </span>
+                @if ($stockCritico > 0)
+                    <span class="kpi-badge kpi-badge--red">
+                        <i class="fa-solid fa-circle-exclamation"></i> Requiere reabastecimiento
+                    </span>
+                @endif
                 <a href="/productos" class="kpi-link">
                     Ver stock <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -59,9 +61,11 @@
             <div class="gauge-container">
                 <svg viewBox="0 0 120 70" class="gauge-svg">
                     <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
-                    <path d="M 10 60 A 50 50 0 0 1 107.6 28.4" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"/>
-                    <text x="55" y="48" text-anchor="middle" class="gauge-value" font-size="14">12</text>
-                    <text x="72" y="48" text-anchor="middle" class="gauge-max" font-size="10">/15</text>
+                    @if ($pctGauge > 0)
+                        <path d="M 10 60 A 50 50 0 0 1 {{ $gaugeFinX }} {{ $gaugeFinY }}" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"/>
+                    @endif
+                    <text x="55" y="48" text-anchor="middle" class="gauge-value" font-size="14">{{ $presentes }}</text>
+                    <text x="72" y="48" text-anchor="middle" class="gauge-max" font-size="10">/{{ $empleadosActivos }}</text>
                     <text x="60" y="62" text-anchor="middle" class="gauge-label" font-size="8">presentes</text>
                 </svg>
             </div>
@@ -80,10 +84,10 @@
                     <i class="fa-solid fa-cash-register"></i>
                 </div>
             </div>
-            <h3 class="kpi-value">$1,450.00</h3>
+            <h3 class="kpi-value">${{ number_format($ventasHoy, 2, '.', ',') }}</h3>
             <div class="kpi-footer">
                 <span class="kpi-badge kpi-badge--green">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +12.4% vs ayer
+                    <i class="fa-solid fa-arrow-trend-up"></i> {{ $variacionTexto }}
                 </span>
                 <a href="/reportes/ventas" class="kpi-link">
                     Ver reportes <i class="fa-solid fa-arrow-right"></i>
@@ -116,29 +120,25 @@
                     <line x1="60" y1="220" x2="680" y2="220" stroke="#f3f4f6" stroke-width="1"/>
 
                     <!-- Y-axis labels -->
-                    <text x="50" y="24" text-anchor="end" font-size="10" fill="#9ca3af">1,600</text>
-                    <text x="50" y="64" text-anchor="end" font-size="10" fill="#9ca3af">1,400</text>
-                    <text x="50" y="104" text-anchor="end" font-size="10" fill="#9ca3af">1,200</text>
-                    <text x="50" y="144" text-anchor="end" font-size="10" fill="#9ca3af">1,000</text>
-                    <text x="50" y="184" text-anchor="end" font-size="10" fill="#9ca3af">800</text>
-                    <text x="50" y="224" text-anchor="end" font-size="10" fill="#9ca3af">700</text>
+                    <text x="50" y="24" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[0] }}</text>
+                    <text x="50" y="64" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[1] }}</text>
+                    <text x="50" y="104" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[2] }}</text>
+                    <text x="50" y="144" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[3] }}</text>
+                    <text x="50" y="184" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[4] }}</text>
+                    <text x="50" y="224" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[5] }}</text>
 
                     <!-- Area fill -->
-                    <path d="M 80 220 L 80 200 Q 80 195 85 195 L 175 130 Q 180 128 185 130 L 280 170 Q 285 172 290 170 L 385 140 Q 390 138 395 140 L 490 155 Q 495 157 500 155 L 595 110 Q 600 108 605 110 L 680 220 Z"
+                    <path d="{{ $rutaArea }}"
                         fill="url(#lineGradient)" opacity="0.3"/>
 
                     <!-- Line -->
-                    <path d="M 80 200 L 175 130 L 280 170 L 385 140 L 490 155 L 595 110 L 680 220"
+                    <path d="{{ $rutaLinea }}"
                         fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 
                     <!-- Data points -->
-                    <circle cx="80" cy="200" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="175" cy="130" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="280" cy="170" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="385" cy="140" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="490" cy="155" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="595" cy="110" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
-                    <circle cx="680" cy="220" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                    @foreach ($puntosGrafico as $punto)
+                        <circle cx="{{ $punto['x'] }}" cy="{{ $punto['y'] }}" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                    @endforeach
 
                     <!-- X-axis labels -->
                     <text x="80" y="245" text-anchor="middle" font-size="10" fill="#9ca3af">Lun</text>
@@ -168,35 +168,41 @@
             </div>
             <div class="pie-chart-container">
                 <svg class="pie-svg" viewBox="0 0 180 180">
-                    <!-- Faltas: 35% (126 grados) - Red -->
-                    <circle cx="90" cy="90" r="60" fill="none" stroke="#ef4444" stroke-width="35"
-                            stroke-dasharray="118.8 376.8" stroke-dashoffset="0"
-                            transform="rotate(-90 90 90)"/>
-                    <!-- Tardanzas: 25% (90 grados) - Yellow -->
-                    <circle cx="90" cy="90" r="60" fill="none" stroke="#f59e0b" stroke-width="35"
-                            stroke-dasharray="94.2 376.8" stroke-dashoffset="-118.8"
-                            transform="rotate(-90 90 90)"/>
-                    <!-- A tiempo: 40% (144 grados) - Green -->
-                    <circle cx="90" cy="90" r="60" fill="none" stroke="#10b981" stroke-width="35"
-                            stroke-dasharray="150.8 376.8" stroke-dashoffset="-213"
-                            transform="rotate(-90 90 90)"/>
+                    <!-- Faltas - Red -->
+                    @if ($lenFaltas > 0)
+                        <circle cx="90" cy="90" r="60" fill="none" stroke="#ef4444" stroke-width="35"
+                                stroke-dasharray="{{ $lenFaltas }} {{ $circunferencia - $lenFaltas }}" stroke-dashoffset="0"
+                                transform="rotate(-90 90 90)"/>
+                    @endif
+                    <!-- Tardanzas - Yellow -->
+                    @if ($lenTardanzas > 0)
+                        <circle cx="90" cy="90" r="60" fill="none" stroke="#f59e0b" stroke-width="35"
+                                stroke-dasharray="{{ $lenTardanzas }} {{ $circunferencia - $lenTardanzas }}" stroke-dashoffset="{{ -$lenFaltas }}"
+                                transform="rotate(-90 90 90)"/>
+                    @endif
+                    <!-- A tiempo - Green -->
+                    @if ($lenTiempo > 0)
+                        <circle cx="90" cy="90" r="60" fill="none" stroke="#10b981" stroke-width="35"
+                                stroke-dasharray="{{ $lenTiempo }} {{ $circunferencia - $lenTiempo }}" stroke-dashoffset="{{ -($lenFaltas + $lenTardanzas) }}"
+                                transform="rotate(-90 90 90)"/>
+                    @endif
 
                     <!-- Center text -->
                     <text x="90" y="85" text-anchor="middle" font-size="11" fill="#6b7280">Total</text>
-                    <text x="90" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">17</text>
+                    <text x="90" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">{{ $totalPuntualidad }}</text>
                 </svg>
                 <div class="pie-legend">
                     <div class="pie-legend-item">
                         <span class="pie-legend-label pie-legend-label--green">A tiempo</span>
-                        <span class="pie-legend-value">10</span>
+                        <span class="pie-legend-value">{{ str_pad($aTiempo, 2, '0', STR_PAD_LEFT) }}</span>
                     </div>
                     <div class="pie-legend-item">
                         <span class="pie-legend-label pie-legend-label--yellow">Tardanzas</span>
-                        <span class="pie-legend-value">02</span>
+                        <span class="pie-legend-value">{{ str_pad($tardanzas, 2, '0', STR_PAD_LEFT) }}</span>
                     </div>
                     <div class="pie-legend-item">
                         <span class="pie-legend-label pie-legend-label--red">Faltas</span>
-                        <span class="pie-legend-value">03</span>
+                        <span class="pie-legend-value">{{ str_pad($faltas, 2, '0', STR_PAD_LEFT) }}</span>
                     </div>
                 </div>
             </div>
@@ -214,37 +220,29 @@
                 <p class="chart-subtitle">Volumen de salidas en inventario informático</p>
             </div>
             <div class="bar-chart-container">
-                <div class="bar-item">
-                    <span class="bar-label">Laptops y PCs</span>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-fill--dark" style="width: 85%;"></div>
+                @if ($categoriasRotacion->isEmpty())
+                    <div class="bar-item">
+                        <span class="bar-label">Sin movimientos registrados</span>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-fill--gray" style="width: 0%;"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="bar-item">
-                    <span class="bar-label">Componentes/Placas</span>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-fill--blue" style="width: 70%;"></div>
-                    </div>
-                </div>
-                <div class="bar-item">
-                    <span class="bar-label">Periféricos</span>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-fill--lightblue" style="width: 55%;"></div>
-                    </div>
-                </div>
-                <div class="bar-item">
-                    <span class="bar-label">Servicios Soporte</span>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-fill--gray" style="width: 40%;"></div>
-                    </div>
-                </div>
+                @else
+                    @php($coloresBarra = ['dark', 'blue', 'lightblue', 'gray'])
+                    @foreach ($categoriasRotacion as $categoria)
+                        <div class="bar-item">
+                            <span class="bar-label">{{ $categoria->nombre_categoria }}</span>
+                            <div class="bar-track">
+                                <div class="bar-fill bar-fill--{{ $coloresBarra[$loop->index % count($coloresBarra)] }}"
+                                     style="width: {{ number_format($categoria->volumen / $escalaBarras * 100, 1, '.', '') }}%;"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
                 <div class="bar-scale">
-                    <span>0</span>
-                    <span>10</span>
-                    <span>20</span>
-                    <span>30</span>
-                    <span>40</span>
-                    <span>50</span>
+                    @foreach ($ticksBarras as $tick)
+                        <span>{{ $tick }}</span>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -267,16 +265,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="alert-product">Memoria RAM DDR4 16GB</td>
-                        <td><span class="alert-stock"><i class="fa-solid fa-circle-exclamation"></i> 2 unds</span></td>
-                        <td><button class="btn-restock" type="button">Reabastecer</button></td>
-                    </tr>
-                    <tr>
-                        <td class="alert-product">Cartucho Tinta Negra HP</td>
-                        <td><span class="alert-stock"><i class="fa-solid fa-circle-exclamation"></i> 1 und</span></td>
-                        <td><button class="btn-restock" type="button">Reabastecer</button></td>
-                    </tr>
+                    @forelse ($productosCriticos as $producto)
+                        <tr>
+                            <td class="alert-product">{{ $producto->nombre }}</td>
+                            <td><span class="alert-stock"><i class="fa-solid fa-circle-exclamation"></i> {{ $producto->stock_actual }} {{ (int) $producto->stock_actual === 1 ? 'und' : 'unds' }}</span></td>
+                            <td><button class="btn-restock" type="button" onclick="location.href='/productos'">Reabastecer</button></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="alert-product">Sin alertas de stock mínimo.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
@@ -286,24 +285,23 @@
                     <i class="fa-solid fa-qrcode"></i> ÚLTIMOS ESCANEOS QR
                 </h4>
                 <div class="qr-list">
-                    <div class="qr-item">
-                        <div class="qr-avatar qr-avatar--blue">CM</div>
-                        <div class="qr-info">
-                            <div class="qr-name">Carlos Mendoza</div>
-                            <div class="qr-detail">Validación QR exitosa</div>
+                    @forelse ($escaneos as $escaneo)
+                        <div class="qr-item">
+                            <div class="qr-avatar qr-avatar--{{ $escaneo['clase'] }}">{{ $escaneo['iniciales'] }}</div>
+                            <div class="qr-info">
+                                <div class="qr-name">{{ $escaneo['nombre'] }}</div>
+                                <div class="qr-detail">{{ $escaneo['detalle'] }}</div>
+                            </div>
+                            <span class="qr-badge qr-badge--{{ $escaneo['clase'] }}">{{ $escaneo['cargo'] }}</span>
+                            <span class="qr-time">{{ $escaneo['horaTexto'] }}</span>
                         </div>
-                        <span class="qr-badge qr-badge--blue">Soporte T.</span>
-                        <span class="qr-time">08:02 AM</span>
-                    </div>
-                    <div class="qr-item">
-                        <div class="qr-avatar qr-avatar--yellow">LG</div>
-                        <div class="qr-info">
-                            <div class="qr-name">Lucía Gómez</div>
-                            <div class="qr-detail">Tardanza registrada</div>
+                    @empty
+                        <div class="qr-item">
+                            <div class="qr-info">
+                                <div class="qr-detail">Sin escaneos registrados hoy.</div>
+                            </div>
                         </div>
-                        <span class="qr-badge qr-badge--yellow">Ventas</span>
-                        <span class="qr-time">08:15 AM</span>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

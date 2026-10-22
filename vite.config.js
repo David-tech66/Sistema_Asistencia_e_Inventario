@@ -21,6 +21,8 @@ export default defineConfig({
                 'resources/css/users.css',
                 'resources/css/empleados.css',
                 'resources/css/asistencias.css',
+                'resources/css/configuracion.css',
+                'resources/css/reporte_asistencias.css',
                 'resources/js/app.js',
                 'resources/js/sidebar_topbar.js',
                 'resources/js/auth/login.js',
@@ -35,6 +37,7 @@ export default defineConfig({
                 'resources/js/users.js',
                 'resources/js/empleados.js',
                 'resources/js/asistencias.js',
+                'resources/js/reporte_asistencias.js',
             ],
             refresh: true,
             fonts: [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asistencia;
 use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Producto;
@@ -23,7 +24,18 @@ class ReporteController extends Controller
 
     public function asistencias(): View
     {
-        return view('reporte_asistencias');
+        $asistencias = Asistencia::with('empleado')
+            ->orderByDesc('fecha')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('reporte_asistencias', [
+            'asistencias' => $asistencias,
+            'presentes' => $asistencias->where('estado', 'presente')->count(),
+            'tardanzas' => $asistencias->where('estado', 'tardanza')->count(),
+            'sinSalida' => $asistencias->filter(fn (Asistencia $a) => $a->hora_entrada && ! $a->hora_salida)->count(),
+            'salidasAnticipadas' => $asistencias->where('salida_anticipada', true)->count(),
+        ]);
     }
 
     public function ventas(): View

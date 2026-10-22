@@ -1,0 +1,45 @@
+/* ==========================================
+   REPORTE DE ASISTENCIAS - PANEL ADMINISTRATIVO (GRUPO MDL)
+   Recursos para resources/views/reporte_asistencias.blade.php
+   Reutiliza el diseño del reporte de ventas; aquí solo se ajustan
+   detalles propios de un reporte de solo lectura.
+   ========================================== */
+
+@import './reporte_ventas.css';
+
+/* La tabla no tiene acciones: nada de cursor de clic ni expansión. */
+.data-table tbody tr { cursor: default; }
+
+/* ============ BADGES DE ASISTENCIA (espejo de asistencias.css) ============ */
+.asistencia-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.asistencia-badge--presente { background-color: #dcfce7; color: #15803d; }
+.asistencia-badge--sin { background-color: #f3f4f6; color: #4b5563; }
+.asistencia-badge--tardanza { background-color: #fef3c7; color: #b45309; }
+.asistencia-badge--anticipada { background-color: #ffedd5; color: #c2410c; margin-left: 6px; }
+
+/* ============ CELDA DE EMPLEADO ============ */
+.cell-empleado-nombre {
+    font-weight: 600;
+    color: #1f2937;
+}
+.cell-empleado-dni {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+/* ============ MENSAJE DE FILTROS SIN RESULTADOS ============ */
+.sin-resultados-msg {
+    padding: 32px 20px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}

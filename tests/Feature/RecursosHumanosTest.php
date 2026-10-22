@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Asistencia;
 use App\Models\Empleado;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -295,5 +296,68 @@ class RecursosHumanosTest extends TestCase
             ->assertSee('Control de Asistencias')
             ->assertSee('DNI del empleado')
             ->assertSee('name="dni"', false);
+    }
+
+    public function test_listado_ofrece_eliminar_asistencia(): void
+    {
+        $empleado = Empleado::factory()->create(['estado' => true]);
+
+        Asistencia::create([
+            'empleado_id' => $empleado->id,
+            'fecha' => now()->toDateString(),
+            'hora_entrada' => '08:00:00',
+            'estado' => 'presente',
+        ]);
+
+        $this->actingAs($this->admin())
+            ->get('/asistencias')
+            ->assertOk()
+            ->assertSee('Acciones')
+            ->assertSee('Eliminar')
+            ->assertSee('modal-eliminar')
+            ->assertSee('name="_method"', false);
+    }
+
+    public function test_eliminar_asistencia(): void
+    {
+        $empleado = Empleado::factory()->create(['estado' => true]);
+
+        $asistencia = Asistencia::create([
+            'empleado_id' => $empleado->id,
+            'fecha' => now()->toDateString(),
+            'hora_entrada' => '08:00:00',
+            'estado' => 'presente',
+        ]);
+
+        $this->actingAs($this->admin())
+            ->delete('/asistencias/' . $asistencia->id)
+            ->assertRedirect('/asistencias')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('asistencias', ['id' => $asistencia->id]);
+        $this->assertDatabaseCount('asistencias', 0);
+    }
+
+    public function test_eliminar_asistencia_requiere_sesion(): void
+    {
+        $empleado = Empleado::factory()->create(['estado' => true]);
+
+        $asistencia = Asistencia::create([
+            'empleado_id' => $empleado->id,
+            'fecha' => now()->toDateString(),
+            'hora_entrada' => '08:00:00',
+            'estado' => 'presente',
+        ]);
+
+        $this->delete('/asistencias/' . $asistencia->id)->assertRedirect('/login');
+
+        $this->assertDatabaseHas('asistencias', ['id' => $asistencia->id]);
+    }
+
+    public function test_eliminar_asistencia_inexistente_devuelve_404(): void
+    {
+        $this->actingAs($this->admin())
+            ->delete('/asistencias/99999')
+            ->assertNotFound();
     }
 }

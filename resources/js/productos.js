@@ -12,6 +12,56 @@ window.cerrarModal = function (id) {
     document.getElementById(id).classList.add('hidden');
 };
 
+window.editarProducto = function (id) {
+    fetch('/productos/' + id + '/edit')
+        .then(function (res) { return res.json(); })
+        .then(function (p) {
+            const form = document.getElementById('form-producto-editar');
+            form.action = '/productos/' + p.id;
+
+            const set = function (nombre, valor) {
+                const el = form.querySelector('[name="' + nombre + '"]');
+                if (el) el.value = (valor === null || valor === undefined) ? '' : valor;
+            };
+            set('codigo_qr', p.codigo_qr);
+            set('nombre', p.nombre);
+            set('categoria_id', p.categoria_id);
+            set('marca_id', p.marca_id);
+            set('proveedor_id', p.proveedor_id);
+            set('meses_garantia', p.meses_garantia);
+            set('stock_actual', p.stock_actual);
+            set('stock_minimo', p.stock_minimo);
+            set('precio_compra', p.precio_compra);
+            set('precio_venta', p.precio_venta);
+            set('especificaciones', p.especificaciones);
+
+            const fileInput = form.querySelector('[name="imagen"]');
+            if (fileInput) fileInput.value = '';
+
+            const img = document.getElementById('preview-img-editar');
+            const icon = document.getElementById('preview-icon-editar');
+            if (img) {
+                if (p.imagen) {
+                    img.src = '/storage/' + p.imagen;
+                    img.classList.remove('hidden');
+                    if (icon) icon.classList.add('hidden');
+                } else {
+                    img.classList.add('hidden');
+                    if (icon) icon.classList.remove('hidden');
+                }
+            }
+
+            window.abrirModal('modal-producto-editar');
+        })
+        .catch(function () { alert('No se pudo cargar el producto.'); });
+};
+
+window.eliminarProducto = function (id, nombre) {
+    document.getElementById('form-eliminar').action = '/productos/' + id;
+    document.getElementById('eliminar-nombre').textContent = nombre;
+    window.abrirModal('modal-eliminar');
+};
+
 const csrfMeta = document.querySelector('meta[name="csrf-token"]');
 const csrfToken = csrfMeta ? csrfMeta.content : '';
 const scannerInput = document.getElementById('scanner-input');

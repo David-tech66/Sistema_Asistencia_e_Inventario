@@ -88,6 +88,7 @@
                         <th class="cell-center">Stock</th>
                         <th class="cell-center">Mínimo</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -118,10 +119,22 @@
                                     <span data-stock-estado class="stock-badge stock-badge--ok">Normal</span>
                                 @endif
                             </td>
+                            <td class="cell-actions">
+                                <div class="actions-group">
+                                    <button type="button" class="btn-edit" title="Editar producto"
+                                            onclick="editarProducto({{ $producto->id }})">
+                                        <i class="fa-solid fa-pen"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn-delete" title="Eliminar producto"
+                                            onclick="eliminarProducto({{ $producto->id }}, '{{ addslashes($producto->nombre) }}')">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="empty-state">
                                     <div class="empty-icon">
                                         <i class="fa-solid fa-box-open"></i>
@@ -154,6 +167,50 @@
                 <button type="button" class="modal-close" onclick="cerrarModal('modal-producto-crear')">&times;</button>
             </div>
             @include('partials.form_producto', ['modo' => 'crear'])
+        </div>
+    </div>
+
+    <!-- MODAL: Editar producto -->
+    <div id="modal-producto-editar" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-producto-editar')"></div>
+        <div class="modal-dialog modal-dialog--lg">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <div class="modal-icon modal-icon--amber">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <div>
+                        <h3 class="modal-title">Editar producto</h3>
+                        <p class="modal-subtitle">Actualiza los datos del producto.</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close" onclick="cerrarModal('modal-producto-editar')">&times;</button>
+            </div>
+            @include('partials.form_producto', ['modo' => 'editar'])
+        </div>
+    </div>
+
+    <!-- MODAL: Confirmar eliminación -->
+    <div id="modal-eliminar" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-eliminar')"></div>
+        <div class="modal-dialog modal-dialog--confirm">
+            <div class="modal-header">
+                <div>
+                    <div class="confirm-icon">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                    <h3 class="confirm-title">Eliminar producto</h3>
+                    <p class="confirm-text">¿Seguro que deseas eliminar <strong id="eliminar-nombre"></strong>? Esta acción no se puede deshacer.</p>
+                </div>
+            </div>
+            <form id="form-eliminar" method="POST" action="/productos/0">
+                @csrf
+                @method('DELETE')
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                </div>
+            </form>
         </div>
     </div>
 
