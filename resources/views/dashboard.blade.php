@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Panel Administrativo')
+@section('title', 'Inicio')
 
 @section('styles')
     @vite(['resources/css/dashboard.css'])

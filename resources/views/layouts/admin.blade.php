@@ -162,7 +162,7 @@
                 <button class="topbar-menu-btn" onclick="toggleSidebar()">
                     <svg {!! $svgAttrs !!}><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
                 </button>
-                <h1 class="topbar-title">Panel Administrativo</h1>
+                <h1 class="topbar-title">@yield('title', 'Panel Administrativo')</h1>
             </div>
 
             <div class="topbar-right">
@@ -182,26 +182,35 @@
                     $u = Auth::user();
                     // Obtener el nombre del array de atributos sin importar el case de la columna
                     $nombre = $u->NOMBRE_USUARIO ?? $u->nombre_usuario ?? $u->name ?? 'Usuario';
-                    $rolRaw = strtolower($u->ROL ?? $u->rol ?? $u->role ?? 'admin');
-                    $rol = ($rolRaw === 'admin') ? 'Administrador' : ucfirst($rolRaw);
+                    $email = $u->email ?? '';
+                    // Iniciales locales (sin servicios externos): 1 letra por palabra, máx. 2.
+                    // Con una sola palabra se usan sus 2 primeras letras (ej. "Administrador" → "AD").
+                    $partes = array_values(array_filter(preg_split('/\s+/', trim((string) $nombre)), 'strlen'));
+                    if (count($partes) >= 2) {
+                        $iniciales = mb_strtoupper(mb_substr($partes[0], 0, 1) . mb_substr($partes[1], 0, 1));
+                    } elseif (count($partes) === 1) {
+                        $iniciales = mb_strtoupper(mb_substr($partes[0], 0, 2));
+                    } else {
+                        $iniciales = 'U';
+                    }
                     @endphp
 
                     <div class="user-info">
                         <p class="user-name">{{ $nombre }}</p>
-                        <p class="user-role">{{ $rol }}</p>
+                        <p class="user-role" title="{{ $email }}">{{ $email }}</p>
                     </div>
 
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($nombre) }}&background=2563eb&color=ffffff&bold=true"
-                        alt="Avatar de {{ $nombre }}"
-                        class="user-avatar">
+                    <span class="user-avatar user-avatar--local" aria-label="Avatar de {{ $nombre }}" role="img">
+                        {{ $iniciales }}
+                    </span>
                     @else
                     <div class="user-info">
                         <p class="user-name">Invitado</p>
                         <p class="user-role">Sin Sesión</p>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=Invitado&background=94a3b8&color=ffffff&bold=true"
-                        alt="Avatar Invitado"
-                        class="user-avatar">
+                    <span class="user-avatar user-avatar--local user-avatar--guest" role="img" aria-label="Avatar Invitado">
+                        IN
+                    </span>
                     @endauth
                 </div>
             </div>
