@@ -7,6 +7,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Panel Administrativo') - Grupo MDL E.I.R.L.</title>
 
+    <!-- Tema (claro/oscuro): se aplica antes del primer pintado para evitar parpadeo -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <!-- Fuentes e Iconos -->
     <link rel="icon" type="image/png" href="{{ asset('images/icono-MDL.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +40,8 @@
         <div class="sidebar-fixed-top">
             <div class="sidebar-header">
                 <a href="/dashboard" class="sidebar-brand-link">
-                    <img src="{{ asset('images/logo-MDL-2.png') }}" alt="Grupo MDI E.I.R.L." class="sidebar-logo-img">
+                    <img src="{{ asset('images/logo-MDL-2.png') }}" alt="Grupo MDL E.I.R.L." class="sidebar-logo-img sidebar-logo-light">
+                    <img src="{{ asset('images/logo-MDL.png') }}" alt="Grupo MDL E.I.R.L." class="sidebar-logo-img sidebar-logo-dark">
                 </a>
             </div>
 
@@ -155,9 +166,10 @@
             </div>
 
             <div class="topbar-right">
-                <!-- Notificación (Campana limpia sin badge) -->
-                <button class="topbar-notification-btn" aria-label="Notificaciones">
-                    <svg class="topbar-icon" {!! $svgAttrs !!}><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+                <!-- Cambio de tema (Luna / Sol), igual que en el login -->
+                <button type="button" data-theme-toggle class="topbar-theme-btn" aria-label="Cambiar tema">
+                    <svg class="topbar-icon theme-icon-moon" {!! $svgAttrs !!}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    <svg class="topbar-icon theme-icon-sun" {!! $svgAttrs !!}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
                 </button>
 
                 <!-- Divisor vertical -->
@@ -200,6 +212,24 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Alternancia de tema (Luna / Sol) + sincronía de iconos, igual que el login -->
+    <script>
+        function syncThemeIcons() {
+            var dark = document.documentElement.classList.contains('dark');
+            document.querySelectorAll('.theme-icon-moon').forEach(function (i) { i.style.display = dark ? 'none' : 'block'; });
+            document.querySelectorAll('.theme-icon-sun').forEach(function (i) { i.style.display = dark ? 'block' : 'none'; });
+        }
+        syncThemeIcons();
+
+        document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var dark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', dark ? 'dark' : 'light');
+                syncThemeIcons();
+            });
+        });
+    </script>
 
     @stack('scripts')
 </body>

@@ -16,7 +16,7 @@
     <!-- Toast de escaneo -->
     <div id="toast" class="toast-pos hidden"></div>
 
-    <div class="flex gap-6 items-start">
+    <div class="flex flex-wrap gap-6 items-start">
 
         <!-- COLUMNA IZQUIERDA: Escáner y Últimas Ventas -->
         <div class="flex-1 space-y-6 min-w-0">
@@ -50,7 +50,7 @@
             <div class="table-card">
                 <div class="table-toolbar">
                     <i class="fa-solid fa-receipt"></i>
-                    <span>Últimas ventas — Total: <strong style="color: #111827;">{{ $ventas->count() }}</strong></span>
+                    <span>Últimas ventas — Total: <strong style="color: var(--ink-strong);">{{ $ventas->count() }}</strong></span>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table">
@@ -69,16 +69,16 @@
                                     <td>
                                         <span class="badge-comprobante">{{ $venta->numero_comprobante }}</span>
                                     </td>
-                                    <td style="color: #374151; font-weight: 500;">{{ $venta->cliente?->nombre }}</td>
+                                    <td style="color: var(--ink-body); font-weight: 500;">{{ $venta->cliente?->nombre }}</td>
                                     <td>
                                         <span class="badge-tipo {{ $venta->tipo_comprobante === 'Boleta' ? 'badge-tipo--boleta' : 'badge-tipo--factura' }}">{{ $venta->tipo_comprobante }}</span>
                                     </td>
-                                    <td style="text-align: right; font-weight: 600; color: #111827;">S/ {{ number_format($venta->total, 2) }}</td>
-                                    <td style="color: #6b7280;">{{ $venta->created_at?->format('d/m/Y H:i') }}</td>
+                                    <td style="text-align: right; font-weight: 600; color: var(--ink-strong);">S/ {{ number_format($venta->total, 2) }}</td>
+                                    <td style="color: var(--ink-dim);">{{ $venta->created_at?->format('d/m/Y H:i') }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" style="text-align: center; padding: 40px 0; color: #9ca3af;">No hay ventas registradas todavía.</td>
+                                    <td colspan="5" style="text-align: center; padding: 40px 0; color: var(--ink-faint);">No hay ventas registradas todavía.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -88,7 +88,7 @@
         </div>
 
         <!-- COLUMNA DERECHA: Voucher -->
-        <div style="width: 400px; flex-shrink: 0;">
+        <div class="voucher-col">
             <div class="voucher-card">
 
                 <!-- Encabezado del voucher -->
@@ -97,15 +97,15 @@
                         <i class="fa-solid fa-file-invoice-dollar"></i>
                     </div>
                     <div>
-                        <h3 style="font-size: 16px; font-weight: 600; color: #111827;">Boleta de venta</h3>
-                        <p style="font-size: 11px; color: #9ca3af;">Grupo MDL E.I.R.L.</p>
+                        <h3 style="font-size: 16px; font-weight: 600; color: var(--ink-strong);">Boleta de venta</h3>
+                        <p style="font-size: 11px; color: var(--ink-faint);">Grupo MDL E.I.R.L.</p>
                     </div>
                 </div>
 
                 <!-- Cliente + Tipo -->
-                <div class="voucher-form-section" style="space-y: 12px;">
+                <div class="voucher-form-section">
                     <div style="margin-bottom: 12px;">
-                        <label class="voucher-label">Cliente</label>
+                        <label for="cliente-select" class="voucher-label">Cliente</label>
                         <select id="cliente-select" class="voucher-select">
                             @foreach ($clientes as $cliente)
                                 <option value="{{ $cliente->id }}" {{ $cliente->nombre === 'Cliente General' ? 'selected' : '' }}>
@@ -115,7 +115,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="voucher-label">Comprobante</label>
+                        <label for="comprobante-select" class="voucher-label">Comprobante</label>
                         <select id="comprobante-select" class="voucher-select">
                             <option value="Boleta">Boleta</option>
                             <option value="Factura">Factura</option>
@@ -125,15 +125,15 @@
 
                 <!-- Items del voucher -->
                 <div id="voucher-items" class="voucher-items-container">
-                    <p id="voucher-vacio" style="text-align: center; font-size: 14px; color: #9ca3af; padding: 32px 0;">
-                        <i class="fa-solid fa-cart-shopping" style="font-size: 30px; color: #e5e7eb; display: block; margin-bottom: 12px;"></i>
+                    <p id="voucher-vacio" style="text-align: center; font-size: 14px; color: var(--ink-faint); padding: 32px 0;">
+                        <i class="fa-solid fa-cart-shopping" style="font-size: 30px; color: var(--icon-soft); display: block; margin-bottom: 12px;"></i>
                         Escanea un producto para comenzar
                     </p>
                 </div>
 
                 <!-- Total + Cobrar -->
                 <div class="voucher-footer">
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; color: var(--ink-strong); margin-bottom: 16px;">
                         <span>Total</span>
                         <span id="voucher-total">S/ 0.00</span>
                     </div>
@@ -152,15 +152,15 @@
     <div id="modal-exito" class="modal-overlay hidden">
         <div class="modal-backdrop" onclick="cerrarModalExito()"></div>
         <div class="modal-dialog" style="text-align: center;">
-            <div style="height: 64px; width: 64px; border-radius: 9999px; background-color: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+            <div style="height: 64px; width: 64px; border-radius: 9999px; background-color: var(--ok-surface); color: var(--ok-ink); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i class="fa-solid fa-check" style="font-size: 28px;"></i>
             </div>
-            <h3 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 4px;">Venta registrada</h3>
-            <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">Comprobante generado correctamente.</p>
-            <div style="background-color: #f9fafb; border-radius: 12px; padding: 16px; text-align: left; font-size: 14px; space-y: 8px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #6b7280;">Comprobante:</span> <span id="exito-comprobante" style="font-family: monospace; font-weight: 600;"></span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #6b7280;">Cliente:</span> <span id="exito-cliente" style="font-weight: 600;"></span></div>
-                <div style="display: flex; justify-content: space-between;"><span style="color: #6b7280;">Total:</span> <span id="exito-total" style="font-weight: 700; color: #059669;"></span></div>
+            <h3 style="font-size: 20px; font-weight: 700; color: var(--ink-strong); margin-bottom: 4px;">Venta registrada</h3>
+            <p style="font-size: 14px; color: var(--ink-dim); margin-bottom: 16px;">Comprobante generado correctamente.</p>
+            <div style="background-color: var(--surf-soft); border-radius: 12px; padding: 16px; text-align: left; font-size: 14px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: var(--ink-dim);">Comprobante:</span> <span id="exito-comprobante" style="font-family: monospace; font-weight: 600;"></span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: var(--ink-dim);">Cliente:</span> <span id="exito-cliente" style="font-weight: 600;"></span></div>
+                <div style="display: flex; justify-content: space-between;"><span style="color: var(--ink-dim);">Total:</span> <span id="exito-total" style="font-weight: 700; color: var(--ok-ink);"></span></div>
             </div>
             <button type="button" onclick="cerrarModalExito()" class="scanner-btn" style="width: 100%; justify-content: center; margin-top: 20px;">Aceptar</button>
         </div>
@@ -171,14 +171,14 @@
         <div class="modal-backdrop" onclick="cerrarCamara()"></div>
         <div class="modal-dialog">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 600; color: #111827;">Escanear con cámara</h3>
-                <button type="button" onclick="cerrarCamara()" style="height: 32px; width: 32px; border-radius: 8px; background-color: #f3f4f6; border: none; color: #4b5563; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <h3 style="font-size: 16px; font-weight: 600; color: var(--ink-strong);">Escanear con cámara</h3>
+                <button type="button" onclick="cerrarCamara()" style="height: 32px; width: 32px; border-radius: 8px; background-color: var(--surf-soft2); border: none; color: var(--ink-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div id="lector-camara" class="camera-viewport"></div>
-            <p id="camara-estado" style="font-size: 12px; color: #6b7280; margin-top: 12px; text-align: center;">Iniciando cámara…</p>
-            <button type="button" onclick="voltearCamara()" style="margin-top: 12px; width: 100%; padding: 8px; font-size: 12px; font-weight: 500; color: #4b5563; background-color: #f3f4f6; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <p id="camara-estado" style="font-size: 12px; color: var(--ink-dim); margin-top: 12px; text-align: center;">Iniciando cámara…</p>
+            <button type="button" onclick="voltearCamara()" style="margin-top: 12px; width: 100%; padding: 8px; font-size: 12px; font-weight: 500; color: var(--ink-muted); background-color: var(--surf-soft2); border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-camera-rotate"></i> Voltear cámara
             </button>
         </div>

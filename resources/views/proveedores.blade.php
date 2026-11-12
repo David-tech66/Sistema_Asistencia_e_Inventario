@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-proveedor-crear') : '' }}">
 
     <!-- TABLA PROVEEDORES -->
     <div class="table-card">
@@ -152,34 +152,35 @@
             </div>
             <form method="POST" action="/proveedores">
                 @csrf
+                <input type="hidden" name="modal_origen" value="modal-proveedor-crear">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Razón social *</label>
-                        <input type="text" name="razon_social" required maxlength="150"
+                        <label for="proveedor-crear-razon" class="form-label">Razón social *</label>
+                        <input type="text" id="proveedor-crear-razon" name="razon_social" required maxlength="150"
                                 value="{{ old('razon_social') }}" class="form-input"
                                 placeholder="Ej: Distribuidora SAC">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">RUC *</label>
-                        <input type="text" name="ruc" required maxlength="20"
+                        <label for="proveedor-crear-ruc" class="form-label">RUC *</label>
+                        <input type="text" id="proveedor-crear-ruc" name="ruc" required maxlength="20"
                                 value="{{ old('ruc') }}" class="form-input form-input--mono"
-                                placeholder="Ej: 20555555555">
+                                inputmode="numeric" placeholder="Ej: 20555555555">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Teléfono</label>
-                        <input type="text" name="telefono" maxlength="20"
+                        <label for="proveedor-crear-telefono" class="form-label">Teléfono</label>
+                        <input type="tel" id="proveedor-crear-telefono" name="telefono" maxlength="20"
                                 value="{{ old('telefono') }}" class="form-input"
                                 placeholder="Ej: 999888777 (opcional)">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Correo electrónico</label>
-                        <input type="email" name="correo" maxlength="100"
-                                value="{{ old('correo') }}" class="form-input"
+                        <label for="proveedor-crear-correo" class="form-label">Correo electrónico</label>
+                        <input type="email" id="proveedor-crear-correo" name="correo" maxlength="100"
+                                value="{{ old('correo') }}" autocomplete="email" class="form-input"
                                 placeholder="Ej: contacto@empresa.com (opcional)">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Dirección</label>
-                        <input type="text" name="direccion" maxlength="200"
+                        <label for="proveedor-crear-direccion" class="form-label">Dirección</label>
+                        <input type="text" id="proveedor-crear-direccion" name="direccion" maxlength="200"
                                 value="{{ old('direccion') }}" class="form-input"
                                 placeholder="Ej: Av. Principal 123 (opcional)">
                     </div>
@@ -211,26 +212,32 @@
             <form id="form-proveedor-editar" method="POST" action="/proveedores/0">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="modal_origen" value="modal-proveedor-editar">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Razón social *</label>
-                        <input type="text" name="razon_social" required maxlength="150" class="form-input">
+                        <label for="proveedor-editar-razon" class="form-label">Razón social *</label>
+                        <input type="text" id="proveedor-editar-razon" name="razon_social" required maxlength="150"
+                               value="{{ old('razon_social') }}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">RUC *</label>
-                        <input type="text" name="ruc" required maxlength="20" class="form-input form-input--mono">
+                        <label for="proveedor-editar-ruc" class="form-label">RUC *</label>
+                        <input type="text" id="proveedor-editar-ruc" name="ruc" required maxlength="20"
+                               value="{{ old('ruc') }}" class="form-input form-input--mono" inputmode="numeric">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Teléfono</label>
-                        <input type="text" name="telefono" maxlength="20" class="form-input">
+                        <label for="proveedor-editar-telefono" class="form-label">Teléfono</label>
+                        <input type="tel" id="proveedor-editar-telefono" name="telefono" maxlength="20"
+                               value="{{ old('telefono') }}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Correo electrónico</label>
-                        <input type="email" name="correo" maxlength="100" class="form-input">
+                        <label for="proveedor-editar-correo" class="form-label">Correo electrónico</label>
+                        <input type="email" id="proveedor-editar-correo" name="correo" maxlength="100"
+                               value="{{ old('correo') }}" autocomplete="email" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Dirección</label>
-                        <input type="text" name="direccion" maxlength="200" class="form-input">
+                        <label for="proveedor-editar-direccion" class="form-label">Dirección</label>
+                        <input type="text" id="proveedor-editar-direccion" name="direccion" maxlength="200"
+                               value="{{ old('direccion') }}" class="form-input">
                     </div>
                 </div>
                 <div class="modal-footer">

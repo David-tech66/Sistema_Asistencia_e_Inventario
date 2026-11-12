@@ -541,6 +541,14 @@ body {
     background-color: #f59e0b;
 }
 
+.qr-avatar--green {
+    background-color: #10b981;
+}
+
+.qr-avatar--red {
+    background-color: #ef4444;
+}
+
 .qr-info {
     flex: 1;
     min-width: 0;
@@ -574,6 +582,16 @@ body {
     background-color: #fffbeb;
 }
 
+.qr-badge--green {
+    color: #047857;
+    background-color: #ecfdf5;
+}
+
+.qr-badge--red {
+    color: #b91c1c;
+    background-color: #fef2f2;
+}
+
 .qr-time {
     font-size: 11px;
     color: #9ca3af;
@@ -602,5 +620,21 @@ body {
 
     .admin-content {
         padding: 16px;
+    }
+}
+
+/* ============ RESPONSIVE ============ */
+.table-wrap {
+    overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+    .line-chart-container {
+        height: 220px;
+    }
+
+    .pie-svg {
+        width: 150px;
+        height: 150px;
     }
 }

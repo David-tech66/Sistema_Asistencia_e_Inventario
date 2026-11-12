@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion-clientes" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion-clientes" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-cliente-crear') : '' }}">
 
     <!-- TABLA DE CLIENTES -->
     <div class="table-card">
@@ -81,7 +81,7 @@
                             </td>
                             <td>
                                 @if ($cliente->telefono)
-                                    <span><i class="fa-solid fa-phone" style="font-size:11px; color:#9ca3af; margin-right:6px;"></i>{{ $cliente->telefono }}</span>
+                                    <span><i class="fa-solid fa-phone" style="font-size:11px; color: var(--ink-faint); margin-right:6px;"></i>{{ $cliente->telefono }}</span>
                                 @else
                                     <span style="color:#d1d5db;">—</span>
                                 @endif
@@ -105,15 +105,15 @@
                                     <div class="empty-icon">
                                         <i class="fa-solid fa-user-group"></i>
                                     </div>
-                                    <p style="font-weight: 500; color: #6b7280;">No hay clientes registrados</p>
-                                    <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Cuando se registren clientes, aparecerán en esta lista.</p>
+                                    <p style="font-weight: 500; color: var(--ink-dim);">No hay clientes registrados</p>
+                                    <p style="font-size: 12px; color: var(--ink-faint); margin-top: 4px;">Cuando se registren clientes, aparecerán en esta lista.</p>
                                 </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            <p id="sin-resultados" class="hidden" style="padding: 32px 20px; text-align: center; color: #9ca3af; font-size: 14px;">No se encontraron clientes con esa búsqueda.</p>
+            <p id="sin-resultados" class="hidden" style="padding: 32px 20px; text-align: center; color: var(--ink-faint); font-size: 14px;">No se encontraron clientes con esa búsqueda.</p>
         </div>
     </div>
 
@@ -132,17 +132,18 @@
             </div>
             <form method="POST" action="/clientes">
                 @csrf
+                <input type="hidden" name="modal_origen" value="modal-cliente-crear">
                 <div class="form-group">
-                    <label class="form-label">Documento (DNI o RUC) *</label>
-                    <input type="text" name="documento" required maxlength="20" class="form-input" style="font-family: monospace;" placeholder="Ej: 12345678">
+                    <label for="cliente-crear-documento" class="form-label">Documento (DNI o RUC) *</label>
+                    <input type="text" id="cliente-crear-documento" name="documento" value="{{ old('documento') }}" required maxlength="20" inputmode="numeric" class="form-input" style="font-family: monospace;" placeholder="Ej: 12345678">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Nombre completo *</label>
-                    <input type="text" name="nombre" required maxlength="200" class="form-input" placeholder="Ej: Juan Pérez">
+                    <label for="cliente-crear-nombre" class="form-label">Nombre completo *</label>
+                    <input type="text" id="cliente-crear-nombre" name="nombre" value="{{ old('nombre') }}" required maxlength="200" class="form-input" placeholder="Ej: Juan Pérez">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Teléfono</label>
-                    <input type="text" name="telefono" maxlength="20" class="form-input" placeholder="Ej: 999888777 (opcional)">
+                    <label for="cliente-crear-telefono" class="form-label">Teléfono</label>
+                    <input type="tel" id="cliente-crear-telefono" name="telefono" value="{{ old('telefono') }}" maxlength="20" class="form-input" placeholder="Ej: 999888777 (opcional)">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-cliente-crear')">Cancelar</button>
@@ -168,17 +169,18 @@
             <form id="form-cliente-editar" method="POST" action="/clientes/0">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="modal_origen" value="modal-cliente-editar">
                 <div class="form-group">
-                    <label class="form-label">Documento (DNI o RUC) *</label>
-                    <input type="text" name="documento" required maxlength="20" class="form-input" style="font-family: monospace;">
+                    <label for="cliente-editar-documento" class="form-label">Documento (DNI o RUC) *</label>
+                    <input type="text" id="cliente-editar-documento" name="documento" value="{{ old('documento') }}" required maxlength="20" inputmode="numeric" class="form-input" style="font-family: monospace;">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Nombre completo *</label>
-                    <input type="text" name="nombre" required maxlength="200" class="form-input">
+                    <label for="cliente-editar-nombre" class="form-label">Nombre completo *</label>
+                    <input type="text" id="cliente-editar-nombre" name="nombre" value="{{ old('nombre') }}" required maxlength="200" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Teléfono</label>
-                    <input type="text" name="telefono" maxlength="20" class="form-input">
+                    <label for="cliente-editar-telefono" class="form-label">Teléfono</label>
+                    <input type="tel" id="cliente-editar-telefono" name="telefono" value="{{ old('telefono') }}" maxlength="20" class="form-input">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-cliente-editar')">Cancelar</button>
@@ -196,7 +198,7 @@
                 <i class="fa-solid fa-trash"></i>
             </div>
             <h3 class="modal-title">Eliminar cliente</h3>
-            <p style="font-size: 14px; color: #6b7280; margin-top: 8px;">¿Seguro que deseas eliminar a <span id="eliminar-nombre" style="font-weight: 600; color: #111827;"></span>? Esta acción no se puede deshacer.</p>
+            <p style="font-size: 14px; color: var(--ink-dim); margin-top: 8px;">¿Seguro que deseas eliminar a <span id="eliminar-nombre" style="font-weight: 600; color: var(--ink-strong);"></span>? Esta acción no se puede deshacer.</p>
             <form id="form-eliminar" method="POST" action="/clientes/0">
                 @csrf
                 @method('DELETE')

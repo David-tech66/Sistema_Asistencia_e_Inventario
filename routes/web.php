@@ -35,7 +35,17 @@ Route::post('/login', function (Request $request) {
 
 Route::get('/recuperar-contrasena', function () {
     return view('auth.recuperar');
-});
+})->name('recuperar.get');
+
+Route::post('/recuperar-contrasena', function (Request $request) {
+    $request->validate([
+        'email' => ['required', 'email'],
+    ]);
+
+    // Misma respuesta exista o no el correo (evita filtrar cuentas registradas).
+    return redirect()->route('recuperar.get')->with('status',
+        'Si el correo está registrado, recibirás un código de verificación para restablecer tu contraseña.');
+})->name('recuperar.post');
 
 // Cierre de sesión real
 Route::post('/logout', function (Request $request) {
@@ -84,6 +94,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Escaneo de stock: código existente = +1 stock, código desconocido = registrar
     Route::post('/productos/escanear', [App\Http\Controllers\ProductoController::class, 'escanear']);
+
+    // Ajuste manual de stock (entrada/salida con motivo) + trazabilidad
+    Route::post('/productos/{producto}/stock', [App\Http\Controllers\ProductoController::class, 'ajustarStock']);
 
     Route::get('/marcas', [App\Http\Controllers\MarcaController::class, 'index']);
     Route::post('/marcas', [App\Http\Controllers\MarcaController::class, 'store']);

@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-usuario-crear') : '' }}">
 
     <!-- Tarjetas resumen -->
     <div class="stats-grid">
@@ -180,27 +180,29 @@
             </div>
             <form method="POST" action="/users">
                 @csrf
+                <input type="hidden" name="modal_origen" value="modal-usuario-crear">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Nombre de usuario *</label>
-                        <input type="text" name="nombre_usuario" required maxlength="150"
+                        <label for="user-crear-nombre" class="form-label">Nombre de usuario *</label>
+                        <input type="text" id="user-crear-nombre" name="nombre_usuario" required maxlength="150"
                                value="{{ old('nombre_usuario') }}" class="form-input"
                                placeholder="Ej: jperez">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Correo electrónico *</label>
-                        <input type="email" name="email" required maxlength="150"
-                               value="{{ old('email') }}" class="form-input"
+                        <label for="user-crear-email" class="form-label">Correo electrónico *</label>
+                        <input type="email" id="user-crear-email" name="email" required maxlength="150"
+                               value="{{ old('email') }}" autocomplete="email" class="form-input"
                                placeholder="correo@grupomdl.com">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Contraseña inicial *</label>
-                        <input type="password" name="password" required minlength="6" class="form-input"
+                        <label for="user-crear-password" class="form-label">Contraseña inicial *</label>
+                        <input type="password" id="user-crear-password" name="password" required minlength="6"
+                               autocomplete="new-password" class="form-input"
                                placeholder="Mínimo 6 caracteres">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Rol de acceso *</label>
-                        <select name="rol" required class="form-input">
+                        <label for="user-crear-rol" class="form-label">Rol de acceso *</label>
+                        <select id="user-crear-rol" name="rol" required class="form-input">
                             <option value="empleado" {{ old('rol') === 'empleado' ? 'selected' : '' }}>Empleado</option>
                             <option value="admin" {{ old('rol') === 'admin' ? 'selected' : '' }}>Administrador</option>
                         </select>
@@ -236,27 +238,29 @@
                 <form method="POST" action="/users/{{ $user->id }}">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="modal_origen" value="modal-usuario-editar-{{ $user->id }}">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="form-label">Nombre de usuario *</label>
-                            <input type="text" name="nombre_usuario" required maxlength="150"
+                            <label for="user-editar-nombre-{{ $user->id }}" class="form-label">Nombre de usuario *</label>
+                            <input type="text" id="user-editar-nombre-{{ $user->id }}" name="nombre_usuario" required maxlength="150"
                                    value="{{ old('nombre_usuario', $user->nombre_usuario) }}" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Correo electrónico *</label>
-                            <input type="email" name="email" required maxlength="150"
-                                   value="{{ old('email', $user->email) }}" class="form-input">
+                            <label for="user-editar-email-{{ $user->id }}" class="form-label">Correo electrónico *</label>
+                            <input type="email" id="user-editar-email-{{ $user->id }}" name="email" required maxlength="150"
+                                   value="{{ old('email', $user->email) }}" autocomplete="email" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Nueva contraseña (opcional)</label>
-                            <input type="password" name="password" minlength="6" class="form-input"
+                            <label for="user-editar-password-{{ $user->id }}" class="form-label">Nueva contraseña (opcional)</label>
+                            <input type="password" id="user-editar-password-{{ $user->id }}" name="password" minlength="6"
+                                   autocomplete="new-password" class="form-input"
                                    placeholder="Déjalo vacío para conservar la actual">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Rol de acceso *</label>
-                            <select name="rol" required class="form-input">
-                                <option value="empleado" {{ $user->rol === 'empleado' ? 'selected' : '' }}>Empleado</option>
-                                <option value="admin" {{ $user->rol === 'admin' ? 'selected' : '' }}>Administrador</option>
+                            <label for="user-editar-rol-{{ $user->id }}" class="form-label">Rol de acceso *</label>
+                            <select id="user-editar-rol-{{ $user->id }}" name="rol" required class="form-input">
+                                <option value="empleado" {{ old('rol', $user->rol) === 'empleado' ? 'selected' : '' }}>Empleado</option>
+                                <option value="admin" {{ old('rol', $user->rol) === 'admin' ? 'selected' : '' }}>Administrador</option>
                             </select>
                         </div>
                     </div>

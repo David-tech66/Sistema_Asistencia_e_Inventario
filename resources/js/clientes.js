@@ -60,8 +60,13 @@ window.filtrarClientes = function () {
 document.addEventListener("DOMContentLoaded", function () {
     // Reabrir modal si hay errores en el formulario
     const errores = document.getElementById("errores-validacion-clientes");
-    if (errores && errores.value === "1") {
-        window.abrirModal("modal-cliente-crear");
+    if (errores && errores.value) {
+        // Reabre el mismo modal del que vino el envío (crear o editar)
+        if (typeof window.reabrirModalConErrores === 'function') {
+            window.reabrirModalConErrores(errores.value);
+        } else {
+            window.abrirModal(errores.value);
+        }
     }
 
     // Cerrar modales con la tecla Escape (como en productos)

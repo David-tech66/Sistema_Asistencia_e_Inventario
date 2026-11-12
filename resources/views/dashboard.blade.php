@@ -60,7 +60,7 @@
             </div>
             <div class="gauge-container">
                 <svg viewBox="0 0 120 70" class="gauge-svg">
-                    <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" class="gauge-track" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
                     @if ($pctGauge > 0)
                         <path d="M 10 60 A 50 50 0 0 1 {{ $gaugeFinX }} {{ $gaugeFinY }}" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"/>
                     @endif
@@ -110,14 +110,14 @@
                 <span class="chart-badge">Semanal</span>
             </div>
             <div class="line-chart-container">
-                <svg class="line-chart-svg" viewBox="0 0 700 280" preserveAspectRatio="none">
+                <svg class="line-chart-svg" viewBox="0 0 700 280">
                     <!-- Grid lines -->
-                    <line x1="60" y1="20" x2="680" y2="20" stroke="#f3f4f6" stroke-width="1"/>
-                    <line x1="60" y1="60" x2="680" y2="60" stroke="#f3f4f6" stroke-width="1"/>
-                    <line x1="60" y1="100" x2="680" y2="100" stroke="#f3f4f6" stroke-width="1"/>
-                    <line x1="60" y1="140" x2="680" y2="140" stroke="#f3f4f6" stroke-width="1"/>
-                    <line x1="60" y1="180" x2="680" y2="180" stroke="#f3f4f6" stroke-width="1"/>
-                    <line x1="60" y1="220" x2="680" y2="220" stroke="#f3f4f6" stroke-width="1"/>
+                    <line x1="60" y1="20" x2="680" y2="20" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
+                    <line x1="60" y1="60" x2="680" y2="60" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
+                    <line x1="60" y1="100" x2="680" y2="100" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
+                    <line x1="60" y1="140" x2="680" y2="140" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
+                    <line x1="60" y1="180" x2="680" y2="180" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
+                    <line x1="60" y1="220" x2="680" y2="220" stroke="#f3f4f6" stroke-width="1" class="chart-grid-line"/>
 
                     <!-- Y-axis labels -->
                     <text x="50" y="24" text-anchor="end" font-size="10" fill="#9ca3af">{{ $etiquetasY[0] }}</text>
@@ -188,8 +188,8 @@
                     @endif
 
                     <!-- Center text -->
-                    <text x="90" y="85" text-anchor="middle" font-size="11" fill="#6b7280">Total</text>
-                    <text x="90" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">{{ $totalPuntualidad }}</text>
+                    <text x="90" y="85" text-anchor="middle" font-size="11" class="pie-total-label" fill="#6b7280">Total</text>
+                    <text x="90" y="100" text-anchor="middle" font-size="16" font-weight="700" class="pie-total-value" fill="#111827">{{ $totalPuntualidad }}</text>
                 </svg>
                 <div class="pie-legend">
                     <div class="pie-legend-item">
@@ -212,6 +212,71 @@
 
     <!-- GRID INFERIOR -->
     <div class="bottom-grid">
+
+        <!-- Alertas de Stock + Últimos Escaneos -->
+        <div class="chart-card">
+            <!-- Alertas de Stock Mínimo -->
+            <div class="alerts-header">
+                <span class="alerts-title">
+                    <i class="fa-solid fa-circle-exclamation"></i> ALERTAS DE STOCK MÍNIMO
+                </span>
+                <a href="/productos" class="alerts-link">Ver inventario</a>
+            </div>
+            <div class="table-wrap">
+            <table class="alerts-table">
+                <thead>
+                    <tr>
+                        <th>Producto / Componente</th>
+                        <th>Stock Actual</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($productosCriticos as $producto)
+                        <tr>
+                            <td class="alert-product">{{ $producto->nombre }}</td>
+                            <td><span class="alert-stock"><i class="fa-solid fa-circle-exclamation"></i> {{ $producto->stock_actual }} {{ (int) $producto->stock_actual === 1 ? 'und' : 'unds' }}</span></td>
+                            <td><button class="btn-restock" type="button" onclick="location.href='/productos'">Reabastecer</button></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="alert-product">Sin alertas de stock mínimo.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            </div>
+
+            <!-- Últimos movimientos de stock -->
+            <div class="qr-section">
+                <h4 class="qr-section-title">
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i> ÚLTIMOS MOVIMIENTOS DE STOCK
+                </h4>
+                <div class="qr-list">
+                    @forelse ($movimientos as $movimiento)
+                        <div class="qr-item">
+                            <div class="qr-avatar qr-avatar--{{ $movimiento->tipo === 'entrada' ? 'green' : 'red' }}">
+                                {{ $movimiento->tipo === 'entrada' ? '+' : '−' }}
+                            </div>
+                            <div class="qr-info">
+                                <div class="qr-name">{{ $movimiento->producto?->nombre ?? 'Producto eliminado' }}</div>
+                                <div class="qr-detail">{{ $movimiento->motivo }}</div>
+                            </div>
+                            <span class="qr-badge qr-badge--{{ $movimiento->tipo === 'entrada' ? 'green' : 'red' }}">
+                                {{ $movimiento->tipo === 'entrada' ? '+' : '−' }}{{ $movimiento->cantidad }}
+                            </span>
+                            <span class="qr-time">{{ $movimiento->created_at?->format('d/m H:i') }}</span>
+                        </div>
+                    @empty
+                        <div class="qr-item">
+                            <div class="qr-info">
+                                <div class="qr-detail">Sin movimientos registrados. Las ventas, el escáner y los ajustes aparecerán aquí.</div>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
 
         <!-- Categorías de Mayor Rotación -->
         <div class="chart-card">
@@ -245,60 +310,28 @@
                     @endforeach
                 </div>
             </div>
-        </div>
 
-        <!-- Alertas de Stock + Últimos Escaneos -->
-        <div class="chart-card">
-            <!-- Alertas de Stock Mínimo -->
-            <div class="alerts-header">
-                <span class="alerts-title">
-                    <i class="fa-solid fa-circle-exclamation"></i> ALERTAS DE STOCK MÍNIMO
-                </span>
-                <a href="/productos" class="alerts-link">Ver inventario</a>
-            </div>
-            <table class="alerts-table">
-                <thead>
-                    <tr>
-                        <th>Producto / Componente</th>
-                        <th>Stock Actual</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($productosCriticos as $producto)
-                        <tr>
-                            <td class="alert-product">{{ $producto->nombre }}</td>
-                            <td><span class="alert-stock"><i class="fa-solid fa-circle-exclamation"></i> {{ $producto->stock_actual }} {{ (int) $producto->stock_actual === 1 ? 'und' : 'unds' }}</span></td>
-                            <td><button class="btn-restock" type="button" onclick="location.href='/productos'">Reabastecer</button></td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="3" class="alert-product">Sin alertas de stock mínimo.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-
-            <!-- Últimos Escaneos QR -->
+            <!-- Top productos vendidos hoy (rellena el espacio inferior de la tarjeta) -->
             <div class="qr-section">
                 <h4 class="qr-section-title">
-                    <i class="fa-solid fa-qrcode"></i> ÚLTIMOS ESCANEOS QR
+                    <i class="fa-solid fa-trophy"></i> TOP PRODUCTOS DEL DÍA
                 </h4>
                 <div class="qr-list">
-                    @forelse ($escaneos as $escaneo)
+                    @forelse ($topProductosHoy as $indice => $producto)
                         <div class="qr-item">
-                            <div class="qr-avatar qr-avatar--{{ $escaneo['clase'] }}">{{ $escaneo['iniciales'] }}</div>
+                            <div class="qr-avatar qr-avatar--blue">{{ $indice + 1 }}</div>
                             <div class="qr-info">
-                                <div class="qr-name">{{ $escaneo['nombre'] }}</div>
-                                <div class="qr-detail">{{ $escaneo['detalle'] }}</div>
+                                <div class="qr-name">{{ $producto->nombre }}</div>
+                                <div class="qr-detail">
+                                    {{ $producto->unidades }} {{ (int) $producto->unidades === 1 ? 'unidad vendida' : 'unidades vendidas' }}
+                                </div>
                             </div>
-                            <span class="qr-badge qr-badge--{{ $escaneo['clase'] }}">{{ $escaneo['cargo'] }}</span>
-                            <span class="qr-time">{{ $escaneo['horaTexto'] }}</span>
+                            <span class="qr-badge qr-badge--green">S/ {{ number_format((float) $producto->monto, 2) }}</span>
                         </div>
                     @empty
                         <div class="qr-item">
                             <div class="qr-info">
-                                <div class="qr-detail">Sin escaneos registrados hoy.</div>
+                                <div class="qr-detail">Sin ventas registradas hoy. El top aparecerá aquí cuando vendas un producto.</div>
                             </div>
                         </div>
                     @endforelse

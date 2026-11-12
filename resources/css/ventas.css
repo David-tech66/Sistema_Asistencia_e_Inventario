@@ -221,7 +221,6 @@
 .voucher-form-section {
     padding: 16px 20px;
     border-bottom: 1px solid #f3f4f6;
-    space-y: 12px;
 }
 .voucher-label {
     display: block;
@@ -325,4 +324,46 @@
     overflow: hidden;
     background-color: #000;
     min-height: 280px;
+}
+
+/* ============ RESPONSIVE ============ */
+.voucher-col {
+    width: 400px;
+    flex-shrink: 0;
+}
+
+.toast-pos {
+    max-width: calc(100vw - 48px);
+}
+
+.modal-dialog {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@media (max-width: 1100px) {
+    .voucher-col {
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .scanner-row {
+        flex-direction: column;
+    }
+
+    .scanner-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toast-pos {
+        left: 16px;
+        right: 16px;
+        max-width: none;
+    }
+
+    .voucher-card {
+        padding: 16px;
+    }
 }

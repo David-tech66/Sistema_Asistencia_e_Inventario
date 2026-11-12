@@ -64,7 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Reabrir el formulario si Laravel devolvió errores de validación
     const errores = document.getElementById('errores-validacion');
-    if (errores && errores.value === '1') {
-        window.abrirModal('modal-categoria-crear');
+    if (errores && errores.value) {
+        // Reabre el mismo modal del que vino el envío (crear o editar)
+        if (typeof window.reabrirModalConErrores === 'function') {
+            window.reabrirModalConErrores(errores.value);
+        } else {
+            window.abrirModal(errores.value);
+        }
     }
 });

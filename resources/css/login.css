@@ -7,19 +7,23 @@
 /* Importar la tipografía Poppins desde Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-/* Bloquear scroll de la página por completo */
+/* Bloquear scroll de la página por completo (con scroll de emergencia si el contenido no cabe) */
 html {
     transition:
         background-color 0.3s ease,
         color 0.3s ease;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto; /* fallback: zoom alto o pantallas cortas pueden necesitar scroll */
 }
 
 body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto;
 }
 
 /* Auto-rellenado adaptado para modo claro y oscuro */
@@ -40,7 +44,9 @@ input:-webkit-autofill:focus {
 /* ============ Contenedor principal ============ */
 .mdl-login {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto; /* si el formulario es más alto que la pantalla, se puede hacer scroll */
     display: flex;
     flex-direction: column;
     background-color: #ffffff; /* slate-50 */

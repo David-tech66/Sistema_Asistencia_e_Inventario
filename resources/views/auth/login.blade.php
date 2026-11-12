@@ -106,10 +106,11 @@
 
                 <!-- Correo Electrónico -->
                 <div>
-                    <label class="mdl-label">Correo Electrónico</label>
+                    <label for="login-email" class="mdl-label">Correo Electrónico</label>
                     <div class="mdl-input-wrap">
                         <span class="mdl-input-icon">@</span>
-                        <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                        <input type="email" id="login-email" name="email" value="{{ old('email') }}" required autofocus
+                            autocomplete="email"
                             class="mdl-input">
                     </div>
                 </div>
@@ -117,7 +118,7 @@
                 <!-- Contraseña -->
                 <div>
                     <div class="mdl-field-header">
-                        <label class="mdl-label">Contraseña</label>
+                        <label for="password" class="mdl-label">Contraseña</label>
                         <a href="/recuperar-contrasena" class="mdl-forgot">¿Olvidaste tu contraseña?</a>
                     </div>
                     <div class="mdl-input-wrap">
@@ -127,6 +128,7 @@
                             </svg>
                         </span>
                         <input type="password" id="password" name="password" required
+                            autocomplete="current-password"
                             class="mdl-input mdl-input--password"
                             placeholder="••••••••••">
                         <button type="button" id="togglePasswordBtn" class="mdl-eye-btn" aria-label="Mostrar contraseña">

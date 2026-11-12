@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Asistencia;
 use App\Models\Categoria;
 use App\Models\Empleado;
+use App\Models\MovimientoStock;
 use App\Models\Producto;
 use App\Models\Venta;
+use App\Models\VentaDetalle;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
 
@@ -134,51 +136,28 @@ class DashboardController extends Controller
         }
 
         // ------------------------------------------------------------
-        // ÚLTIMOS ESCANEOS (eventos de entrada/salida de hoy)
+        // TOP PRODUCTOS VENDIDOS HOY (unidades y S/ del día)
         // ------------------------------------------------------------
-        $escaneos = Asistencia::with('empleado')
-            ->where('fecha', $hoy)
-            ->whereHas('empleado')
-            ->orderByDesc('id')
-            ->get()
-            ->flatMap(function ($asistencia) {
-                $eventos = collect();
-
-                if ($asistencia->hora_entrada) {
-                    $eventos->push([
-                        'tipo' => $asistencia->estado === 'tardanza' ? 'tardanza' : 'entrada',
-                        'detalle' => $asistencia->estado === 'tardanza'
-                            ? 'Tardanza registrada'
-                            : 'Entrada registrada',
-                        'hora' => $asistencia->hora_entrada,
-                        'horaTexto' => Carbon::parse($asistencia->hora_entrada)->format('h:i A'),
-                        'nombre' => $asistencia->empleado->nombre_completo,
-                        'cargo' => $asistencia->empleado->cargo,
-                        'iniciales' => $this->iniciales($asistencia->empleado->nombre_completo),
-                        'clase' => $asistencia->estado === 'tardanza' ? 'yellow' : 'blue',
-                    ]);
-                }
-
-                if ($asistencia->hora_salida) {
-                    $eventos->push([
-                        'tipo' => 'salida',
-                        'detalle' => $asistencia->salida_anticipada
-                            ? 'Salida anticipada'
-                            : 'Salida registrada',
-                        'hora' => $asistencia->hora_salida,
-                        'horaTexto' => Carbon::parse($asistencia->hora_salida)->format('h:i A'),
-                        'nombre' => $asistencia->empleado->nombre_completo,
-                        'cargo' => $asistencia->empleado->cargo,
-                        'iniciales' => $this->iniciales($asistencia->empleado->nombre_completo),
-                        'clase' => $asistencia->salida_anticipada ? 'yellow' : 'blue',
-                    ]);
-                }
-
-                return $eventos;
-            })
-            ->sortByDesc('hora')
+        $topProductosHoy = VentaDetalle::query()
+            ->select('productos.id', 'productos.nombre')
+            ->selectRaw('COALESCE(SUM(venta_detalles.cantidad), 0) AS unidades')
+            ->selectRaw('COALESCE(SUM(venta_detalles.subtotal), 0) AS monto')
+            ->join('ventas', 'ventas.id', '=', 'venta_detalles.venta_id')
+            ->join('productos', 'productos.id', '=', 'venta_detalles.producto_id')
+            ->whereDate('ventas.created_at', today())
+            ->groupBy('productos.id', 'productos.nombre')
+            ->orderByDesc('unidades')
+            ->orderByDesc('monto')
             ->take(5)
-            ->values();
+            ->get();
+
+        // ------------------------------------------------------------
+        // ÚLTIMOS MOVIMIENTOS DE STOCK (ventas, escáner, ajustes manuales)
+        // ------------------------------------------------------------
+        $movimientos = MovimientoStock::with(['producto', 'user'])
+            ->latest('id')
+            ->take(5)
+            ->get();
 
         return view('dashboard', compact(
             'totalProductos',
@@ -207,7 +186,8 @@ class DashboardController extends Controller
             'categoriasRotacion',
             'escalaBarras',
             'ticksBarras',
-            'escaneos'
+            'topProductosHoy',
+            'movimientos'
         ));
     }
 
@@ -243,19 +223,5 @@ class DashboardController extends Controller
         }
 
         return rtrim(rtrim(number_format($valor, 2, '.', ','), '0'), '.');
-    }
-
-    /**
-     * Iniciales del nombre (máx. 2 letras).
-     */
-    private function iniciales(string $nombre): string
-    {
-        $palabras = preg_split('/\s+/', trim($nombre));
-
-        if (count($palabras) >= 2 && $palabras[1] !== '') {
-            return mb_strtoupper(mb_substr($palabras[0], 0, 1) . mb_substr($palabras[1], 0, 1));
-        }
-
-        return mb_strtoupper(mb_substr($nombre, 0, 2));
     }
 }

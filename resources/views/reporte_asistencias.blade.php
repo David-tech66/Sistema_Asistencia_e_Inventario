@@ -94,9 +94,9 @@
         <div class="table-toolbar">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-table-list"></i>
-                <span>Mostrando <strong id="contador-mostradas" style="color: #111827;">{{ $asistencias->count() }}</strong> de {{ $asistencias->count() }} registro(s)</span>
+                <span>Mostrando <strong id="contador-mostradas" style="color: var(--ink-strong);">{{ $asistencias->count() }}</strong> de {{ $asistencias->count() }} registro(s)</span>
             </div>
-            <span style="font-size: 12px; color: #9ca3af;">Reporte de solo lectura</span>
+            <span style="font-size: 12px; color: var(--ink-faint);">Reporte de solo lectura</span>
         </div>
 
         <div class="table-wrap">
@@ -126,13 +126,13 @@
                                     <div class="cell-empleado-dni">DNI {{ $asistencia->empleado->dni }}</div>
                                 @endif
                             </td>
-                            <td style="color: #4b5563;">{{ $asistencia->fecha }}</td>
+                            <td style="color: var(--ink-muted);">{{ $asistencia->fecha }}</td>
                             <td>{{ $asistencia->hora_entrada ?? '--:--:--' }}</td>
                             <td>
                                 @if ($asistencia->hora_salida)
                                     {{ $asistencia->hora_salida }}
                                 @else
-                                    <span style="color: #9ca3af;">Pendiente</span>
+                                    <span style="color: var(--ink-faint);">Pendiente</span>
                                 @endif
                             </td>
                             <td>
@@ -161,8 +161,8 @@
                                     <div class="empty-icon">
                                         <i class="fa-solid fa-calendar-xmark"></i>
                                     </div>
-                                    <p style="font-weight: 500; color: #6b7280;">No hay asistencias registradas</p>
-                                    <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Las asistencias registradas en el módulo de Recursos Humanos aparecerán en este reporte.</p>
+                                    <p style="font-weight: 500; color: var(--ink-dim);">No hay asistencias registradas</p>
+                                    <p style="font-size: 12px; color: var(--ink-faint); margin-top: 4px;">Las asistencias registradas en el módulo de Recursos Humanos aparecerán en este reporte.</p>
                                 </div>
                             </td>
                         </tr>

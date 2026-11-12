@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-categoria-crear') : '' }}">
 
     <!-- TABLA CATEGORÍAS -->
     <div class="table-card">
@@ -132,16 +132,17 @@
             </div>
             <form method="POST" action="/categorias">
                 @csrf
+                <input type="hidden" name="modal_origen" value="modal-categoria-crear">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Nombre *</label>
-                        <input type="text" name="nombre_categoria" required maxlength="100"
+                        <label for="categoria-crear-nombre" class="form-label">Nombre *</label>
+                        <input type="text" id="categoria-crear-nombre" name="nombre_categoria" required maxlength="100"
                                value="{{ old('nombre_categoria') }}" class="form-input"
                                placeholder="Ej: Laptops, Monitores, RAM">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea name="descripcion" maxlength="255" rows="2" class="form-input"
+                        <label for="categoria-crear-descripcion" class="form-label">Descripción</label>
+                        <textarea id="categoria-crear-descripcion" name="descripcion" maxlength="255" rows="2" class="form-input"
                                   placeholder="Descripción breve (opcional)">{{ old('descripcion') }}</textarea>
                     </div>
                 </div>
@@ -172,14 +173,16 @@
             <form id="form-categoria-editar" method="POST" action="/categorias/0">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="modal_origen" value="modal-categoria-editar">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Nombre *</label>
-                        <input type="text" name="nombre_categoria" required maxlength="100" class="form-input">
+                        <label for="categoria-editar-nombre" class="form-label">Nombre *</label>
+                        <input type="text" id="categoria-editar-nombre" name="nombre_categoria" required maxlength="100"
+                               value="{{ old('nombre_categoria') }}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea name="descripcion" maxlength="255" rows="2" class="form-input"></textarea>
+                        <label for="categoria-editar-descripcion" class="form-label">Descripción</label>
+                        <textarea id="categoria-editar-descripcion" name="descripcion" maxlength="255" rows="2" class="form-input">{{ old('descripcion') }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

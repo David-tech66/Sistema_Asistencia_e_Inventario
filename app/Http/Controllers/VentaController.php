@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\MovimientoStock;
 use App\Models\Producto;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
@@ -97,6 +98,7 @@ class VentaController extends Controller
                         'cantidad' => $item['cantidad'],
                         'precio_unitario' => $producto->precio_venta,
                         'subtotal' => $subtotal,
+                        'stock_resultante' => $producto->stock_actual,
                     ];
                 }
 
@@ -109,6 +111,17 @@ class VentaController extends Controller
                 ]);
 
                 foreach ($detalles as $detalle) {
+                    // Trazabilidad: cada venta genera una salida de stock
+                    MovimientoStock::create([
+                        'producto_id' => $detalle['producto_id'],
+                        'user_id' => Auth::id(),
+                        'tipo' => 'salida',
+                        'cantidad' => $detalle['cantidad'],
+                        'motivo' => 'Venta ' . $numero,
+                        'stock_resultante' => $detalle['stock_resultante'],
+                    ]);
+
+                    unset($detalle['stock_resultante']);
                     $venta->detalles()->create($detalle);
                 }
 

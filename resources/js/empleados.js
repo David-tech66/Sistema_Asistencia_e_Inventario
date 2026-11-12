@@ -21,8 +21,13 @@ window.buscarEmpleado = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     const errores = document.getElementById('errores-validacion');
-    if (errores && errores.value === '1') {
-        window.abrirModal('modal-empleado-crear');
+    if (errores && errores.value) {
+        // Reabre el mismo modal del que vino el envío (crear o editar)
+        if (typeof window.reabrirModalConErrores === 'function') {
+            window.reabrirModalConErrores(errores.value);
+        } else {
+            window.abrirModal(errores.value);
+        }
     }
 
     document.addEventListener('keydown', function (event) {

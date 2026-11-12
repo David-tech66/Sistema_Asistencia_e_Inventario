@@ -145,35 +145,37 @@ class DashboardTest extends TestCase
         $this->assertEquals(1, $response->viewData('totalPuntualidad'));
     }
 
-    public function test_dashboard_lista_los_ultimos_escaneos_del_dia(): void
+    public function test_dashboard_lista_los_ultimos_movimientos_de_stock(): void
     {
-        $empleado = Empleado::factory()->create(['estado' => true, 'cargo' => 'Ventas']);
+        $producto = $this->producto(['stock_actual' => 10]);
 
-        Asistencia::create([
-            'empleado_id' => $empleado->id,
-            'fecha' => now()->toDateString(),
-            'hora_entrada' => '07:58:00',
-            'hora_salida' => '17:30:00',
-            'estado' => 'presente',
+        $this->actingAs($this->admin())->postJson("/productos/{$producto->id}/stock", [
+            'tipo' => 'salida',
+            'cantidad' => 2,
+            'motivo' => 'Merma por daño',
+        ]);
+
+        $this->actingAs($this->admin())->postJson("/productos/{$producto->id}/stock", [
+            'tipo' => 'entrada',
+            'cantidad' => 4,
+            'motivo' => 'Reposición',
         ]);
 
         $response = $this->actingAs($this->admin())->get('/dashboard');
 
-        $escaneos = $response->viewData('escaneos');
-        $this->assertCount(2, $escaneos);
-        $this->assertEquals('salida', $escaneos[0]['tipo']);
-        $this->assertEquals('05:30 PM', $escaneos[0]['horaTexto']);
-        $this->assertEquals('entrada', $escaneos[1]['tipo']);
-        $this->assertEquals('Ventas', $escaneos[1]['cargo']);
-        $this->assertNotEmpty($escaneos[1]['iniciales']);
+        $movimientos = $response->viewData('movimientos');
+        $this->assertCount(2, $movimientos);
+        $this->assertEquals('entrada', $movimientos->first()->tipo);
+        $this->assertEquals('Reposición', $movimientos->first()->motivo);
+        $response->assertSee('ÚLTIMOS MOVIMIENTOS DE STOCK');
     }
 
-    public function test_dashboard_sin_escaneos_muestra_lista_vacia(): void
+    public function test_dashboard_sin_movimientos_muestra_lista_vacia(): void
     {
         $response = $this->actingAs($this->admin())->get('/dashboard');
 
-        $this->assertCount(0, $response->viewData('escaneos'));
-        $response->assertSee('Sin escaneos registrados hoy.');
+        $this->assertCount(0, $response->viewData('movimientos'));
+        $response->assertSee('Sin movimientos registrados');
     }
 
     public function test_dashboard_calcula_rotacion_por_categoria(): void

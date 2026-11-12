@@ -57,15 +57,15 @@
     <!-- Filtros -->
     <div class="filters-card">
         <div class="filter-group">
-            <label class="filter-label">Desde</label>
+            <label for="filtro-desde" class="filter-label">Desde</label>
             <input type="date" id="filtro-desde" onchange="aplicarFiltros()" class="filter-input">
         </div>
         <div class="filter-group">
-            <label class="filter-label">Hasta</label>
+            <label for="filtro-hasta" class="filter-label">Hasta</label>
             <input type="date" id="filtro-hasta" onchange="aplicarFiltros()" class="filter-input">
         </div>
         <div class="filter-group">
-            <label class="filter-label">Comprobante</label>
+            <label for="filtro-tipo" class="filter-label">Comprobante</label>
             <select id="filtro-tipo" onchange="aplicarFiltros()" class="filter-select">
                 <option value="">Todos</option>
                 <option value="Boleta">Boleta</option>
@@ -73,7 +73,7 @@
             </select>
         </div>
         <div class="search-group">
-            <label class="filter-label">Buscar</label>
+            <label for="filtro-texto" class="filter-label">Buscar</label>
             <div style="position: relative;">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="filtro-texto" oninput="aplicarFiltros()" placeholder="N° comprobante o cliente..." class="filter-input search-input">
@@ -89,9 +89,9 @@
         <div class="table-toolbar">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-table-list"></i>
-                <span>Mostrando <strong id="contador-mostradas" style="color: #111827;">{{ $ventas->count() }}</strong> de {{ $ventas->count() }} venta(s)</span>
+                <span>Mostrando <strong id="contador-mostradas" style="color: var(--ink-strong);">{{ $ventas->count() }}</strong> de {{ $ventas->count() }} venta(s)</span>
             </div>
-            <span style="font-size: 12px; color: #9ca3af;">Haz clic en una fila para ver los productos</span>
+            <span style="font-size: 12px; color: var(--ink-faint);">Haz clic en una fila para ver los productos</span>
         </div>
 
         <div class="table-wrap">
@@ -117,20 +117,20 @@
                             <td>
                                 <span class="badge-comprobante">{{ $venta->numero_comprobante }}</span>
                             </td>
-                            <td style="color: #4b5563;">{{ $venta->created_at ? $venta->created_at->format('d/m/Y H:i') : '—' }}</td>
-                            <td style="font-weight: 500; color: #1f2937;">{{ $venta->cliente?->nombre }}</td>
-                            <td style="color: #6b7280;">{{ $venta->user?->nombre_usuario }}</td>
+                            <td style="color: var(--ink-muted);">{{ $venta->created_at ? $venta->created_at->format('d/m/Y H:i') : '—' }}</td>
+                            <td style="font-weight: 500; color: var(--ink-title);">{{ $venta->cliente?->nombre }}</td>
+                            <td style="color: var(--ink-dim);">{{ $venta->user?->nombre_usuario }}</td>
                             <td>
                                 <span class="badge-tipo {{ $venta->tipo_comprobante === 'Boleta' ? 'badge-tipo--boleta' : 'badge-tipo--factura' }}">{{ $venta->tipo_comprobante }}</span>
                             </td>
-                            <td style="text-align: center; color: #4b5563;">{{ $venta->detalles->sum('cantidad') }}</td>
-                            <td style="text-align: right; font-weight: 600; color: #111827;">S/ {{ number_format($venta->total, 2) }}</td>
+                            <td style="text-align: center; color: var(--ink-muted);">{{ $venta->detalles->sum('cantidad') }}</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--ink-strong);">S/ {{ number_format($venta->total, 2) }}</td>
                         </tr>
                         <tr id="detalle-{{ $venta->id }}" class="detail-row hidden">
                             <td colspan="7" style="padding: 0;">
                                 <div class="detail-content">
                                     <div class="detail-title">
-                                        <i class="fa-solid fa-list" style="color: #2563eb;"></i> Productos de {{ $venta->numero_comprobante }}
+                                        <i class="fa-solid fa-list" style="color: #60a5fa;"></i> Productos de {{ $venta->numero_comprobante }}
                                     </div>
                                     <div class="detail-table-wrap">
                                         <table class="detail-table">
@@ -145,10 +145,10 @@
                                             <tbody>
                                                 @foreach ($venta->detalles as $detalle)
                                                     <tr>
-                                                        <td style="color: #374151; font-weight: 500;">{{ $detalle->producto?->nombre ?? 'Producto eliminado' }}</td>
-                                                        <td style="text-align: center; color: #4b5563;">{{ $detalle->cantidad }}</td>
-                                                        <td style="text-align: right; color: #4b5563;">S/ {{ number_format($detalle->precio_unitario, 2) }}</td>
-                                                        <td style="text-align: right; font-weight: 600; color: #1f2937;">S/ {{ number_format($detalle->subtotal, 2) }}</td>
+                                                        <td style="color: var(--ink-body); font-weight: 500;">{{ $detalle->producto?->nombre ?? 'Producto eliminado' }}</td>
+                                                        <td style="text-align: center; color: var(--ink-muted);">{{ $detalle->cantidad }}</td>
+                                                        <td style="text-align: right; color: var(--ink-muted);">S/ {{ number_format($detalle->precio_unitario, 2) }}</td>
+                                                        <td style="text-align: right; font-weight: 600; color: var(--ink-title);">S/ {{ number_format($detalle->subtotal, 2) }}</td>
                                                     </tr>
                                                 @endforeach
                                                 <tr class="subtotal-row">
@@ -168,15 +168,15 @@
                                     <div class="empty-icon">
                                         <i class="fa-solid fa-receipt"></i>
                                     </div>
-                                    <p style="font-weight: 500; color: #6b7280;">No hay ventas registradas</p>
-                                    <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Las ventas realizadas desde el POS aparecerán en este reporte.</p>
+                                    <p style="font-weight: 500; color: var(--ink-dim);">No hay ventas registradas</p>
+                                    <p style="font-size: 12px; color: var(--ink-faint); margin-top: 4px;">Las ventas realizadas desde el POS aparecerán en este reporte.</p>
                                 </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            <p id="sin-resultados" class="hidden" style="padding: 32px 20px; text-align: center; color: #9ca3af; font-size: 14px;">No se encontraron ventas con esos filtros.</p>
+            <p id="sin-resultados" class="hidden" style="padding: 32px 20px; text-align: center; color: var(--ink-faint); font-size: 14px;">No se encontraron ventas con esos filtros.</p>
         </div>
     </div>
 @endsection

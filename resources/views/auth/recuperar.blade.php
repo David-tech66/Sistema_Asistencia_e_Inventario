@@ -42,21 +42,35 @@
             </div>
 
             @if (session('status'))
-                <div class="rcv-alert-status">
+                <div class="rcv-alert-status" role="status">
                     {{ session('status') }}
                 </div>
             @endif
 
-            <form method="POST" action="#" class="rcv-form">
+            @if ($errors->any())
+                <div class="rcv-alert-status rcv-alert-errors" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('recuperar.post') }}" class="rcv-form">
                 @csrf
 
                 <div>
-                    <label class="rcv-label">Correo Electrónico</label>
+                    <label for="recuperar-email" class="rcv-label">Correo Electrónico</label>
                     <div class="rcv-input-wrap">
                         <span class="rcv-input-icon">@</span>
-                        <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                            class="rcv-input">
+                        <input type="email" id="recuperar-email" name="email" value="{{ old('email') }}"
+                            autocomplete="email" required autofocus
+                            class="rcv-input @error('email') rcv-input--error @enderror">
                     </div>
+                    @error('email')
+                        <p class="rcv-field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Botón Siguiente con efecto de hover -->

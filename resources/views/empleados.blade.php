@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-empleado-crear') : '' }}">
 
     <!-- Tarjetas resumen -->
     <div class="stats-grid">
@@ -176,28 +176,29 @@
             </div>
             <form method="POST" action="/empleados">
                 @csrf
+                <input type="hidden" name="modal_origen" value="modal-empleado-crear">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Nombre completo *</label>
-                        <input type="text" name="nombre_completo" required maxlength="150"
+                        <label for="empleado-crear-nombre" class="form-label">Nombre completo *</label>
+                        <input type="text" id="empleado-crear-nombre" name="nombre_completo" required maxlength="150"
                                value="{{ old('nombre_completo') }}" class="form-input"
                                placeholder="Ej: Juan Pérez López">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">DNI *</label>
-                        <input type="text" name="dni" required maxlength="15" pattern="[0-9]+"
+                        <label for="empleado-crear-dni" class="form-label">DNI *</label>
+                        <input type="text" id="empleado-crear-dni" name="dni" required maxlength="15" pattern="[0-9]+"
                                value="{{ old('dni') }}" class="form-input"
                                placeholder="Ej: 12345678" inputmode="numeric">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Cargo *</label>
-                        <input type="text" name="cargo" required maxlength="100"
+                        <label for="empleado-crear-cargo" class="form-label">Cargo *</label>
+                        <input type="text" id="empleado-crear-cargo" name="cargo" required maxlength="100"
                                value="{{ old('cargo') }}" class="form-input"
                                placeholder="Ej: Ayudante de almacén">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Teléfono</label>
-                        <input type="text" name="telefono" maxlength="20"
+                        <label for="empleado-crear-telefono" class="form-label">Teléfono</label>
+                        <input type="tel" id="empleado-crear-telefono" name="telefono" maxlength="20"
                                value="{{ old('telefono') }}" class="form-input"
                                placeholder="Ej: 987654321" inputmode="tel">
                     </div>
@@ -232,25 +233,26 @@
                 <form method="POST" action="/empleados/{{ $empleado->id }}">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="modal_origen" value="modal-empleado-editar-{{ $empleado->id }}">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="form-label">Nombre completo *</label>
-                            <input type="text" name="nombre_completo" required maxlength="150"
+                            <label for="empleado-editar-nombre-{{ $empleado->id }}" class="form-label">Nombre completo *</label>
+                            <input type="text" id="empleado-editar-nombre-{{ $empleado->id }}" name="nombre_completo" required maxlength="150"
                                    value="{{ old('nombre_completo', $empleado->nombre_completo) }}" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">DNI *</label>
-                            <input type="text" name="dni" required maxlength="15" pattern="[0-9]+"
+                            <label for="empleado-editar-dni-{{ $empleado->id }}" class="form-label">DNI *</label>
+                            <input type="text" id="empleado-editar-dni-{{ $empleado->id }}" name="dni" required maxlength="15" pattern="[0-9]+"
                                    value="{{ old('dni', $empleado->dni) }}" class="form-input" inputmode="numeric">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Cargo *</label>
-                            <input type="text" name="cargo" required maxlength="100"
+                            <label for="empleado-editar-cargo-{{ $empleado->id }}" class="form-label">Cargo *</label>
+                            <input type="text" id="empleado-editar-cargo-{{ $empleado->id }}" name="cargo" required maxlength="100"
                                    value="{{ old('cargo', $empleado->cargo) }}" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Teléfono</label>
-                            <input type="text" name="telefono" maxlength="20"
+                            <label for="empleado-editar-telefono-{{ $empleado->id }}" class="form-label">Teléfono</label>
+                            <input type="tel" id="empleado-editar-telefono-{{ $empleado->id }}" name="telefono" maxlength="20"
                                    value="{{ old('telefono', $empleado->telefono) }}" class="form-input" inputmode="tel">
                         </div>
                     </div>

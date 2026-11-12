@@ -39,7 +39,7 @@
             </ul>
         </div>
     @endif
-    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? '1' : '0' }}">
+    <input type="hidden" id="errores-validacion" value="{{ $errors->any() ? (old('modal_origen') ?: 'modal-producto-crear') : '' }}">
 
     <!-- ESCÁNER -->
     <div class="scanner-card">
@@ -121,6 +121,10 @@
                             </td>
                             <td class="cell-actions">
                                 <div class="actions-group">
+                                    <button type="button" class="btn-stock" title="Ajustar stock (entrada/salida)"
+                                            onclick="abrirAjusteStock({{ $producto->id }}, '{{ addslashes($producto->nombre) }}', {{ $producto->stock_actual }})">
+                                        <i class="fa-solid fa-arrow-right-arrow-left"></i> Stock
+                                    </button>
                                     <button type="button" class="btn-edit" title="Editar producto"
                                             onclick="editarProducto({{ $producto->id }})">
                                         <i class="fa-solid fa-pen"></i> Editar
@@ -141,6 +145,65 @@
                                     </div>
                                     <p class="empty-title">No hay productos registrados</p>
                                     <p class="empty-text">Registra el primero con el escáner o con el botón "Nuevo producto".</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- HISTORIAL DE MOVIMIENTOS DE STOCK -->
+    <div class="table-card movimientos-card">
+        <div class="table-card-header">
+            <div class="table-total">
+                <i class="fa-solid fa-clock-rotate-left table-total-icon"></i>
+                <span>Movimientos de stock — Últimos <strong>{{ $movimientos->count() }}</strong></span>
+            </div>
+            <span class="movimientos-hint"><i class="fa-solid fa-circle-info"></i> Todo cambio de stock queda registrado con motivo y usuario.</span>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th class="cell-center">Tipo</th>
+                        <th class="cell-center">Cantidad</th>
+                        <th>Motivo</th>
+                        <th class="cell-center">Stock resultante</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($movimientos as $movimiento)
+                        <tr>
+                            <td class="cell-date">{{ $movimiento->created_at?->format('d/m/Y H:i') }}</td>
+                            <td><span class="entity-name">{{ $movimiento->producto?->nombre ?? '—' }}</span></td>
+                            <td class="cell-center">
+                                @if ($movimiento->tipo === 'entrada')
+                                    <span class="mov-badge mov-badge--entrada">Entrada</span>
+                                @else
+                                    <span class="mov-badge mov-badge--salida">Salida</span>
+                                @endif
+                            </td>
+                            <td class="cell-center">
+                                <strong>{{ $movimiento->tipo === 'entrada' ? '+' : '−' }}{{ $movimiento->cantidad }}</strong>
+                            </td>
+                            <td class="cell-date">{{ $movimiento->motivo }}</td>
+                            <td class="cell-center"><span class="stock-value">{{ $movimiento->stock_resultante }}</span></td>
+                            <td class="cell-date">{{ $movimiento->user?->nombre_usuario ?? '—' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </div>
+                                    <p class="empty-title">Sin movimientos registrados</p>
+                                    <p class="empty-text">Las ventas, el escáner y los ajustes manuales aparecerán aquí.</p>
                                 </div>
                             </td>
                         </tr>
@@ -209,6 +272,63 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Ajustar stock -->
+    <div id="modal-ajustar-stock" class="modal-overlay hidden">
+        <div class="modal-backdrop" onclick="cerrarModal('modal-ajustar-stock')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <div class="modal-icon modal-icon--blue">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </div>
+                    <div>
+                        <h3 class="modal-title">Ajustar stock</h3>
+                        <p class="modal-subtitle" id="ajuste-producto-nombre"></p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close" onclick="cerrarModal('modal-ajustar-stock')">&times;</button>
+            </div>
+            <form id="form-ajustar-stock" method="POST" action="/productos/0/stock" onsubmit="return guardarAjusteStock(event)">
+                @csrf
+                <input type="hidden" id="ajuste-producto-id" name="producto_id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ajuste-tipo" class="form-label">Tipo de movimiento</label>
+                        <select name="tipo" id="ajuste-tipo" class="form-input" required>
+                            <option value="entrada">Entrada (+) — compra, reposición, corrección</option>
+                            <option value="salida">Salida (−) — merma, daño, robo, uso interno</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="ajuste-cantidad" class="form-label">Cantidad</label>
+                            <input type="number" name="cantidad" id="ajuste-cantidad" class="form-input"
+                                   min="1" max="100000" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ajuste-stock-actual" class="form-label">Stock actual</label>
+                            <input type="text" id="ajuste-stock-actual" class="form-input" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Motivo *</label>
+                        <input type="text" name="motivo" id="ajuste-motivo" class="form-input"
+                               maxlength="255" placeholder="Ej: Merma por daño en almacén" required>
+                    </div>
+                    <div id="ajuste-error" class="alert alert-danger hidden">
+                        <i class="fa-solid fa-circle-exclamation"></i> <span></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-ajustar-stock')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="ajuste-btn-guardar">
+                        <i class="fa-solid fa-check"></i> Registrar movimiento
+                    </button>
                 </div>
             </form>
         </div>

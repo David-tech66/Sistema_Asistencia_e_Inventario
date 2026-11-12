@@ -56,9 +56,10 @@
 @media (min-width: 768px) {
     .register-form {
         flex-direction: row;
+        flex-wrap: wrap; /* Evita el apretón a ~768px: el botón pasa a nueva línea si no cabe */
         align-items: flex-end;
     }
-    .register-field { flex: 1; }
+    .register-field { flex: 1; min-width: 200px; }
     .register-form .btn { width: auto; white-space: nowrap; }
 }
 

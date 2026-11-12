@@ -77,7 +77,7 @@
         </p>
     </section>
 
-    <p style="font-size: 12px; color: #9ca3af; margin-top: 20px; text-align: center;">
+    <p style="font-size: 12px; color: var(--ink-faint); margin-top: 20px; text-align: center;">
         Grupo MDL E.I.R.L. — Módulo de Recursos Humanos
     </p>
 @endsection

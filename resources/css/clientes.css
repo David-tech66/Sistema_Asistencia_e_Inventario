@@ -115,6 +115,11 @@
     align-items: flex-start;
     gap: 4px;
 }
+
+/* Copia de la lista de errores inyectada dentro de un modal reabierto */
+.modal-errors {
+    margin: 16px 24px 0;
+}
 .alert-list ul {
     margin-top: 4px;
     padding-left: 24px;
@@ -366,6 +371,14 @@
         border-color 0.15s,
         box-shadow 0.15s;
 }
+
+/* Móvil/tablet: 16px evita el zoom automático de iOS al enfocar (<16px) */
+@media (max-width: 768px) {
+    .form-input,
+    .search-input {
+        font-size: 16px;
+    }
+}
 .form-input:focus {
     border-color: #60a5fa;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
@@ -375,7 +388,39 @@
     display: flex;
     gap: 12px;
     margin-top: 24px;
+    /* Pegado al fondo del diálogo: el botón Guardar siempre visible en formularios largos */
+    position: sticky;
+    bottom: 0;
+    background-color: inherit;
+    z-index: 2;
 }
 .modal-footer .btn {
     flex: 1;
+}
+
+/* ============ RESPONSIVE ============ */
+.modal-dialog {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@media (max-width: 640px) {
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .table-toolbar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .search-box .search-input {
+        width: 100%;
+    }
 }

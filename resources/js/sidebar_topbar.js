@@ -24,3 +24,44 @@ function toggleSidebar() {
 
 // Hacer la función accesible globalmente
 window.toggleSidebar = toggleSidebar;
+
+/**
+ * Reabre un modal tras un fallo de validación y, si la página muestra una
+ * lista de errores (.alert-list), la copia dentro del modal para que el
+ * usuario la vea sin tener que cerrarlo (antes quedaba fuera de pantalla).
+ */
+window.reabrirModalConErrores = function (modalId) {
+    window.abrirModal(modalId);
+
+    const modal = document.getElementById(modalId);
+    const alertList = document.querySelector('.alert-list');
+
+    if (!modal || !alertList || !alertList.innerText.trim()) return;
+    if (modal.querySelector('.modal-errors')) return; // ya inyectado
+
+    const box = document.createElement('div');
+    box.className = 'alert-list modal-errors';
+    box.innerHTML = alertList.innerHTML;
+
+    const header = modal.querySelector('.modal-header');
+    if (header) {
+        header.insertAdjacentElement('afterend', box);
+    } else {
+        modal.insertBefore(box, modal.firstChild);
+    }
+};
+
+/**
+ * Protección anti doble-envío: al enviar un formulario nativo se deshabilita
+ * su botón de envío para evitar POSTs duplicados por doble clic.
+ * Si el envío se cancela (p. ej. un onsubmit que retorna false), no se toca.
+ */
+document.addEventListener('submit', function (event) {
+    if (event.defaultPrevented) return;
+
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+});

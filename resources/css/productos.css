@@ -170,6 +170,71 @@ tr.row-flash,
     font-weight: 600;
 }
 
+/* ============ MOVIMIENTOS DE STOCK ============ */
+.movimientos-card {
+    margin-top: 24px;
+}
+
+.movimientos-hint {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.movimientos-hint i {
+    color: #2563eb;
+    margin-right: 4px;
+}
+
+.mov-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.mov-badge--entrada {
+    background-color: #ecfdf5;
+    color: #047857;
+}
+
+.mov-badge--entrada::before {
+    content: "+";
+}
+
+.mov-badge--salida {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+.mov-badge--salida::before {
+    content: "−";
+}
+
+/* Botón de ajuste de stock en la tabla */
+.btn-stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.15s ease;
+    background-color: #f5f3ff;
+    color: #6d28d9;
+}
+
+.btn-stock:hover {
+    background-color: #ede9fe;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 640px) {
     .scanner-row {
@@ -178,5 +243,11 @@ tr.row-flash,
 
     .scanner-btn {
         justify-content: center;
+    }
+
+    .toast-escaneo {
+        left: 16px;
+        right: 16px;
+        max-width: none; /* en pantallas angostas el toast ocupa todo el ancho sin cortarse */
     }
 }

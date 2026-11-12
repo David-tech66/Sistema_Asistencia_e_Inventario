@@ -38,6 +38,9 @@ window.editarProducto = function (id) {
             const fileInput = form.querySelector('[name="imagen"]');
             if (fileInput) fileInput.value = '';
 
+            const nombreArchivo = document.getElementById('archivo-nombre-editar');
+            if (nombreArchivo) nombreArchivo.textContent = 'Ningún archivo seleccionado';
+
             const img = document.getElementById('preview-img-editar');
             const icon = document.getElementById('preview-icon-editar');
             if (img) {
@@ -217,6 +220,76 @@ function filtrarStock() {
     });
 }
 
+/* ============ Ajuste manual de stock (entrada/salida con motivo) ============ */
+window.abrirAjusteStock = function (id, nombre, stockActual) {
+    document.getElementById('ajuste-producto-id').value = id;
+    document.getElementById('ajuste-producto-nombre').textContent = nombre + ' — stock actual: ' + stockActual;
+    document.getElementById('ajuste-stock-actual').value = stockActual;
+    document.getElementById('ajuste-cantidad').value = 1;
+    document.getElementById('ajuste-motivo').value = '';
+    document.getElementById('ajuste-tipo').value = 'entrada';
+
+    const error = document.getElementById('ajuste-error');
+    error.classList.add('hidden');
+
+    window.abrirModal('modal-ajustar-stock');
+};
+
+window.guardarAjusteStock = async function (event) {
+    event.preventDefault();
+
+    const id = document.getElementById('ajuste-producto-id').value;
+    const errorBox = document.getElementById('ajuste-error');
+    const errorTexto = errorBox.querySelector('span');
+    const btn = document.getElementById('ajuste-btn-guardar');
+
+    const payload = {
+        tipo: document.getElementById('ajuste-tipo').value,
+        cantidad: parseInt(document.getElementById('ajuste-cantidad').value, 10),
+        motivo: document.getElementById('ajuste-motivo').value.trim(),
+    };
+
+    errorBox.classList.add('hidden');
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/productos/' + id + '/stock', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
+            body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.exito) {
+            const mensaje = (data && data.mensaje)
+                || (data && data.errors ? Object.values(data.errors).flat().join(' ') : null)
+                || 'No se pudo registrar el movimiento.';
+            errorTexto.textContent = mensaje;
+            errorBox.classList.remove('hidden');
+            return false;
+        }
+
+        actualizarFilaStock(id, data.producto.stock_actual);
+        mostrarToast(data.mensaje + ' Stock actual: ' + data.producto.stock_actual + '.', 'blue');
+        window.cerrarModal('modal-ajustar-stock');
+
+        // Recargar para refrescar el historial de movimientos
+        setTimeout(function () { window.location.reload(); }, 1600);
+
+        return false;
+    } catch (e) {
+        errorTexto.textContent = 'Error de conexión. Intenta nuevamente.';
+        errorBox.classList.remove('hidden');
+        return false;
+    } finally {
+        btn.disabled = false;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     // Búsqueda en vivo en la tabla de stock
     const buscador = document.getElementById('buscar-stock');
@@ -239,7 +312,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Reabrir el formulario si Laravel devolvió errores de validación
     const errores = document.getElementById('errores-validacion');
-    if (errores && errores.value === '1') {
-        window.abrirModal('modal-producto-crear');
+    if (errores && errores.value) {
+        // Reabre el mismo modal del que vino el envío (crear o editar)
+        if (typeof window.reabrirModalConErrores === 'function') {
+            window.reabrirModalConErrores(errores.value);
+        } else {
+            window.abrirModal(errores.value);
+        }
     }
 });

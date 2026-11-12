@@ -202,7 +202,7 @@ class ConfiguracionTest extends TestCase
             ->assertSee('Horario: entrada 08:10');
     }
 
-    public function test_dashboard_muestra_salida_anticipada(): void
+    public function test_dashboard_cuenta_la_salida_anticipada_como_presente(): void
     {
         $empleado = Empleado::factory()->create(['estado' => true]);
 
@@ -217,10 +217,9 @@ class ConfiguracionTest extends TestCase
 
         $response = $this->actingAs($this->usuario('admin'))->get('/dashboard');
 
-        $escaneos = $response->viewData('escaneos');
-        $this->assertEquals('Salida anticipada', $escaneos[0]['detalle']);
-        $this->assertEquals('yellow', $escaneos[0]['clase']);
-        $response->assertSee('Salida anticipada');
+        $response->assertOk();
+        $this->assertEquals(1, $response->viewData('presentes'));
+        $this->assertEquals(1.0, $response->viewData('pctGauge'));
     }
 
     public function test_valores_por_defecto_del_horario(): void

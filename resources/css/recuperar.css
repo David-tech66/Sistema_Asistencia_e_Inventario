@@ -7,19 +7,23 @@
 /* Importar la tipografía Poppins desde Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-/* Bloquear scroll de la página por completo */
+/* Bloquear scroll de la página por completo (con scroll de emergencia si el contenido no cabe) */
 html {
     transition:
         background-color 0.3s ease,
         color 0.3s ease;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto; /* fallback: zoom alto o pantallas cortas pueden necesitar scroll */
 }
 
 body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto;
 }
 
 /* Auto-rellenado adaptado para modo claro y oscuro */
@@ -40,7 +44,9 @@ input:-webkit-autofill:focus {
 /* ============ Contenedor principal ============ */
 .rcv-login {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overflow-y: auto; /* si el formulario es más alto que la pantalla, se puede hacer scroll */
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
@@ -65,6 +71,7 @@ input:-webkit-autofill:focus {
 .rcv-panel-left {
     position: relative;
     overflow: hidden;
+    overflow-y: auto; /* el formulario nunca debe quedar cortado */
     width: 100%;
     display: flex;
     align-items: center;
@@ -224,6 +231,40 @@ input:-webkit-autofill:focus {
     border: 1px solid #a7f3d0;
     color: #047857;
     font-size: 0.875rem;
+}
+
+/* Lista de errores de validación */
+.rcv-alert-errors {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.rcv-alert-errors ul {
+    list-style: disc;
+    padding-left: 1.1rem;
+    margin: 0;
+}
+
+/* Error bajo un campo */
+.rcv-field-error {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: #dc2626;
+}
+
+.rcv-input--error {
+    border-color: #f87171;
+}
+
+.dark .rcv-alert-errors {
+    background-color: #450a0a;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+.dark .rcv-field-error {
+    color: #f87171;
 }
 
 /* Formulario */

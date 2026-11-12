@@ -31,19 +31,19 @@ window.renderVoucher = function() {
         return `
         <div class="voucher-item-row">
             <div style="flex: 1; min-width: 0;">
-                <p style="font-size: 14px; font-weight: 600; color: #1f2937; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.nombre}</p>
-                <p style="font-size: 12px; color: #6b7280;">S/ ${item.precio.toFixed(2)} c/u</p>
+                <p style="font-size: 14px; font-weight: 600; color: var(--ink-title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.nombre}</p>
+                <p style="font-size: 12px; color: var(--ink-dim);">S/ ${item.precio.toFixed(2)} c/u</p>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <button type="button" onclick="cambiarCantidad(${i}, -1)" style="height: 28px; width: 28px; border-radius: 8px; background: #fff; border: 1px solid #e5e7eb; color: #6b7280; cursor: pointer;">
+                <button type="button" onclick="cambiarCantidad(${i}, -1)" style="height: 28px; width: 28px; border-radius: 8px; background: var(--surf-white); border: 1px solid var(--line-soft); color: var(--ink-dim); cursor: pointer;">
                     <i class="fa-solid fa-minus" style="font-size: 10px;"></i>
                 </button>
-                <span style="width: 24px; text-align: center; font-size: 14px; font-weight: 700; color: #1f2937;">${item.cantidad}</span>
-                <button type="button" onclick="cambiarCantidad(${i}, 1)" style="height: 28px; width: 28px; border-radius: 8px; background: #fff; border: 1px solid #e5e7eb; color: #6b7280; cursor: pointer;">
+                <span style="width: 24px; text-align: center; font-size: 14px; font-weight: 700; color: var(--ink-title);">${item.cantidad}</span>
+                <button type="button" onclick="cambiarCantidad(${i}, 1)" style="height: 28px; width: 28px; border-radius: 8px; background: var(--surf-white); border: 1px solid var(--line-soft); color: var(--ink-dim); cursor: pointer;">
                     <i class="fa-solid fa-plus" style="font-size: 10px;"></i>
                 </button>
             </div>
-            <span style="width: 64px; text-align: right; font-size: 14px; font-weight: 600; color: #111827;">S/ ${subtotal.toFixed(2)}</span>
+            <span style="width: 64px; text-align: right; font-size: 14px; font-weight: 600; color: var(--ink-strong);">S/ ${subtotal.toFixed(2)}</span>
             <button type="button" onclick="eliminarItem(${i})" style="height: 28px; width: 28px; border-radius: 8px; border: none; background: transparent; color: #f87171; cursor: pointer;">
                 <i class="fa-solid fa-trash-can" style="font-size: 12px;"></i>
             </button>
@@ -202,7 +202,7 @@ window.abrirCamara = async function() {
             () => {}
         );
         estado.textContent = 'Apunta al código del producto.';
-        estado.style.color = '#6b7280';
+        estado.style.color = 'var(--ink-dim)';
     } catch (e) {
         estado.textContent = 'No se pudo acceder a la cámara. ' + e;
         estado.style.color = '#ef4444';
@@ -215,7 +215,7 @@ async function alDetectarCamara(texto) {
 
     const estado = document.getElementById('camara-estado');
     estado.textContent = 'Código detectado: ' + texto;
-    estado.style.color = '#2563eb';
+    estado.style.color = '#60a5fa';
 
     try { camaraScanner.pause(true); } catch (e) {}
 
@@ -224,7 +224,7 @@ async function alDetectarCamara(texto) {
     setTimeout(async () => {
         try { await camaraScanner.resume(); } catch (e) {}
         estado.textContent = 'Apunta al siguiente código.';
-        estado.style.color = '#6b7280';
+        estado.style.color = 'var(--ink-dim)';
         camaraPausada = false;
     }, 1500);
 }

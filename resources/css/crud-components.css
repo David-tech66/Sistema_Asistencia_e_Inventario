@@ -176,6 +176,11 @@
     display: block;
 }
 
+/* Copia de la lista de errores inyectada dentro de un modal reabierto */
+.modal-errors {
+    margin: 16px 24px 0;
+}
+
 .alert-list p {
     display: flex;
     align-items: center;
@@ -539,6 +544,11 @@
     gap: 12px;
     padding: 16px 24px;
     border-top: 1px solid #f3f4f6;
+    /* Pegado al fondo del diálogo: en formularios largos el botón Guardar siempre visible */
+    position: sticky;
+    bottom: 0;
+    background-color: #ffffff;
+    z-index: 2;
 }
 
 .modal-footer .btn {
@@ -637,7 +647,107 @@ textarea.form-input {
     min-height: 64px;
 }
 
+/* Móvil/tablet: 16px evita el zoom automático de iOS al enfocar (<16px) */
+@media (max-width: 768px) {
+    .form-input,
+    .search-box .search-input,
+    textarea.form-input {
+        font-size: 16px;
+    }
+}
+
+/* ============ REJILLA DE CAMPOS (formularios largos) ============ */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.form-grid > .form-group {
+    margin-bottom: 0;
+}
+
+@media (min-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ============ MENSAJE DE VALIDACIÓN BAJO UN CAMPO ============ */
+.form-error {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 6px;
+}
+
+/* ============ SELECTOR DE IMAGEN ============ */
+.img-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.img-drop {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    background-color: #f9fafb;
+    color: #9ca3af;
+}
+
+.img-drop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-drop i {
+    font-size: 22px;
+}
+
+.img-picker {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.img-hint {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.img-name {
+    color: #6b7280;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+    .img-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
 /* ============ RESPONSIVE ============ */
+/* 641-767px: la cabecera sigue en fila pero el buscador debe poder encoger
+   (antes forzaba 256px y apretaba el contador de la derecha) */
+@media (min-width: 641px) and (max-width: 767px) {
+    .search-box .search-input {
+        width: 100%;
+        max-width: 256px;
+    }
+}
+
 @media (max-width: 640px) {
     .section-header {
         flex-direction: column;

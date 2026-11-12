@@ -180,7 +180,7 @@
         </div>
     </div>
 
-    <p style="font-size: 12px; color: #9ca3af; margin-top: 20px; text-align: center;">
+    <p style="font-size: 12px; color: var(--ink-faint); margin-top: 20px; text-align: center;">
         Grupo MDL E.I.R.L. — Módulo de Recursos Humanos
     </p>
 
@@ -192,12 +192,12 @@
                 <i class="fa-solid fa-trash"></i>
             </div>
             <h3 class="modal-title">Eliminar asistencia</h3>
-            <p style="font-size: 14px; color: #6b7280; margin-top: 8px;">¿Seguro que deseas eliminar la asistencia de <span id="eliminar-nombre" style="font-weight: 600; color: #111827;"></span>? Esta acción no se puede deshacer.</p>
+            <p style="font-size: 14px; color: var(--ink-dim); margin-top: 8px;">¿Seguro que deseas eliminar la asistencia de <span id="eliminar-nombre" style="font-weight: 600; color: var(--ink-strong);"></span>? Esta acción no se puede deshacer.</p>
             <form id="form-eliminar" method="POST" action="/asistencias/0">
                 @csrf
                 @method('DELETE')
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
+                    <button type="button" class="btn btn-muted" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Sí, eliminar</button>
                 </div>
             </form>

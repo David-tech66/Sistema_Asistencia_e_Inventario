@@ -21,6 +21,7 @@ body {
 .app-layout {
     display: flex;
     height: 100vh;
+    height: 100dvh; /* viewport dinámico: evita que el contenido quede detrás de la barra del navegador móvil */
     overflow: hidden;
 }
 
@@ -49,6 +50,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     border-right: 1px solid #e5e7eb;
     z-index: 20;
     flex-shrink: 0;
@@ -319,6 +321,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -475,6 +478,7 @@ body {
         top: 0;
         left: -260px;
         height: 100vh;
+        height: 100dvh;
         transition: transform 0.3s ease-in-out;
         z-index: 20;
     }
@@ -515,4 +519,950 @@ body {
     .topbar-menu-btn {
         display: flex; /* Se muestra el botón hamburguesa solo en pantallas pequeñas */
     }
+}
+
+/* --- Pantallas muy pequeñas (360-480px) --- */
+@media (max-width: 480px) {
+    .user-info {
+        display: none; /* Solo queda el avatar; el nombre/rol no caben en el topbar */
+    }
+
+    .user-profile {
+        gap: 8px;
+    }
+
+    .topbar-title {
+        font-size: 16px;
+    }
+
+    .topbar-divider {
+        display: none;
+    }
+
+    .main-content {
+        padding: 12px;
+    }
+}
+
+/* ==========================================
+    TEMA (CLARO / OSCURO) — igual que el login
+   ========================================== */
+
+/* --- Botón Luma/Sol del topbar --- */
+.topbar-theme-btn {
+    background: transparent;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.topbar-theme-btn:hover {
+    background-color: #e2e8f0; /* slate-200 */
+    color: #0f2942;
+}
+
+/* Luna visible en claro, sol visible en oscuro (mismo patrón que el login) */
+.theme-icon-sun {
+    display: none;
+}
+
+.dark .theme-icon-moon {
+    display: none;
+}
+
+.dark .theme-icon-sun {
+    display: block;
+}
+
+.dark .topbar-theme-btn {
+    color: #94a3b8; /* slate-400 */
+}
+
+.dark .topbar-theme-btn:hover {
+    background-color: #1e293b; /* slate-800 */
+    color: #e2e8f0;
+}
+
+/* --- Logo dual del sidebar (claro / oscuro) --- */
+.sidebar-logo-light {
+    display: block;
+}
+
+.sidebar-logo-dark {
+    display: none;
+}
+
+.dark .sidebar-logo-light {
+    display: none;
+}
+
+.dark .sidebar-logo-dark {
+    display: block;
+}
+
+/* --- Auto-completado de campos en oscuro (evita el fondo blanco de Safari/Chrome) --- */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ==========================================
+    MODO OSCURO — Shell (fondo, sidebar, topbar)
+   Paleta idéntica al login:
+   fondo #000a1a · superficie #0f172a · bordes #1e293b/#334155
+   texto #e2e8f0 · texto tenue #94a3b8
+   ========================================== */
+.dark body {
+    background-color: #000a1a;
+    color: #e2e8f0;
+}
+
+.dark .main-content {
+    background-color: #000a1a;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Sidebar */
+.dark .sidebar,
+.dark .sidebar-fixed-top,
+.dark .sidebar-footer {
+    background-color: #0f172a;
+}
+
+.dark .sidebar,
+.dark .sidebar-fixed-top {
+    border-color: #1e293b;
+}
+
+.dark .sidebar-header {
+    border-bottom-color: #1e293b;
+}
+
+.dark .sidebar-footer {
+    border-top-color: #1e293b;
+}
+
+.dark .sidebar-divider {
+    border-top-color: #1e293b;
+}
+
+.dark .sidebar-submenu {
+    border-left-color: #1e293b;
+}
+
+.dark .sidebar-item,
+.dark .submenu-item {
+    color: #cbd5e1; /* slate-300 */
+}
+
+.dark .sidebar-icon,
+.dark .submenu-icon,
+.dark .sidebar-arrow {
+    color: #94a3b8;
+}
+
+.dark .sidebar-item:hover {
+    background-color: #1e293b;
+    color: #60a5fa;
+}
+
+.dark .sidebar-item.active {
+    background-color: #1e3a8a; /* azul profundo */
+    color: #ffffff;
+}
+
+.dark .sidebar-item.active .sidebar-icon,
+.dark .sidebar-item.active .sidebar-arrow {
+    color: #ffffff;
+}
+
+.dark .submenu-item:hover,
+.dark .submenu-item.active {
+    color: #60a5fa;
+}
+
+.dark .logout-btn:hover {
+    background-color: #451a1a;
+    color: #f87171;
+}
+
+/* Topbar */
+.dark .topbar {
+    background-color: #0f172a;
+    border-bottom-color: #1e293b;
+}
+
+.dark .topbar-title {
+    color: #e2e8f0;
+}
+
+.dark .topbar-menu-btn {
+    color: #94a3b8;
+}
+
+.dark .topbar-divider {
+    background-color: #1e293b;
+}
+
+.dark .user-name {
+    color: #e2e8f0;
+}
+
+.dark .user-role {
+    color: #94a3b8;
+}
+
+/* ==========================================
+    MODO OSCURO — Componentes compartidos
+   (tarjetas, tablas, formularios, modales, botones)
+   ========================================== */
+
+/* Tarjetas */
+.dark .kpi-card,
+.dark .chart-card,
+.dark .table-card,
+.dark .stat-card,
+.dark .voucher-card,
+.dark .filters-card,
+.dark .modal-dialog {
+    background-color: #0f172a;
+    border-color: #1e293b;
+    box-shadow: none;
+}
+
+.dark .table-card-header {
+    border-bottom-color: #1e293b;
+}
+
+.dark .table-total {
+    color: #94a3b8;
+}
+
+.dark .table-total strong {
+    color: #e2e8f0;
+}
+
+/* Textos de encabezados compartidos */
+.dark .section-title,
+.dark .chart-title,
+.dark .kpi-value,
+.dark .qr-name,
+.dark .alerts-title {
+    color: #e2e8f0;
+}
+
+.dark .section-subtitle,
+.dark .chart-subtitle,
+.dark .kpi-label,
+.dark .qr-detail,
+.dark .qr-time,
+.dark .register-note,
+.dark .empty-filter,
+.dark .bar-scale {
+    color: #94a3b8;
+}
+
+.dark .bar-label,
+.dark .alert-product {
+    color: #cbd5e1;
+}
+
+/* Tablas de datos */
+.dark .data-table thead th,
+.dark .alerts-table th {
+    background-color: #1e293b;
+    color: #94a3b8;
+}
+
+.dark .data-table tbody td {
+    border-top-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .data-table tbody tr:hover {
+    background-color: #16213a;
+}
+
+.dark .alerts-table td {
+    border-bottom-color: #1e293b;
+    color: #cbd5e1;
+}
+
+/* Elementos en fila con fondo claro (dashboard, listas) */
+.dark .qr-item {
+    background-color: #1e293b;
+}
+
+/* Badges e iconos con tintes claros → equivalentes oscuros */
+.dark .qr-badge--blue,
+.dark .kpi-icon--blue,
+.dark .badge-tipo--boleta,
+.dark .stat-icon--blue {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+.dark .qr-badge--yellow,
+.dark .kpi-icon--amber,
+.dark .stat-icon--amber {
+    background-color: #451a03;
+    color: #fbbf24;
+}
+
+.dark .qr-badge--green,
+.dark .stat-icon--emerald {
+    background-color: #052e2b;
+    color: #34d399;
+}
+
+.dark .qr-badge--red {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.dark .kpi-icon--red,
+.dark .badge-tipo--factura {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.dark .stat-icon--purple {
+    background-color: #2e1065;
+    color: #c084fc;
+}
+
+/* Formularios */
+.dark .form-label,
+.dark .filter-label,
+.dark .voucher-label {
+    color: #cbd5e1;
+}
+
+.dark .form-input,
+.dark .search-box .search-input,
+.dark .filter-input,
+.dark .filter-select,
+.dark .scanner-input,
+.dark .voucher-select {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark .form-input::placeholder,
+.dark .search-box .search-input::placeholder,
+.dark .filter-input::placeholder {
+    color: #64748b;
+}
+
+.dark .form-input:focus,
+.dark .search-box .search-input:focus,
+.dark .filter-input:focus,
+.dark .filter-select:focus,
+.dark .scanner-input:focus,
+.dark .voucher-select:focus {
+    background-color: #0f172a;
+    border-color: #2563eb;
+    color: #e2e8f0;
+}
+
+.dark .search-box .search-icon {
+    color: #64748b;
+}
+
+/* Botones secundarios */
+.dark .btn-outline {
+    background-color: #1e293b;
+    color: #cbd5e1;
+    border-color: #334155;
+}
+
+.dark .btn-outline:hover {
+    background-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark .btn-muted,
+.dark .btn-clear {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .btn-muted:hover,
+.dark .btn-clear:hover {
+    background-color: #334155;
+    color: #e2e8f0;
+}
+
+/* Pegado al fondo del diálogo en oscuro */
+.dark .modal-footer {
+    background-color: #0f172a;
+}
+
+/* Encabezado de modal y pie */
+.dark .modal-header {
+    border-bottom-color: #1e293b;
+}
+
+.dark .modal-footer {
+    border-top-color: #1e293b;
+}
+
+.dark .modal-title {
+    color: #e2e8f0;
+}
+
+.dark .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Modo entrada/salida (asistencias) */
+.dark .modo-switch {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+.dark .modo-option {
+    color: #94a3b8;
+}
+
+.dark .modo-option:hover {
+    color: #e2e8f0;
+}
+
+.dark .modo-option:has(input:checked) {
+    background-color: #0f172a;
+    color: #60a5fa;
+}
+
+/* Formulario de producto (utilidades Tailwind: bg-gray-50/border-gray-200) */
+.dark #form-producto-crear input,
+.dark #form-producto-crear select,
+.dark #form-producto-crear textarea,
+.dark #form-producto-editar input,
+.dark #form-producto-editar select,
+.dark #form-producto-editar textarea {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark #form-producto-crear label,
+.dark #form-producto-editar label {
+    color: #cbd5e1;
+}
+
+.dark #form-producto-crear ::placeholder,
+.dark #form-producto-editar ::placeholder {
+    color: #64748b;
+}
+
+/* Botón "Cancelar" (gris Tailwind) dentro del modal de producto */
+.dark #form-producto-crear button[type="button"],
+.dark #form-producto-editar button[type="button"] {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+/* Utilidades Tailwind sueltas: zona de imagen, icono y auxiliares */
+.dark #form-producto-crear .img-drop,
+.dark #form-producto-editar .img-drop {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #475569;
+}
+
+.dark .form-error {
+    color: #f87171;
+}
+
+.dark .img-name {
+    color: #94a3b8;
+}
+
+/* Avisos (éxito/error) con tinte claro → fondo oscuro con borde */
+.dark .alert-success {
+    background-color: #052e2b;
+    border-color: #065f46;
+    color: #6ee7b7;
+}
+
+.dark .alert-danger {
+    background-color: #450a0a;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+.dark .alert-warning {
+    background-color: #451a03;
+    border-color: #78350f;
+    color: #fcd34d;
+}
+
+/* ==========================================
+    VARIABLES DE COLOR ADAPTATIVAS
+    Las vistas y el POS usan estilos en línea (style="color: #111827"),
+    que ninguna hoja de estilos puede sobreescribir. Esos valores se
+    sustituyen por estas variables, que cambian con el tema.
+    ========================================== */
+:root {
+    --ink-strong: #111827; /* títulos y valores fuertes */
+    --ink-title: #1f2937;
+    --ink-body: #374151;
+    --ink-muted: #4b5563;
+    --ink-dim: #6b7280;
+    --ink-faint: #9ca3af;
+    --icon-soft: #e5e7eb; /* iconos muy claros */
+    --surf-white: #ffffff;
+    --surf-soft: #f9fafb;
+    --surf-soft2: #f3f4f6;
+    --line-soft: #e5e7eb;
+    --ok-surface: #ecfdf5;
+    --ok-ink: #059669;
+}
+
+html.dark {
+    --ink-strong: #e2e8f0;
+    --ink-title: #e2e8f0;
+    --ink-body: #cbd5e1;
+    --ink-muted: #cbd5e1;
+    --ink-dim: #94a3b8;
+    --ink-faint: #94a3b8;
+    --icon-soft: #475569;
+    --surf-white: #0f172a;
+    --surf-soft: #1e293b;
+    --surf-soft2: #1e293b;
+    --line-soft: #334155;
+    --ok-surface: #052e2b;
+    --ok-ink: #34d399;
+}
+
+/* ==========================================
+    MODO OSCURO — MÓDULOS
+    Corrige lo que las hojas de página (resources/css/*.css) pinta en
+    claro. Esas hojas se cargan DESPUÉS de este archivo, así que aquí se
+    usan selectores con igual o mayor especificidad que los suyos.
+    ========================================== */
+
+/* ---------- Superficies y tarjetas ---------- */
+.dark .admin-content,
+.dark .register-card,
+.dark .scanner-card,
+.dark .config-card,
+.dark .product-card {
+    background-color: #0f172a;
+    border-color: #1e293b;
+    box-shadow: none;
+}
+
+.dark .product-media {
+    background-color: #1e293b;
+}
+
+.dark .product-media-empty {
+    color: #64748b;
+}
+
+.dark .product-footer,
+.dark .kpi-footer,
+.dark .table-footer {
+    border-top-color: #1e293b;
+}
+
+.dark .config-note {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+.dark .detail-content {
+    background-color: #0f172a;
+    border-bottom-color: #1e293b;
+}
+
+.dark .detail-table-wrap {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+.dark .detail-table th {
+    background-color: #1e293b;
+    color: #94a3b8;
+}
+
+.dark .detail-table td {
+    border-top-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .detail-table tr.subtotal-row {
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
+
+.dark .table-toolbar,
+.dark .table-footer,
+.dark .stat-label,
+.dark .stat-sub,
+.dark .sin-resultados-msg {
+    color: #94a3b8;
+}
+
+.dark .table-toolbar {
+    border-bottom-color: #1e293b;
+}
+
+/* ---------- Títulos y textos de módulo ---------- */
+.dark .register-title,
+.dark .scanner-title,
+.dark .config-title,
+.dark .qr-section-title,
+.dark .entity-name,
+.dark .client-name,
+.dark .cell-empleado-nombre,
+.dark .stock-value,
+.dark .confirm-title,
+.dark .confirm-text strong,
+.dark .stat-value,
+.dark .product-name,
+.dark .product-price,
+.dark .dni-card__nombre,
+.dark .detail-table tr.subtotal-row {
+    color: #e2e8f0;
+}
+
+.dark .register-subtitle,
+.dark .scanner-sub,
+.dark .config-subtitle,
+.dark .config-hint,
+.dark .modal-subtitle,
+.dark .confirm-text,
+.dark .product-meta,
+.dark .product-stock,
+.dark .dni-card__cargo,
+.dark .movimientos-hint,
+.dark .camera-status,
+.dark .scanner-hint,
+.dark .detail-title,
+.dark .cell-date,
+.dark .cell-detail {
+    color: #94a3b8;
+}
+
+.dark .product-code {
+    color: #64748b;
+}
+
+.dark .modal-close {
+    color: #94a3b8;
+}
+
+/* El título de alertas es rojo a propósito: se aclara para oscuro */
+.dark .alerts-title {
+    color: #f87171;
+}
+
+.dark .alerts-link,
+.dark .kpi-link {
+    color: #60a5fa;
+}
+
+.dark .alerts-link:hover,
+.dark .kpi-link:hover {
+    color: #93c5fd;
+}
+
+/* ---------- Estados vacíos ---------- */
+.dark .empty-state .empty-icon {
+    background-color: #1e293b;
+    color: #475569;
+}
+
+.dark .empty-state .empty-title {
+    color: #94a3b8;
+}
+
+.dark .empty-state .empty-text {
+    color: #64748b;
+}
+
+.dark .empty-icon {
+    background-color: #1e293b;
+    color: #94a3b8;
+}
+
+/* ---------- Iconos con fondo claro ---------- */
+.dark .entity-icon,
+.dark .register-icon,
+.dark .config-icon,
+.dark .scanner-icon,
+.dark .avatar-icon,
+.dark .avatar-circle,
+.dark .chart-badge,
+.dark .badge-rol--empleado,
+.dark .badge-tipo--boleta {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+/* Chips neutros (códigos, comprobantes, documentos) */
+.dark .cell-code,
+.dark .badge-comprobante,
+.dark .badge-doc {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .scanner-head .entity-icon {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+.dark .modal-icon--blue {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+.dark .modal-icon--amber {
+    background-color: #451a03;
+    color: #fbbf24;
+}
+
+.dark .badge-rol--admin,
+.dark .badge-tipo--factura {
+    background-color: #2e1065;
+    color: #c084fc;
+}
+
+/* ---------- Badges: éxito / peligro / aviso ---------- */
+.dark .asistencia-badge--presente,
+.dark .asistencia-badge--anticipada,
+.dark .badge-estado--activo,
+.dark .stock-badge--ok,
+.dark .mov-badge--entrada,
+.dark .kpi-badge--green,
+.dark .pie-legend-label--green,
+.dark .btn-state--on {
+    background-color: #052e2b;
+    color: #34d399;
+}
+
+.dark .asistencia-badge--sin {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .asistencia-badge--tardanza,
+.dark .pie-legend-label--yellow {
+    background-color: #451a03;
+    color: #fbbf24;
+}
+
+.dark .badge-estado--inactivo,
+.dark .stock-badge--low,
+.dark .mov-badge--salida,
+.dark .kpi-badge--red,
+.dark .alert-stock,
+.dark .pie-legend-label--red {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.dark .dni-preview--ok {
+    background-color: #052e2b;
+    border-color: #065f46;
+    color: #6ee7b7;
+}
+
+.dark .dni-preview--warn {
+    background-color: #451a03;
+    border-color: #78350f;
+    color: #fcd34d;
+}
+
+.dark .dni-preview--err {
+    background-color: #450a0a;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+/* ---------- Botones ---------- */
+.dark .btn-icon {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .btn-icon:hover {
+    background-color: #334155;
+}
+
+.dark .btn-icon--edit {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+.dark .btn-icon--edit:hover {
+    background-color: #1e40af;
+}
+
+.dark .btn-icon--delete {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.dark .btn-icon--delete:hover {
+    background-color: #7f1d1d;
+}
+
+.dark .btn-edit {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+.dark .btn-edit:hover {
+    background-color: #1e40af;
+    color: #93c5fd;
+}
+
+.dark .btn-delete,
+.dark .btn-state--off {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.dark .btn-delete:hover,
+.dark .btn-state--off:hover {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+
+.dark .btn-state--on:hover {
+    background-color: #065f46;
+}
+
+.dark .btn-secondary,
+.dark .btn-cancelar-venta {
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .btn-secondary:hover,
+.dark .btn-cancelar-venta:hover {
+    background-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark .btn-stock {
+    background-color: #2e1065;
+    color: #c084fc;
+}
+
+.dark .btn-stock:hover {
+    background-color: #4c1d95;
+    color: #ddd6fe;
+}
+
+.dark .btn-cobrar:disabled {
+    background-color: #334155;
+    color: #94a3b8;
+}
+
+/* ---------- Tarjeta voucher (POS) ---------- */
+.dark .voucher-header,
+.dark .voucher-form-section {
+    border-bottom-color: #1e293b;
+}
+
+.dark .voucher-footer {
+    border-top-color: #1e293b;
+}
+
+.dark .voucher-item-row {
+    background-color: #1e293b;
+}
+
+.dark .voucher-icon {
+    background-color: #052e2b;
+    color: #34d399;
+}
+
+.dark .search-input,
+.dark .search-input:focus {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+/* ---------- Dashboard: gauges, barras y SVG ---------- */
+.dark .gauge-track {
+    stroke: #334155;
+}
+
+.dark .gauge-value {
+    fill: #e2e8f0;
+}
+
+.dark .gauge-max,
+.dark .gauge-label {
+    fill: #94a3b8;
+}
+
+.dark .kpi-value .kpi-unit {
+    fill: #94a3b8;
+    color: #94a3b8;
+}
+
+.dark .bar-track {
+    background-color: #1e293b;
+}
+
+.dark .bar-fill--dark {
+    background-color: #e2e8f0;
+}
+
+.dark .bar-fill--gray {
+    background-color: #64748b;
+}
+
+.dark .chart-grid-line {
+    stroke: #1e293b;
+}
+
+.dark .pie-total-label {
+    fill: #94a3b8;
+}
+
+.dark .pie-total-value {
+    fill: #e2e8f0;
+}
+
+.dark .pie-legend-value {
+    color: #94a3b8;
+}
+
+/* ---------- Flujo de escaneo: destello de fila ---------- */
+.dark tr.row-flash,
+.dark .data-table tbody tr.row-flash {
+    background-color: #052e2b !important;
+}
+
+/* ---------- Opción activa del selector entrada/salida ---------- */
+.dark .modo-option:has(input:checked) {
+    background-color: #334155;
+    color: #93c5fd;
 }
