@@ -65,3 +65,37 @@ document.addEventListener('submit', function (event) {
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
 });
+
+/**
+ * Reloj en vivo del topbar: muestra la fecha y la hora con minutos y
+ * segundos (ej. 22:41:07 / vie, 13 nov 2026). Se actualiza cada segundo.
+ */
+(function () {
+    const fechaEl = document.getElementById('topbar-clock-date');
+    const horaEl = document.getElementById('topbar-clock-time');
+
+    if (!fechaEl || !horaEl) return;
+
+    const fmtHora = new Intl.DateTimeFormat('es-PE', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    });
+
+    const fmtFecha = new Intl.DateTimeFormat('es-PE', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
+
+    function tick() {
+        const ahora = new Date();
+        horaEl.textContent = fmtHora.format(ahora);
+        fechaEl.textContent = fmtFecha.format(ahora);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+})();

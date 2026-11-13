@@ -166,6 +166,18 @@
             </div>
 
             <div class="topbar-right">
+                <!-- Reloj en vivo: fecha y hora (hora:minuto:segundo) -->
+                <div class="topbar-clock" id="topbar-clock">
+                    <i class="fa-solid fa-clock topbar-clock-icon" aria-hidden="true"></i>
+                    <div class="topbar-clock-info">
+                        <span class="topbar-clock-time" id="topbar-clock-time">--:--:--</span>
+                        <span class="topbar-clock-date" id="topbar-clock-date">&nbsp;</span>
+                    </div>
+                </div>
+
+                <!-- Divisor vertical -->
+                <div class="topbar-divider"></div>
+
                 <!-- Cambio de tema (Luna / Sol), igual que en el login -->
                 <button type="button" data-theme-toggle class="topbar-theme-btn" aria-label="Cambiar tema">
                     <svg class="topbar-icon theme-icon-moon" {!! $svgAttrs !!}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>

@@ -416,6 +416,40 @@ body {
     background-color: #e2e8f0;
 }
 
+/* Reloj en vivo del topbar (fecha + hora:min:seg) */
+.topbar-clock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.topbar-clock-icon {
+    font-size: 15px;
+    color: #64748b; /* Tono gris tenue igual al resto de iconos */
+}
+
+.topbar-clock-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.topbar-clock-time {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0B2F5B; /* Azul marino profundo igual al título */
+    font-variant-numeric: tabular-nums; /* Los dígitos no bailan al actualizar */
+    letter-spacing: 0.01em;
+}
+
+.topbar-clock-date {
+    font-size: 11px;
+    color: #64748b;
+    text-transform: capitalize;
+}
+
 /* Perfil de Usuario */
 .user-profile {
     display: flex;
@@ -543,6 +577,14 @@ body {
 @media (max-width: 480px) {
     .user-info {
         display: none; /* Solo queda el avatar; el nombre/rol no caben en el topbar */
+    }
+
+    .topbar-clock-date {
+        display: none;
+    }
+
+    .topbar-clock-icon {
+        display: none;
     }
 
     .user-profile {
@@ -735,6 +777,15 @@ body {
 
 .dark .topbar-divider {
     background-color: #1e293b;
+}
+
+.dark .topbar-clock-time {
+    color: #e2e8f0;
+}
+
+.dark .topbar-clock-date,
+.dark .topbar-clock-icon {
+    color: #94a3b8;
 }
 
 .dark .user-name {
