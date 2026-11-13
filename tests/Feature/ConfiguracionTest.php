@@ -22,6 +22,19 @@ class ConfiguracionTest extends TestCase
         ]);
     }
 
+    /**
+     * Payload válido completo para POST /configuracion.
+     */
+    private function payload(array $sobrescribir = []): array
+    {
+        return array_merge([
+            'hora_entrada' => '09:15',
+            'hora_salida' => '17:45',
+            'tolerancia_tardanza' => '5',
+            'stock_minimo_defecto' => '8',
+        ], $sobrescribir);
+    }
+
     public function test_vista_configuracion_requiere_sesion(): void
     {
         $this->get('/configuracion')->assertRedirect('/login');
@@ -68,41 +81,110 @@ class ConfiguracionTest extends TestCase
     public function test_actualiza_el_horario(): void
     {
         $this->actingAs($this->usuario('admin'))
-            ->post('/configuracion', [
-                'hora_entrada' => '09:15',
-                'hora_salida' => '17:45',
-            ])
+            ->post('/configuracion', $this->payload())
             ->assertRedirect('/configuracion')
             ->assertSessionHas('success');
 
         $this->assertEquals('09:15', Configuracion::obtener('hora_entrada', '08:10'));
         $this->assertEquals('17:45', Configuracion::obtener('hora_salida', '18:00'));
+        $this->assertEquals('5', Configuracion::obtener('tolerancia_tardanza', '0'));
+        $this->assertEquals('8', Configuracion::obtener('stock_minimo_defecto', '5'));
     }
 
     public function test_valida_formato_y_orden_de_las_horas(): void
     {
         $this->actingAs($this->usuario('admin'))
-            ->post('/configuracion', [
-                'hora_entrada' => '25:99',
-                'hora_salida' => '17:00',
-            ])
+            ->post('/configuracion', $this->payload(['hora_entrada' => '25:99', 'hora_salida' => '17:00']))
             ->assertSessionHasErrors('hora_entrada');
 
         $this->actingAs($this->usuario('admin'))
-            ->post('/configuracion', [
-                'hora_entrada' => '09:00',
-                'hora_salida' => '07:00',
-            ])
+            ->post('/configuracion', $this->payload(['hora_entrada' => '09:00', 'hora_salida' => '07:00']))
             ->assertSessionHasErrors('hora_salida');
 
         $this->actingAs($this->usuario('admin'))
-            ->post('/configuracion', [
-                'hora_entrada' => '',
-                'hora_salida' => '',
-            ])
+            ->post('/configuracion', $this->payload(['hora_entrada' => '', 'hora_salida' => '']))
             ->assertSessionHasErrors(['hora_entrada', 'hora_salida']);
 
         $this->assertEquals('08:10', Configuracion::obtener('hora_entrada', '08:10'));
+    }
+
+    public function test_valida_los_valores_numericos_nuevos(): void
+    {
+        $this->actingAs($this->usuario('admin'))
+            ->post('/configuracion', $this->payload(['tolerancia_tardanza' => '-3']))
+            ->assertSessionHasErrors('tolerancia_tardanza');
+
+        $this->actingAs($this->usuario('admin'))
+            ->post('/configuracion', $this->payload(['tolerancia_tardanza' => '500']))
+            ->assertSessionHasErrors('tolerancia_tardanza');
+
+        $this->actingAs($this->usuario('admin'))
+            ->post('/configuracion', $this->payload(['stock_minimo_defecto' => 'abc']))
+            ->assertSessionHasErrors('stock_minimo_defecto');
+
+        $this->actingAs($this->usuario('admin'))
+            ->post('/configuracion', $this->payload(['stock_minimo_defecto' => '']))
+            ->assertSessionHasErrors('stock_minimo_defecto');
+
+        // Nada se guardó con datos inválidos
+        $this->assertEquals('08:10', Configuracion::obtener('hora_entrada', '08:10'));
+        $this->assertEquals('0', Configuracion::obtener('tolerancia_tardanza', '0'));
+        $this->assertEquals('5', Configuracion::obtener('stock_minimo_defecto', '5'));
+    }
+
+    public function test_vista_muestra_los_campos_nuevos(): void
+    {
+        $this->actingAs($this->usuario('admin'))
+            ->get('/configuracion')
+            ->assertOk()
+            ->assertSee('Tolerancia de tardanza')
+            ->assertSee('Stock mínimo por defecto')
+            ->assertSee('id="tolerancia_tardanza"', false)
+            ->assertSee('id="stock_minimo_defecto"', false);
+    }
+
+    public function test_tolerancia_amplia_el_limite_de_tardanza(): void
+    {
+        Configuracion::guardar('hora_entrada', '09:00');
+        Configuracion::guardar('tolerancia_tardanza', '10');
+
+        // 09:05 → dentro de la tolerancia (antes era tardanza)
+        Carbon::setTestNow('2026-10-23 09:05:00');
+        $dentro = Empleado::factory()->create(['estado' => true]);
+        $this->actingAs($this->usuario('admin'))->post('/asistencias/registrar', [
+            'modo' => 'entrada',
+            'dni' => $dentro->dni,
+        ]);
+
+        // 09:15 → fuera de la tolerancia
+        Carbon::setTestNow('2026-10-23 09:15:00');
+        $fuera = Empleado::factory()->create(['estado' => true]);
+        $this->actingAs($this->usuario('admin'))->post('/asistencias/registrar', [
+            'modo' => 'entrada',
+            'dni' => $fuera->dni,
+        ]);
+
+        $this->assertEquals('presente', Asistencia::where('empleado_id', $dentro->id)->first()->estado);
+        $this->assertEquals('tardanza', Asistencia::where('empleado_id', $fuera->id)->first()->estado);
+
+        Carbon::setTestNow();
+    }
+
+    public function test_tolerancia_cero_se_comporta_como_antes(): void
+    {
+        Configuracion::guardar('hora_entrada', '09:00');
+        Configuracion::guardar('tolerancia_tardanza', '0');
+
+        Carbon::setTestNow('2026-10-23 09:01:00');
+        $empleado = Empleado::factory()->create(['estado' => true]);
+        $this->actingAs($this->usuario('admin'))->post('/asistencias/registrar', [
+            'modo' => 'entrada',
+            'dni' => $empleado->dni,
+        ]);
+
+        $this->assertEquals('tardanza', Asistencia::where('empleado_id', $empleado->id)->first()->estado);
+
+        Carbon::setTestNow();
     }
 
     public function test_tardanza_usa_la_hora_configurada(): void

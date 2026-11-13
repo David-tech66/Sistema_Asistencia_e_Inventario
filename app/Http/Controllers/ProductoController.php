@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Configuracion;
 use App\Models\MovimientoStock;
 use App\Models\Marca;
 use App\Models\Producto;
@@ -29,7 +30,9 @@ class ProductoController extends Controller
             ->limit(30)
             ->get();
 
-        return view('productos', compact('productos', 'categorias', 'marcas', 'proveedores', 'movimientos'));
+        $stockMinimoDefecto = (int) Configuracion::obtener('stock_minimo_defecto', '5');
+
+        return view('productos', compact('productos', 'categorias', 'marcas', 'proveedores', 'movimientos', 'stockMinimoDefecto'));
     }
 
     public function escanear(Request $request): JsonResponse

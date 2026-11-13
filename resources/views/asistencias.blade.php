@@ -93,7 +93,7 @@
         <p class="register-note">
             <i class="fa-solid fa-circle-info"></i>
             Escanea el código de barras del DNI o escríbelo y presiona Enter. La fecha y la hora se capturan automáticamente.
-            Horario: entrada {{ $horarioEntrada }} · salida {{ $horarioSalida }}. Primero registra la entrada; la salida solo está disponible cuando ya existe entrada hoy.
+            Horario: entrada {{ $horarioEntrada }}@if($toleranciaTardanza > 0) (+{{ $toleranciaTardanza }} min de tolerancia)@endif · salida {{ $horarioSalida }}. Primero registra la entrada; la salida solo está disponible cuando ya existe entrada hoy.
         </p>
     </section>
 

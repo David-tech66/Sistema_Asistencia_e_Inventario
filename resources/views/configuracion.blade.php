@@ -11,7 +11,7 @@
     <div class="section-header">
         <div>
             <h2 class="section-title">Configuración</h2>
-            <p class="section-subtitle">Define la hora de entrada y la hora de salida del personal.</p>
+            <p class="section-subtitle">Define el horario, la tolerancia de tardanza y los valores por defecto del sistema.</p>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
             </div>
             <div>
                 <h3 class="config-title">Horario laboral</h3>
-                <p class="config-subtitle">Estas horas definen las reglas de asistencia para todo el personal.</p>
+                <p class="config-subtitle">Estas reglas aplican a todo el personal y a los productos nuevos.</p>
             </div>
         </div>
 
@@ -66,8 +66,32 @@
                 </p>
             </div>
 
+            <div class="config-field">
+                <label class="form-label" for="tolerancia_tardanza">Tolerancia de tardanza (minutos)</label>
+                <input type="number" name="tolerancia_tardanza" id="tolerancia_tardanza" class="form-input"
+                       value="{{ old('tolerancia_tardanza', $toleranciaTardanza) }}"
+                       min="0" max="120" step="1" inputmode="numeric" required>
+                <p class="config-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Minutos de gracia después de la hora de entrada. Con entrada a las
+                    <strong>{{ $horaEntrada }}</strong> y <strong>{{ (int) old('tolerancia_tardanza', $toleranciaTardanza) }} min</strong>,
+                    quien marque hasta las <strong>{{ \Carbon\Carbon::parse($horaEntrada)->addMinutes((int) old('tolerancia_tardanza', $toleranciaTardanza))->format('H:i') }}</strong> pasa como <strong>presente</strong>.
+                </p>
+            </div>
+
+            <div class="config-field">
+                <label class="form-label" for="stock_minimo_defecto">Stock mínimo por defecto</label>
+                <input type="number" name="stock_minimo_defecto" id="stock_minimo_defecto" class="form-input"
+                       value="{{ old('stock_minimo_defecto', $stockMinimoDefecto) }}"
+                       min="0" max="9999" step="1" inputmode="numeric" required>
+                <p class="config-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Valor con el que se prellena el campo <strong>Stock mínimo</strong> al registrar un producto nuevo.
+                </p>
+            </div>
+
             <button type="submit" class="btn btn-primary">
-                <i class="fa-solid fa-floppy-disk"></i> Guardar horario
+                <i class="fa-solid fa-floppy-disk"></i> Guardar configuración
             </button>
         </form>
 

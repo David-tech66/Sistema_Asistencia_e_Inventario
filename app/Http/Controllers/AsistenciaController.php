@@ -33,6 +33,7 @@ class AsistenciaController extends Controller
             'empleados' => $empleados,
             'horarioEntrada' => Configuracion::obtener('hora_entrada', '08:10'),
             'horarioSalida' => Configuracion::obtener('hora_salida', '18:00'),
+            'toleranciaTardanza' => self::toleranciaVigente(),
         ]);
     }
 
@@ -73,9 +74,7 @@ class AsistenciaController extends Controller
             }
 
             $horaEntrada = now()->format('H:i:s');
-            $limiteEntrada = $this->normalizarHora(
-                Configuracion::obtener('hora_entrada', self::HORA_LIMITE_TARDANZA)
-            );
+            $limiteEntrada = $this->limiteTardanza();
 
             Asistencia::create([
                 'empleado_id' => $empleado->id,
@@ -121,6 +120,40 @@ class AsistenciaController extends Controller
     private function normalizarHora(string $hora): string
     {
         return strlen($hora) === 5 ? $hora . ':00' : $hora;
+    }
+
+    /**
+     * Hora límite real para marcar tardanza: hora de entrada + minutos de tolerancia.
+     * Ej.: entrada 08:10 con 5 min de tolerancia → 08:15:00.
+     */
+    private function limiteTardanza(): string
+    {
+        $base = $this->normalizarHora(
+            Configuracion::obtener('hora_entrada', self::HORA_LIMITE_TARDANZA)
+        );
+
+        $tolerancia = max(0, (int) Configuracion::obtener('tolerancia_tardanza', '0'));
+
+        if ($tolerancia === 0) {
+            return $base;
+        }
+
+        $minutos = ((int) substr($base, 0, 2)) * 60
+            + ((int) substr($base, 3, 2))
+            + $tolerancia;
+
+        // Nunca pasa de las 23:59
+        $minutos = min($minutos, 23 * 60 + 59);
+
+        return sprintf('%02d:%02d:00', intdiv($minutos, 60), $minutos % 60);
+    }
+
+    /**
+     * Minutos de tolerancia vigentes (para mostrar en la vista).
+     */
+    public static function toleranciaVigente(): int
+    {
+        return max(0, (int) Configuracion::obtener('tolerancia_tardanza', '0'));
     }
 
     /**

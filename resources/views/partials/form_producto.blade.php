@@ -1,6 +1,7 @@
 @php
     $modo = $modo ?? 'crear';
     $producto = $producto ?? null;
+    $stockMinimoDefecto = $stockMinimoDefecto ?? 5;
 @endphp
 
 <form action="{{ $modo === 'editar' ? '/productos/' . ($producto?->id ?? 0) : '/productos' }}" method="POST" enctype="multipart/form-data" id="form-producto-{{ $modo }}">
@@ -81,7 +82,7 @@
             </div>
             <div class="form-group">
                 <label for="stock_minimo-{{ $modo }}" class="form-label">Stock mínimo *</label>
-                <input type="number" id="stock_minimo-{{ $modo }}" name="stock_minimo" value="{{ old('stock_minimo', $producto?->stock_minimo ?? 5) }}" required min="0"
+                <input type="number" id="stock_minimo-{{ $modo }}" name="stock_minimo" value="{{ old('stock_minimo', $producto?->stock_minimo ?? $stockMinimoDefecto) }}" required min="0"
                        class="form-input">
                 @error('stock_minimo') <p class="form-error">{{ $message }}</p> @enderror
             </div>
